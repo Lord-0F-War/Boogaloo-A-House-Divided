@@ -1,13 +1,13 @@
 
 import sys
 import os
-from json import load as json_load, dump as json_dump
+from json import load as json_load
 from PygameManager import pygame
 
 
 MAIN_FOLDER = os.path.dirname(sys.argv[0])
 
-with open(f'{MAIN_FOLDER}\settings.txt', 'r') as file:
+with open(f'{MAIN_FOLDER}\_settings.txt', 'r') as file:
     CONFIGURATIONS:dict     = json_load(file)
     SCREEN_WIDTH:int        = CONFIGURATIONS.get('screen_width')
     SCREEN_HEIGHT:int       = CONFIGURATIONS.get('screen_height')
@@ -28,212 +28,194 @@ FACTOR_X:int                    = SCREEN_WIDTH / REFERENCE_SCREEN_SIZE_X
 FACTOR_Y:int                    = SCREEN_HEIGHT / REFERENCE_SCREEN_SIZE_y
 
 
-def load_assets():
-    GFX_FOLDER                          = os.path.join(MAIN_FOLDER,     'GFX')
+class GameLoader:
+    def load_assets(self):
+        GFX_FOLDER                          = os.path.join(MAIN_FOLDER,     'GFX')
 
 
-    ###########################################################################################################################################################
-    # -------------------------------------------------------------------- INTERFACE_FOLDER ------------------------------------------------------------------#
+        ###########################################################################################################################################################
+        # -------------------------------------------------------------------- INTERFACE FOLDER ------------------------------------------------------------------#
 
 
-    ###########################################################################################################################################################
-    #--------------------------------------------------------------------------------------------------------------------------------------- MAIN_MENU_FOLDER #
-    INTERFACE_FOLDER                    = os.path.join(GFX_FOLDER,      'INTERFACE')
+        ###########################################################################################################################################################
+        #--------------------------------------------------------------------------------------------------------------------------------------- MAIN MENU FOLDER #
+        INTERFACE_FOLDER                    = os.path.join(GFX_FOLDER,      'INTERFACE')
 
 
-    MAIN_MENU_FOLDER                    = os.path.join(INTERFACE_FOLDER,      'MAIN_MENU')
+        MAIN_MENU_FOLDER                    = os.path.join(INTERFACE_FOLDER,      'MAIN_MENU')
 
-    main_menu_background_source 	    = pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'main_menu_background.png')).convert_alpha()
-    global main_menu_background
-    main_menu_background 	            = pygame.transform.smoothscale(main_menu_background_source, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        main_menu_background_source 	    = pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'main_menu_background.png')).convert_alpha()
+        global main_menu_background
+        main_menu_background 	            = pygame.transform.smoothscale(main_menu_background_source, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-    python_logo_source 					= pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'python_logo.png')).convert_alpha()
-    global python_logo
-    python_logo 						= pygame.transform.smoothscale_by(python_logo_source, (FACTOR_X, FACTOR_Y))
+        python_logo_source 					= pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'python_logo.png')).convert_alpha()
+        global python_logo
+        python_logo 						= pygame.transform.smoothscale_by(python_logo_source, (FACTOR_X, FACTOR_Y))
 
-    game_logo_source 					= pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'game_logo.png')).convert_alpha()
-    global game_logo
-    game_logo                           = pygame.transform.smoothscale_by(game_logo_source, (FACTOR_X, FACTOR_Y))
+        game_logo_source 					= pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'game_logo.png')).convert_alpha()
+        global game_logo
+        game_logo                           = pygame.transform.smoothscale_by(game_logo_source, (FACTOR_X, FACTOR_Y))
 
-    main_menu_UI_source 				= pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'menu_UI.png')).convert_alpha()
-    global main_menu_UI
-    main_menu_UI                        = pygame.transform.smoothscale_by(main_menu_UI_source, (FACTOR_X, FACTOR_Y))
-    
-    #--------------------------------------------------------------------------------------------------------------------------------------- MAIN_MENU_FOLDER #
-    ###########################################################################################################################################################
-
-
-    ###########################################################################################################################################################
-    #------------------------------------------------------------------------------------------------------------------------------------ OPTIONS_MENU_FOLDER #
-    OPTIONS_MENU_FOLDER                 = os.path.join(INTERFACE_FOLDER,      'OPTIONS_MENU')
-
-    game_options_menu_source 			= pygame.image.load(os.path.join(OPTIONS_MENU_FOLDER, 'game_options_menu.png')).convert_alpha()
-    global game_options_menu
-    game_options_menu                   = pygame.transform.smoothscale_by(game_options_menu_source, (FACTOR_X, FACTOR_Y))
-
-    #------------------------------------------------------------------------------------------------------------------------------------ OPTIONS_MENU_FOLDER #
-    ###########################################################################################################################################################
+        main_menu_UI_source 				= pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'menu_UI.png')).convert_alpha()
+        global main_menu_UI
+        main_menu_UI                        = pygame.transform.smoothscale_by(main_menu_UI_source, (FACTOR_X, FACTOR_Y))
+        
+        #--------------------------------------------------------------------------------------------------------------------------------------- MAIN MENU FOLDER #
+        ###########################################################################################################################################################
 
 
-    ###########################################################################################################################################################
-    #---------------------------------------------------------------------------------------------------------------------------------------- ESC_MENU_FOLDER #
-    ESC_MENU_FOLDER                     = os.path.join(INTERFACE_FOLDER,      'ESC_MENU')
+        ###########################################################################################################################################################
+        #------------------------------------------------------------------------------------------------------------------------------------ OPTIONS MENU FOLDER #
+        OPTIONS_MENU_FOLDER                 = os.path.join(INTERFACE_FOLDER,      'OPTIONS_MENU')
 
-    esc_menu_background_source 		    = pygame.image.load(os.path.join(ESC_MENU_FOLDER, 'esc_menu_background.png')).convert_alpha()
-    global esc_menu_background
-    esc_menu_background 				= pygame.transform.smoothscale_by(esc_menu_background_source, (FACTOR_X, FACTOR_Y))
+        game_options_menu_source 			= pygame.image.load(os.path.join(OPTIONS_MENU_FOLDER, 'game_options_menu.png')).convert_alpha()
+        global game_options_menu
+        game_options_menu                   = pygame.transform.smoothscale_by(game_options_menu_source, (FACTOR_X, FACTOR_Y))
 
-    #---------------------------------------------------------------------------------------------------------------------------------------- ESC_MENU_FOLDER #
-    ###########################################################################################################################################################
-
-
-    # -------------------------------------------------------------------- INTERFACE_FOLDER ------------------------------------------------------------------#
-    ###########################################################################################################################################################
-    
-
-    ###########################################################################################################################################################
-    # ---------------------------------------------------------------------- SOUNDS_FOLDER -------------------------------------------------------------------#
-    SOUNDS_FOLDER = os.path.join(MAIN_FOLDER, 'Sounds')
+        #------------------------------------------------------------------------------------------------------------------------------------ OPTIONS MENU FOLDER #
+        ###########################################################################################################################################################
 
 
-    global generic_hover_over_button_sound
-    generic_hover_over_button_sound 	= pygame.mixer.Sound(os.path.join(SOUNDS_FOLDER, 'generic_hover_over_button_sound.wav'))
-    global generic_click_button_sound
-    generic_click_button_sound 		    = pygame.mixer.Sound(os.path.join(SOUNDS_FOLDER, 'generic_click_button_sound.wav'))
+        ###########################################################################################################################################################
+        #---------------------------------------------------------------------------------------------------------------------------------------- ESC MENU FOLDER #
+        ESC_MENU_FOLDER                     = os.path.join(INTERFACE_FOLDER,      'ESC_MENU')
 
-    # ---------------------------------------------------------------------- SOUNDS_FOLDER -------------------------------------------------------------------#
-    ###########################################################################################################################################################
+        esc_menu_background_source 		    = pygame.image.load(os.path.join(ESC_MENU_FOLDER, 'esc_menu_background.png')).convert_alpha()
+        global esc_menu_background
+        esc_menu_background 				= pygame.transform.smoothscale_by(esc_menu_background_source, (FACTOR_X, FACTOR_Y))
 
-def create_classes():
-    ###########################################################################################################################################################
-    #------------------------------------------------------------------------------------------------------------------------------------------ SOUND MANAGER #
-    import SoundManager
-
-    global Sounds_Manager
-    Sounds_Manager = SoundManager.Sound_Manager(generic_hover_over_button_sound, generic_click_button_sound)
-
-    #------------------------------------------------------------------------------------------------------------------------------------------ SOUND MANAGER #
-    ###########################################################################################################################################################
+        #---------------------------------------------------------------------------------------------------------------------------------------- ESC MENU FOLDER #
+        ###########################################################################################################################################################
 
 
-    ###########################################################################################################################################################
-    #-------------------------------------------------------------------------------------------------------------------------------------------------- MENUS #
-    import MenuManager
+        # -------------------------------------------------------------------- INTERFACE FOLDER ------------------------------------------------------------------#
+        ###########################################################################################################################################################
+        
 
-    global Main_Menu
-    Main_Menu = MenuManager.Main_Menu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background, main_menu_UI,
-        Sounds_Manager.generic_hover_over_button_sound, Sounds_Manager.generic_click_button_sound)
-
-    global Options_Menu
-    Options_Menu = MenuManager.Options_Menu(SCREEN_WIDTH, SCREEN_HEIGHT, game_options_menu, Sounds_Manager.generic_hover_over_button_sound,
-        Sounds_Manager.generic_click_button_sound, Sounds_Manager, Main_Menu)
-    
-    global ESC_Menu
-    ESC_Menu = MenuManager.ESC_Menu(SCREEN_WIDTH, SCREEN_HEIGHT, esc_menu_background, Sounds_Manager.generic_hover_over_button_sound,
-        Sounds_Manager.generic_click_button_sound)
-    
-    #-------------------------------------------------------------------------------------------------------------------------------------------------- MENUS #
-    ###########################################################################################################################################################
+        ###########################################################################################################################################################
+        # ---------------------------------------------------------------------- SOUNDS FOLDER -------------------------------------------------------------------#
+        SOUNDS_FOLDER = os.path.join(MAIN_FOLDER, 'SOUNDS')
 
 
-    ###########################################################################################################################################################
-    #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
-    import ScreenManager
+        global generic_hover_over_button_sound
+        generic_hover_over_button_sound 	= pygame.mixer.Sound(os.path.join(SOUNDS_FOLDER, 'generic_hover_over_button_sound.wav'))
+        global generic_click_button_sound
+        generic_click_button_sound 		    = pygame.mixer.Sound(os.path.join(SOUNDS_FOLDER, 'generic_click_button_sound.wav'))
 
-    global Screen_Manager
-    Screen_Manager = ScreenManager.Screen(Main_Menu, ESC_Menu, Options_Menu, SCREEN_WIDTH, SCREEN_HEIGHT)
-    #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
-    ###########################################################################################################################################################
+        # ---------------------------------------------------------------------- SOUNDS_FOLDER -------------------------------------------------------------------#
+        ###########################################################################################################################################################
 
-def set_variables():
-    global screen_center
-    screen_center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
-    global mouse_pos
-    mouse_pos = pygame.mouse.get_pos()
-    global mouse_rect
-    mouse_rect = pygame.Rect(mouse_pos, (1, 1))
+        ###########################################################################################################################################################
+        # ---------------------------------------------------------------------- MUSICS FOLDER -------------------------------------------------------------------#    
+        global music_files_dic
+        music_files_dic = self.load_music_files(os.path.join(MAIN_FOLDER, 'MUSICS'))
 
-    global clicked_button
-    clicked_button = None
-    global hovered_button
-    hovered_button = None
+        # ---------------------------------------------------------------------- MUSICS FOLDER -------------------------------------------------------------------#
+        ############################################################################################################################################################ 
 
-    global main_menu_music_started
-    main_menu_music_started = False
+    def load_music_files(self, musics_folder):
+        music_files_dic:dict = {}
 
-    global RUNNING
-    RUNNING = True 
+        for folder_name in os.listdir(musics_folder):
+            folder_path = os.path.join(musics_folder, folder_name)
+            if os.path.isdir(folder_path):
+                for filename in os.listdir(folder_path):
+                    if filename.endswith(".wav") or filename.endswith(".ogg") or filename.endswith(".mp3"):
+                        music_path = os.path.join(folder_path, filename)
+                        image_name = os.path.splitext(filename)[0]
+                        music_files_dic[image_name] = music_path
+        
+        return music_files_dic
 
-    global is_options_menu_open
-    is_options_menu_open = False
+    def set_variables(self):
+        global screen_center
+        screen_center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
-    global is_in_esc_menu
-    is_in_esc_menu = False
+        global mouse_pos
+        mouse_pos = pygame.mouse.get_pos()
+        global mouse_rect
+        mouse_rect = pygame.Rect(mouse_pos, (1, 1))
 
-    global is_in_main_menu_screen
-    is_in_main_menu_screen = True
+        global clicked_button
+        clicked_button = None
+        global hovered_button
+        hovered_button = None
 
-    global is_in_scenario_selection_screen
-    is_in_scenario_selection_screen = False
+        global main_menu_music_started
+        main_menu_music_started = False
 
-    global is_in_country_selection_screen
-    is_in_country_selection_screen = False
+        global RUNNING
+        RUNNING = True 
 
-    global is_in_game_screen
-    is_in_game_screen = False
+        global is_options_menu_open
+        is_options_menu_open = False
 
-    global to_draw
-    to_draw = True
+        global is_in_esc_menu
+        is_in_esc_menu = False
 
-def game_utility_menu(mouse_rect):
-    global is_options_menu_open
-    global clicked_button
+        global is_in_main_menu_screen
+        is_in_main_menu_screen = True
 
-    ###########################################################################################################################################################
-    #----------------------------------------------------------------------------------------------------------------------------------------------- ESC MENU #
-    if is_in_esc_menu == True:
-        clicked_button = ESC_Menu.get_clicked_button(mouse_rect)
+        global is_in_scenario_selection_screen
+        is_in_scenario_selection_screen = False
 
-    #----------------------------------------------------------------------------------------------------------------------------------------------- ESC MENU #
-    ###########################################################################################################################################################
-    
+        global is_in_country_selection_screen
+        is_in_country_selection_screen = False
 
-    ###########################################################################################################################################################
-    #------------------------------------------------------------------------------------------------------------------------------------------- OPTIONS MENU #
-    elif is_options_menu_open == True:
-        clicked_button = Options_Menu.get_clicked_button(mouse_rect)
+        global is_in_game_screen
+        is_in_game_screen = False
 
-        if clicked_button == 'back':
-            is_options_menu_open = False
+        global to_draw
+        to_draw = True
 
-        resolution_to_save = None
-        if clicked_button == 'resolution_2560x1440':
-            resolution_to_save = (2560,1440)
-        elif clicked_button == 'resolution_1920x1080':
-            resolution_to_save = (1920,1080)
-        elif clicked_button == 'resolution_1600x900':
-            resolution_to_save = (1600,900)
-        elif clicked_button == 'resolution_1440x900':
-            resolution_to_save = (1440,900)
-        elif clicked_button == 'resolution_1280x1024':
-            resolution_to_save = (1280,1024)
+    def create_classes(self):
+        ###########################################################################################################################################################
+        #------------------------------------------------------------------------------------------------------------------------------------------ SOUND MANAGER #
+        import SoundManager
 
-        if resolution_to_save != None:
-            with open(f'{MAIN_FOLDER}\\settings.txt', 'r') as file:
-                configs = json_load(file)
+        global Sounds_Manager
+        Sounds_Manager = SoundManager.Sound_Manager(generic_hover_over_button_sound, generic_click_button_sound)
 
-            configs["screen_width"], configs["screen_height"] = resolution_to_save
+        #------------------------------------------------------------------------------------------------------------------------------------------ SOUND MANAGER #
+        ###########################################################################################################################################################
 
-            with open(f'{MAIN_FOLDER}\\settings.txt', 'w') as file:
-                json_dump(configs, file) 
 
-    #------------------------------------------------------------------------------------------------------------------------------------------- OPTIONS MENU #
-    ###########################################################################################################################################################
+        ###########################################################################################################################################################
+        #-------------------------------------------------------------------------------------------------------------------------------------------------- MENUS #
+        exec(open("MenuManager.py").read(), globals())
 
-load_assets()
-create_classes()
-set_variables()
+
+        global Main_Menu
+        Main_Menu = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background, main_menu_UI,
+            Sounds_Manager.generic_hover_over_button_sound, Sounds_Manager.generic_click_button_sound) 
+
+        global Options_Menu
+        Options_Menu = OptionsMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_options_menu, Sounds_Manager.generic_hover_over_button_sound,
+            Sounds_Manager.generic_click_button_sound, Sounds_Manager, Main_Menu)
+        
+        global ESC_Menu
+        ESC_Menu = ESCMenu(SCREEN_WIDTH, SCREEN_HEIGHT, esc_menu_background, Sounds_Manager.generic_hover_over_button_sound,
+            Sounds_Manager.generic_click_button_sound)
+        
+        #-------------------------------------------------------------------------------------------------------------------------------------------------- MENUS #
+        ###########################################################################################################################################################
+
+
+        ###########################################################################################################################################################
+        #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
+        import ScreenManager
+
+        global Screen_Manager
+        Screen_Manager = ScreenManager.Screen(Main_Menu, ESC_Menu, Options_Menu, SCREEN_WIDTH, SCREEN_HEIGHT)
+        #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
+        ###########################################################################################################################################################
+
+Loader = GameLoader()
+Loader.load_assets()
+Loader.set_variables()
+Loader.create_classes()
+
 pygame.event.clear()
 
 while RUNNING:
@@ -244,14 +226,13 @@ while RUNNING:
     PYGAME_EVENTS = pygame.event.get()
     
     if is_options_menu_open == True:
-        hovered_button = Options_Menu.get_hovered_button(mouse_rect)
-        Options_Menu.hovered_button = hovered_button
+        Options_Menu.hover_button(mouse_rect)
         Main_Menu.hovered_button = None
+        
         for event in PYGAME_EVENTS:
             Options_Menu.interacting_with_UI_slides(event)            
     elif is_in_esc_menu == True:
-        hovered_button = ESC_Menu.get_hovered_button(mouse_rect)
-        ESC_Menu.hovered_button = hovered_button 
+        ESC_Menu.hover_button(mouse_rect) 
         Main_Menu.hovered_button = None  
 
     #------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
@@ -259,15 +240,15 @@ while RUNNING:
     
 
     ###############################################################################################################################################################
-    #------------------------------------------------------------------------ MAIN MENU --------------------------------------------------------------------------#
+    # MAIN MENU --------------------------------------------------------------------------------------------------------------------------------------------------#
     if is_in_main_menu_screen == True:
         
         ###########################################################################################################################################################
         #-------------------------------------------------------------------------------------------------------------------------------------------------- MUSIC #
-        #if main_menu_music_started == False or pygame.mixer.music.get_busy() == False:
-            #main_menu_music_started = True
-            #pygame.mixer.music.load(music_files_dic['clock-ticking'])
-            #pygame.mixer.music.play()
+        if main_menu_music_started == False or pygame.mixer.music.get_busy() == False:
+            main_menu_music_started = True
+            pygame.mixer.music.load(music_files_dic['clock-ticking'])
+            pygame.mixer.music.play()
 
         #-------------------------------------------------------------------------------------------------------------------------------------------------- MUSIC #
         ###########################################################################################################################################################
@@ -282,7 +263,7 @@ while RUNNING:
 
 
         ###########################################################################################################################################################
-        #------------------------------------------------------------------------------------------------------------------------------------------ PYGAME EVENTS #
+        #--------------------------------------------------------------------- PYGAME EVENTS ---------------------------------------------------------------------#
         mouse_pos = pygame.mouse.get_pos()
         mouse_rect = pygame.Rect(mouse_pos, (1, 1))					
 
@@ -309,58 +290,31 @@ while RUNNING:
                 pass
             
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if is_options_menu_open == True or is_in_esc_menu == True:
-                    game_utility_menu(mouse_rect)
-
+                if is_options_menu_open == True:
+                    Options_Menu.click_button(mouse_rect)
+                elif is_in_esc_menu == True:
+                    ESC_Menu.click_button(mouse_rect)
                 else:
-                    clicked_button = Main_Menu.get_clicked_button(mouse_rect)
-                    if clicked_button != 'none':
-                        if Main_Menu.is_in_new_game_menu == False:
-                            if clicked_button == 'start':
-                                pygame.time.delay(50)
-                                Main_Menu.is_in_new_game_menu = True
-                                Main_Menu.main_menu_intro_video.toggle_pause()
-                                Options_Menu.music_slider.value = 60
-                                Options_Menu.music_slider.update()
-                                pygame.mixer.music.set_volume(Options_Menu.music_slider.value/100)
-                            elif clicked_button == 'quit':
-                                RUNNING = False
-                            elif clicked_button == 'options':
-                                pygame.time.delay(50)
-                                is_options_menu_open = True
-                        else:
-                            if clicked_button == 'new_game':
-                                is_in_scenario_selection_screen = True
-                                is_in_main_menu_screen = False
-                                Main_Menu.is_in_new_game_menu = False
-                            elif clicked_button == 'load_save':
-                                Main_Menu.is_in_new_game_menu = False
-                            elif clicked_button == 'back':		
-                                Main_Menu.is_in_new_game_menu = False
-                                Main_Menu.main_menu_intro_video.toggle_pause()
-                                Options_Menu.music_slider.value = 10
-                                Options_Menu.music_slider.update()
-                                pygame.mixer.music.set_volume(Options_Menu.music_slider.value/100)                    
+                    Main_Menu.click_button(mouse_rect)
 
             #---------------------------------------------------------------------------------------------------------------------------------------------- MOUSE #
             #######################################################################################################################################################
 
 
-        #------------------------------------------------------------------------------------------------------------------------------------------ PYGAME EVENTS #
+        #--------------------------------------------------------------------- PYGAME EVENTS ---------------------------------------------------------------------#
         ###########################################################################################################################################################
 
 
         ###########################################################################################################################################################
         #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
         if is_options_menu_open == False and is_in_esc_menu == False:				
-            hovered_button = Main_Menu.get_hovered_button(mouse_rect)
-            Main_Menu.hovered_button = hovered_button
+            Main_Menu.hover_button(mouse_rect)
 
         #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
         ###########################################################################################################################################################
 
 
-    #------------------------------------------------------------------------ MAIN MENU --------------------------------------------------------------------------#
+    # MAIN MENU --------------------------------------------------------------------------------------------------------------------------------------------------#
     ###############################################################################################################################################################
 
 
