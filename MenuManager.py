@@ -8,7 +8,7 @@ from json import load as json_load, dump as json_dump
 ###############################################################################################################################################################
 #---------------------------------------------------------------------- UTILITY MENUS ------------------------------------------------------------------------#
 class ESCMenu:
-	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, esc_menu_background, generic_hover_over_button_sound, generic_click_menu_sound) -> None:
+	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, ESC_MENU_BACKGROUND, HOVER_OVER_BUTTON_SOUND, CLICK_BUTTON_SOUND) -> None:
 
 		###############################################################################################################################################################
 		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
@@ -19,17 +19,17 @@ class ESCMenu:
 		self.FACTOR_X:float                 = self.SCREEN_WIDTH / self.REFERENCE_SCREEN_SIZE_X
 		self.FACTOR_Y:float                 = self.SCREEN_HEIGHT / self.REFERENCE_SCREEN_SIZE_y
 
-		MENU_GUI_WIDTH:int 					= esc_menu_background.get_width()
-		MENU_GUI_HEIGHT:int 				= esc_menu_background.get_height()
+		MENU_GUI_WIDTH:int 					= ESC_MENU_BACKGROUND.get_width()
+		MENU_GUI_HEIGHT:int 				= ESC_MENU_BACKGROUND.get_height()
 		self.MENU_GUI_MIDDLE_X:int 			= int(SCREEN_WIDTH/2 - MENU_GUI_WIDTH/2)
 		self.MENU_GUI_MIDDLE_Y:int 			= int(SCREEN_HEIGHT/2 - MENU_GUI_HEIGHT/2)			
 
-		self.hover_over_button_sound 		= generic_hover_over_button_sound
-		self.click_menu_sound 				= generic_click_menu_sound
+		self.HOVER_OVER_BUTTON_SOUND 		= HOVER_OVER_BUTTON_SOUND
+		self.CLICK_BUTTON_SOUND 			= CLICK_BUTTON_SOUND
 		self.hovered_button 				= None
 		self.last_hovered_button 			= None		
 
-		self.esc_menu_background 			= esc_menu_background
+		self.ESC_MENU_BACKGROUND 			= ESC_MENU_BACKGROUND
 
 		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
 		###############################################################################################################################################################	
@@ -71,15 +71,48 @@ class ESCMenu:
 	def click_button(self, mouse_rect):
 		clicked_button = self.get_button_by_interaction(mouse_rect)
 		if clicked_button != None:
-			self.hover_over_button_sound.fadeout(150)
-			self.click_menu_sound.play()
+			global is_in_esc_menu
+			global is_options_menu_open
+			global is_in_main_menu_screen
+			global is_in_new_game_screen
+			global RUNNING
+			global Main_Menu
+			global Options_Menu			
+
+			if clicked_button == 'options':
+				is_in_esc_menu = False	
+
+				is_options_menu_open = True
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+			elif clicked_button == 'main_menu' and is_in_main_menu_screen == False:
+				is_in_esc_menu = False
+
+				is_in_main_menu_screen = True
+
+				is_in_new_game_screen = False
+
+				Main_Menu.main_menu_intro_video.toggle_pause()
+
+				Options_Menu.MUSIC_SLIDER.value = 0
+				Options_Menu.MUSIC_SLIDER.update()
+				pygame.mixer.music.set_volume(Options_Menu.MUSIC_SLIDER.value/100)				
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+			elif clicked_button == 'quit':
+				RUNNING = False	
+				
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()								
 		return clicked_button
 
 	def hover_button(self, mouse_rect):
 		hovered_button = self.get_button_by_interaction(mouse_rect)
 		if hovered_button != None:
 			if hovered_button != self.last_hovered_button:
-				self.hover_over_button_sound.play()
+				self.HOVER_OVER_BUTTON_SOUND.play()
 
 				self.last_hovered_button = hovered_button
 				self.hovered_button = self.last_hovered_button
@@ -88,7 +121,7 @@ class ESCMenu:
 			self.hovered_button = self.last_hovered_button
 
 	def draw(self, surface_alfa):
-		surface_alfa.blit(self.esc_menu_background, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
+		surface_alfa.blit(self.ESC_MENU_BACKGROUND, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
 
 		if self.hovered_button != None:
 			if self.hovered_button == 'options':
@@ -99,7 +132,7 @@ class ESCMenu:
 				pygame.draw.rect(surface_alfa, (255, 23, 23), (self.QUIT_BUTTON.rect[0]-1, self.QUIT_BUTTON.rect[1]-1, self.QUIT_BUTTON.rect[2]+2, self.QUIT_BUTTON.rect[3]+2), 4)			
 
 class OptionsMenu:
-	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, options_menu_background, generic_hover_over_button_sound, generic_click_menu_sound, Sounds_Manager, Main_Menu) -> None:
+	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, OPTIONS_MENU_BACKGROUND, HOVER_OVER_BUTTON_SOUND, CLICK_BUTTON_SOUND, Sounds_Manager, Main_Menu) -> None:
 
 		###############################################################################################################################################################
 		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
@@ -110,17 +143,17 @@ class OptionsMenu:
 		self.FACTOR_X:float                 = self.SCREEN_WIDTH / self.REFERENCE_SCREEN_SIZE_X
 		self.FACTOR_Y:float                 = self.SCREEN_HEIGHT / self.REFERENCE_SCREEN_SIZE_y
 
-		MENU_GUI_WIDTH:int 					= options_menu_background.get_width()
-		MENU_GUI_HEIGHT:int 				= options_menu_background.get_height()
+		MENU_GUI_WIDTH:int 					= OPTIONS_MENU_BACKGROUND.get_width()
+		MENU_GUI_HEIGHT:int 				= OPTIONS_MENU_BACKGROUND.get_height()
 		self.MENU_GUI_MIDDLE_X:int 			= int(SCREEN_WIDTH/2 - MENU_GUI_WIDTH/2)
 		self.MENU_GUI_MIDDLE_Y:int 			= int(SCREEN_HEIGHT/2 - MENU_GUI_HEIGHT/2)			
 
-		self.hover_over_button_sound 		= generic_hover_over_button_sound
-		self.click_menu_sound 				= generic_click_menu_sound
+		self.HOVER_OVER_BUTTON_SOUND 		= HOVER_OVER_BUTTON_SOUND
+		self.CLICK_BUTTON_SOUND 			= CLICK_BUTTON_SOUND
 		self.hovered_button 				= None
 		self.last_hovered_button 			= None		
 
-		self.options_menu_background 		= options_menu_background
+		self.OPTIONS_MENU_BACKGROUND 		= OPTIONS_MENU_BACKGROUND
 
 		self.Sounds_Manager 				= Sounds_Manager
 		self.Main_Menu 						= Main_Menu
@@ -133,27 +166,28 @@ class OptionsMenu:
 
 		###############################################################################################################################################################
 		#------------------------------------------------------------------------- BUTTONS ---------------------------------------------------------------------------#
-		back_button_width 					= 371 * self.FACTOR_X
-		back_button_height 					= 34 * self.FACTOR_Y
-		back_button_x_offset 				= 63 * self.FACTOR_X
-		back_button_y_offset 				= 887 * self.FACTOR_Y
-		self.back_button 					= Utility.Button(self.MENU_GUI_MIDDLE_X + back_button_x_offset, self.MENU_GUI_MIDDLE_Y + back_button_y_offset,
-												back_button_width, back_button_height)	
+		BACK_BUTTON_WIDTH 					= 371 * self.FACTOR_X
+		BACK_BUTTON_HEIGHT 					= 34 * self.FACTOR_Y
+		BACK_BUTTON_X_OFFSET 				= 63 * self.FACTOR_X
+		BACK_BUTTON_Y_OFFSET 				= 887 * self.FACTOR_Y
+		self.BACK_BUTTON 					= Utility.Button(self.MENU_GUI_MIDDLE_X + BACK_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + BACK_BUTTON_Y_OFFSET,
+												BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)	
 		
-		resolutions_button_width 			= 371 * self.FACTOR_X
-		resolutions_button_height 			= 34 * self.FACTOR_Y
-		resolutions_button_x_offset 		= 62 * self.FACTOR_X
 
-		self.resolution_2560x1440_button 	= Utility.Button(self.MENU_GUI_MIDDLE_X + resolutions_button_x_offset, self.MENU_GUI_MIDDLE_Y + 100 * self.FACTOR_Y,
-												resolutions_button_width, resolutions_button_height)	
-		self.resolution_1920x1080_button 	= Utility.Button(self.MENU_GUI_MIDDLE_X + resolutions_button_x_offset, self.MENU_GUI_MIDDLE_Y + 145 * self.FACTOR_Y,
-												resolutions_button_width, resolutions_button_height)	
-		self.resolution_1600x900_button 	= Utility.Button(self.MENU_GUI_MIDDLE_X + resolutions_button_x_offset, self.MENU_GUI_MIDDLE_Y + 190 * self.FACTOR_Y,
-												resolutions_button_width, resolutions_button_height)	
-		self.resolution_1440x900_button 	= Utility.Button(self.MENU_GUI_MIDDLE_X + resolutions_button_x_offset, self.MENU_GUI_MIDDLE_Y + 235 * self.FACTOR_Y,
-												resolutions_button_width, resolutions_button_height)	
-		self.resolution_1280x1024_button 	= Utility.Button(self.MENU_GUI_MIDDLE_X + resolutions_button_x_offset, self.MENU_GUI_MIDDLE_Y + 280 * self.FACTOR_Y,
-												resolutions_button_width, resolutions_button_height)										
+		RESOLUTIONS_BUTTON_WIDTH 			= 371 * self.FACTOR_X
+		RESOLUTIONS_BUTTON_HEIGHT 			= 34 * self.FACTOR_Y
+		RESOLUTIONS_BUTTON_X_OFFSET 		= 62 * self.FACTOR_X
+
+		self.RESOLUTION_2560x1440_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 100 * self.FACTOR_Y,
+												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)	
+		self.RESOLUTION_1920x1080_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 145 * self.FACTOR_Y,
+												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)	
+		self.RESOLUTION_1600x900_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 190 * self.FACTOR_Y,
+												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)	
+		self.RESOLUTION_1440x900_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 235 * self.FACTOR_Y,
+												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)	
+		self.RESOLUTION_1280x1024_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 280 * self.FACTOR_Y,
+												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)										
 
 		#------------------------------------------------------------------------- BUTTONS ---------------------------------------------------------------------------#
 		###############################################################################################################################################################
@@ -161,13 +195,13 @@ class OptionsMenu:
 
 		###############################################################################################################################################################
 		#------------------------------------------------------------------------- SLIDERS ---------------------------------------------------------------------------#
-		self.brightness_slider 				= Utility.Slide(self.MENU_GUI_MIDDLE_X + 457* self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 135* self.FACTOR_Y,
+		self.BRIGHTNESS_SLIDER 				= Utility.Slide(self.MENU_GUI_MIDDLE_X + 457* self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 135* self.FACTOR_Y,
 												374* self.FACTOR_X, 10* self.FACTOR_Y, 0, 180, 0)
 		
-		self.music_slider 					= Utility.Slide(self.MENU_GUI_MIDDLE_X + 852* self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 135* self.FACTOR_Y,
-												374* self.FACTOR_X, 10* self.FACTOR_Y, 0, max_value = 100, initial_value = 10)
-		self.sound_slider 					= Utility.Slide(self.MENU_GUI_MIDDLE_X + 852* self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 270* self.FACTOR_Y,
-												374* self.FACTOR_X, 10* self.FACTOR_Y, 0, max_value = 100, initial_value = 50)
+		self.MUSIC_SLIDER 					= Utility.Slide(self.MENU_GUI_MIDDLE_X + 852* self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 135* self.FACTOR_Y,
+												374* self.FACTOR_X, 10* self.FACTOR_Y, 0, max_value = 100, initial_value = 0)
+		self.SOUND_SLIDER 					= Utility.Slide(self.MENU_GUI_MIDDLE_X + 852* self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 270* self.FACTOR_Y,
+												374* self.FACTOR_X, 10* self.FACTOR_Y, 0, max_value = 100, initial_value = 40)
 		
 		#------------------------------------------------------------------------- SLIDERS ---------------------------------------------------------------------------#
 		###############################################################################################################################################################		
@@ -175,25 +209,25 @@ class OptionsMenu:
 		
 		###############################################################################################################################################################
 		#-------------------------------------------------------------------------- SETERS ---------------------------------------------------------------------------#
-		pygame.mixer.music.set_volume(self.music_slider.value/100)	
-		self.Sounds_Manager.change_volume(self.sound_slider.value/100)
-		self.Main_Menu.main_menu_intro_video.set_volume(self.sound_slider.value/100)
+		pygame.mixer.music.set_volume(self.MUSIC_SLIDER.value/100)	
+		self.Sounds_Manager.change_volume(self.SOUND_SLIDER.value/100)
+		self.Main_Menu.main_menu_intro_video.set_volume(self.SOUND_SLIDER.value/100)
 
 		#-------------------------------------------------------------------------- SETERS ---------------------------------------------------------------------------#
 		###############################################################################################################################################################
 
 	def get_button_by_interaction(self, mouse_rect):
-		if self.back_button.rect.colliderect(mouse_rect):
+		if self.BACK_BUTTON.rect.colliderect(mouse_rect):
 			return 'back'
-		elif self.resolution_2560x1440_button.rect.colliderect(mouse_rect):
+		elif self.RESOLUTION_2560x1440_BUTTON.rect.colliderect(mouse_rect):
 			return 'resolution_2560x1440'	
-		elif self.resolution_1920x1080_button.rect.colliderect(mouse_rect):
+		elif self.RESOLUTION_1920x1080_BUTTON.rect.colliderect(mouse_rect):
 			return 'resolution_1920x1080'
-		elif self.resolution_1600x900_button.rect.colliderect(mouse_rect):
+		elif self.RESOLUTION_1600x900_BUTTON.rect.colliderect(mouse_rect):
 			return 'resolution_1600x900'
-		elif self.resolution_1440x900_button.rect.colliderect(mouse_rect):
+		elif self.RESOLUTION_1440x900_BUTTON.rect.colliderect(mouse_rect):
 			return 'resolution_1440x900'
-		elif self.resolution_1280x1024_button.rect.colliderect(mouse_rect):
+		elif self.RESOLUTION_1280x1024_BUTTON.rect.colliderect(mouse_rect):
 			return 'resolution_1280x1024'
 		else:
 			return None
@@ -202,12 +236,14 @@ class OptionsMenu:
 		clicked_button = self.get_button_by_interaction(mouse_rect)
 		
 		if clicked_button != None:
+			global is_options_menu_open
+			global MAIN_FOLDER			
+
 			if clicked_button == 'back':
-				global is_options_menu_open
 				is_options_menu_open = False
 
-				self.hover_over_button_sound.fadeout(150)
-				self.click_menu_sound.play()
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
 
 			resolution_to_save = None
 
@@ -223,7 +259,6 @@ class OptionsMenu:
 				resolution_to_save = (1280,1024)
 
 			if resolution_to_save != None:
-				global MAIN_FOLDER
 				with open(f'{MAIN_FOLDER}\_settings.txt', 'r') as file:
 					configs = json_load(file)
 
@@ -241,7 +276,7 @@ class OptionsMenu:
 		
 		if hovered_button != None:
 			if hovered_button != self.last_hovered_button:
-				self.hover_over_button_sound.play()
+				self.HOVER_OVER_BUTTON_SOUND.play()
 
 				self.last_hovered_button = hovered_button
 				self.hovered_button = self.last_hovered_button
@@ -250,51 +285,62 @@ class OptionsMenu:
 			self.hovered_button = self.last_hovered_button
 
 	def interacting_with_UI_slides(self, key_event):
-		self.brightness_slider.dragging_slide(key_event)
-		self.music_slider.dragging_slide(key_event)
-		self.sound_slider.dragging_slide(key_event)		
+		self.BRIGHTNESS_SLIDER.dragging_slide(key_event)
+		self.MUSIC_SLIDER.dragging_slide(key_event)
+		self.SOUND_SLIDER.dragging_slide(key_event)		
 
-		self.brightness_slider.update()
-		self.music_slider.update()
-		self.sound_slider.update()
+		self.BRIGHTNESS_SLIDER.update()
+		self.MUSIC_SLIDER.update()
+		self.SOUND_SLIDER.update()
 
-		self.Main_Menu.main_menu_intro_video.set_volume(self.sound_slider.value/100)
+		self.Main_Menu.main_menu_intro_video.set_volume(self.SOUND_SLIDER.value/100)
 
-		pygame.mixer.music.set_volume(self.music_slider.value/100)
-		self.Sounds_Manager.change_volume(self.sound_slider.value/100)
+		pygame.mixer.music.set_volume(self.MUSIC_SLIDER.value/100)
+		self.Sounds_Manager.change_volume(self.SOUND_SLIDER.value/100)
 
 	def draw(self, surface_alfa):
-		surface_alfa.blit(self.options_menu_background, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
+		surface_alfa.blit(self.OPTIONS_MENU_BACKGROUND, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
 
-		self.brightness_slider.draw(surface_alfa)
-		self.music_slider.draw(surface_alfa)
-		self.sound_slider.draw(surface_alfa)
+		self.BRIGHTNESS_SLIDER.draw(surface_alfa)
+		self.MUSIC_SLIDER.draw(surface_alfa)
+		self.SOUND_SLIDER.draw(surface_alfa)
 
 		if self.hovered_button != None:
 			if self.hovered_button == 'back':
-				pygame.draw.rect(surface_alfa, (255, 23, 23), (self.back_button.rect[0]-1, self.back_button.rect[1]-1, self.back_button.rect[2]+2, self.back_button.rect[3]+2), 4)			
+				pygame.draw.rect(surface_alfa, (255, 23, 23), (self.BACK_BUTTON.rect[0]-1, self.BACK_BUTTON.rect[1]-1, self.BACK_BUTTON.rect[2]+2,
+																self.BACK_BUTTON.rect[3]+2), 4)			
 
 			elif self.hovered_button == 'resolution_2560x1440':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_2560x1440_button.rect[0]-1, self.resolution_2560x1440_button.rect[1]-1, self.resolution_2560x1440_button.rect[2]+2, self.resolution_2560x1440_button.rect[3]+2), 4)	
+				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_2560x1440_BUTTON.rect[0]-1, self.RESOLUTION_2560x1440_BUTTON.rect[1]-1,
+																self.RESOLUTION_2560x1440_BUTTON.rect[2]+2, self.RESOLUTION_2560x1440_BUTTON.rect[3]+2), 4)	
 			elif self.hovered_button == 'resolution_1920x1080':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_1920x1080_button.rect[0]-1, self.resolution_1920x1080_button.rect[1]-1, self.resolution_1920x1080_button.rect[2]+2, self.resolution_1920x1080_button.rect[3]+2), 4)	
+				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1920x1080_BUTTON.rect[0]-1, self.RESOLUTION_1920x1080_BUTTON.rect[1]-1,
+																self.RESOLUTION_1920x1080_BUTTON.rect[2]+2, self.RESOLUTION_1920x1080_BUTTON.rect[3]+2), 4)	
 			elif self.hovered_button == 'resolution_1600x900':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_1600x900_button.rect[0]-1, self.resolution_1600x900_button.rect[1]-1, self.resolution_1600x900_button.rect[2]+2, self.resolution_1600x900_button.rect[3]+2), 4)
+				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1600x900_BUTTON.rect[0]-1, self.RESOLUTION_1600x900_BUTTON.rect[1]-1,
+																self.RESOLUTION_1600x900_BUTTON.rect[2]+2, self.RESOLUTION_1600x900_BUTTON.rect[3]+2), 4)
 			elif self.hovered_button == 'resolution_1440x900':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_1440x900_button.rect[0]-1, self.resolution_1440x900_button.rect[1]-1, self.resolution_1440x900_button.rect[2]+2, self.resolution_1440x900_button.rect[3]+2), 4)
+				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1440x900_BUTTON.rect[0]-1, self.RESOLUTION_1440x900_BUTTON.rect[1]-1,
+																self.RESOLUTION_1440x900_BUTTON.rect[2]+2, self.RESOLUTION_1440x900_BUTTON.rect[3]+2), 4)
 			elif self.hovered_button == 'resolution_1280x1024':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_1280x1024_button.rect[0]-1, self.resolution_1280x1024_button.rect[1]-1, self.resolution_1280x1024_button.rect[2]+2, self.resolution_1280x1024_button.rect[3]+2), 4)
+				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1280x1024_BUTTON.rect[0]-1, self.RESOLUTION_1280x1024_BUTTON.rect[1]-1,
+																self.RESOLUTION_1280x1024_BUTTON.rect[2]+2, self.RESOLUTION_1280x1024_BUTTON.rect[3]+2), 4)
 
 		if self.clicked_resolution_button == 'resolution_2560x1440':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_2560x1440_button.rect[0]-1, self.resolution_2560x1440_button.rect[1]-1, self.resolution_2560x1440_button.rect[2]+2, self.resolution_2560x1440_button.rect[3]+2), 4)	
+			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_2560x1440_BUTTON.rect[0]-1, self.RESOLUTION_2560x1440_BUTTON.rect[1]-1,
+																self.RESOLUTION_2560x1440_BUTTON.rect[2]+2, self.RESOLUTION_2560x1440_BUTTON.rect[3]+2), 4)	
 		elif self.clicked_resolution_button == 'resolution_1920x1080':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_1920x1080_button.rect[0]-1, self.resolution_1920x1080_button.rect[1]-1, self.resolution_1920x1080_button.rect[2]+2, self.resolution_1920x1080_button.rect[3]+2), 4)	
+			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1920x1080_BUTTON.rect[0]-1, self.RESOLUTION_1920x1080_BUTTON.rect[1]-1,
+																self.RESOLUTION_1920x1080_BUTTON.rect[2]+2, self.RESOLUTION_1920x1080_BUTTON.rect[3]+2), 4)	
 		elif self.clicked_resolution_button == 'resolution_1600x900':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_1600x900_button.rect[0]-1, self.resolution_1600x900_button.rect[1]-1, self.resolution_1600x900_button.rect[2]+2, self.resolution_1600x900_button.rect[3]+2), 4)		
+			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1600x900_BUTTON.rect[0]-1, self.RESOLUTION_1600x900_BUTTON.rect[1]-1,
+																self.RESOLUTION_1600x900_BUTTON.rect[2]+2, self.RESOLUTION_1600x900_BUTTON.rect[3]+2), 4)		
 		elif self.clicked_resolution_button == 'resolution_1440x900':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_1440x900_button.rect[0]-1, self.resolution_1440x900_button.rect[1]-1, self.resolution_1440x900_button.rect[2]+2, self.resolution_1440x900_button.rect[3]+2), 4)		
+			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1440x900_BUTTON.rect[0]-1, self.RESOLUTION_1440x900_BUTTON.rect[1]-1,
+																self.RESOLUTION_1440x900_BUTTON.rect[2]+2, self.RESOLUTION_1440x900_BUTTON.rect[3]+2), 4)		
 		elif self.clicked_resolution_button == 'resolution_1280x1024':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.resolution_1280x1024_button.rect[0]-1, self.resolution_1280x1024_button.rect[1]-1, self.resolution_1280x1024_button.rect[2]+2, self.resolution_1280x1024_button.rect[3]+2), 4)		
+			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1280x1024_BUTTON.rect[0]-1, self.RESOLUTION_1280x1024_BUTTON.rect[1]-1,
+																self.RESOLUTION_1280x1024_BUTTON.rect[2]+2, self.RESOLUTION_1280x1024_BUTTON.rect[3]+2), 4)		
 
 #---------------------------------------------------------------------- UTILITY MENUS ------------------------------------------------------------------------#
 ###############################################################################################################################################################
@@ -303,62 +349,73 @@ class OptionsMenu:
 ###############################################################################################################################################################
 #------------------------------------------------------------------------ MAIN MENU---------------------------------------------------------------------------#
 class MainMenu:
-	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_backgound, menu_gui, hover_over_button_sound, click_menu_sound
-		):
+	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, GAME_LOGO, PYTHON_LOGO, MAIN_MENU_BACKGROUND, MENU_GUI, HOVER_OVER_BUTTON_SOUND, CLICK_BUTTON_SOUND):
 
-		self.hovered_button = None
-		self.last_hovered_button =None
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
+		self.SCREEN_WIDTH:int               = SCREEN_WIDTH
+		self.SCREEN_HEIGHT:int              = SCREEN_HEIGHT	
+		self.REFERENCE_SCREEN_SIZE_X:int    = 1920
+		self.REFERENCE_SCREEN_SIZE_y:int    = 1080
+		self.FACTOR_X:float                 = self.SCREEN_WIDTH / self.REFERENCE_SCREEN_SIZE_X
+		self.FACTOR_Y:float                 = self.SCREEN_HEIGHT / self.REFERENCE_SCREEN_SIZE_y
 
-		self.hover_over_button_sound = hover_over_button_sound
-		self.click_menu_sound = click_menu_sound
+		MENU_GUI_WIDTH:int 					= MENU_GUI.get_width()
+		MENU_GUI_HEIGHT:int 				= MENU_GUI.get_height()
+		self.MENU_GUI_MIDDLE_X:int 			= int(SCREEN_WIDTH/2 - MENU_GUI_WIDTH/2)
+		self.MENU_GUI_MIDDLE_Y:int 			= int(SCREEN_HEIGHT/2 - MENU_GUI_HEIGHT/5)			
 
+		self.HOVER_OVER_BUTTON_SOUND 		= HOVER_OVER_BUTTON_SOUND
+		self.CLICK_BUTTON_SOUND 			= CLICK_BUTTON_SOUND
+		self.hovered_button 				= None
+		self.last_hovered_button 			= None		
+
+		self.MAIN_MENU_BACKGROUND 			= MAIN_MENU_BACKGROUND
+		self.MENU_GUI 						= MENU_GUI
+		self.GAME_LOGO 						= GAME_LOGO
+		self.PYTHON_LOGO 					= PYTHON_LOGO
+
+		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
+		###############################################################################################################################################################	
+
+
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------- BUTTONS ---------------------------------------------------------------------------#
+		START_BUTTON_WIDTH 					= 371 * self.FACTOR_X
+		START_BUTTON_HEIGHT 				= 34 * self.FACTOR_Y
+		START_BUTTON_X_OFFSET 				= 49 * self.FACTOR_X
+		START_BUTTON_Y_OFFSET 				= 459 * self.FACTOR_Y
+		self.START_BUTTON 					= Utility.Button(self.MENU_GUI_MIDDLE_X + START_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + START_BUTTON_Y_OFFSET,
+												START_BUTTON_WIDTH, START_BUTTON_HEIGHT)	
+
+		QUIT_BUTTON_WIDTH 					= 371 * self.FACTOR_X
+		QUIT_BUTTON_HEIGHT 					= 34 * self.FACTOR_Y
+		QUIT_BUTTON_X_OFFSET 				= 516 * self.FACTOR_X
+		QUIT_BUTTON_Y_OFFSET 				= 459 * self.FACTOR_Y
+		self.QUIT_BUTTON 					= Utility.Button(self.MENU_GUI_MIDDLE_X + QUIT_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + QUIT_BUTTON_Y_OFFSET,
+												QUIT_BUTTON_WIDTH, QUIT_BUTTON_HEIGHT)	
+
+		OPTIONS_BUTTON_WIDTH 				= 371 * self.FACTOR_X
+		OPTIONS_BUTTON_HEIGHT 				= 34 * self.FACTOR_Y
+		OPTIONS_BUTTON_X_OFFSET 			= 516 * self.FACTOR_X
+		OPTIONS_BUTTON_Y_OFFSET 			= 403 * self.FACTOR_Y
+		self.OPTIONS_BUTTON 				= Utility.Button(self.MENU_GUI_MIDDLE_X + OPTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + OPTIONS_BUTTON_Y_OFFSET,
+												OPTIONS_BUTTON_WIDTH, OPTIONS_BUTTON_HEIGHT)				
 		
-		self.SCREEN_WIDTH = SCREEN_WIDTH
-		self.SCREEN_HEIGHT = SCREEN_HEIGHT
-		reference_SCREEN_size_x = 1920
-		reference_SCREEN_size_y = 1080
-		self.FACTOR_X = SCREEN_WIDTH / reference_SCREEN_size_x
-		self.FACTOR_Y = SCREEN_HEIGHT / reference_SCREEN_size_y
-
-		self.factor = self.FACTOR_X * self.FACTOR_Y
-
-		self.main_menu_backgound = main_menu_backgound
-		self.python_logo = python_logo
-		self.game_logo = game_logo
-		self.menu_gui = menu_gui
-
-		
-		MENU_GUI_WIDTH = self.menu_gui.get_width()
-		MENU_GUI_HEIGHT = self.menu_gui.get_height()
-		
-		self.MENU_GUI_MIDDLE_X = (SCREEN_WIDTH/2 - MENU_GUI_WIDTH/2)
-		self.MENU_GUI_MIDDLE_Y = (SCREEN_HEIGHT/1.35 - MENU_GUI_HEIGHT/2)	
-
-		
-		start_button_width = 371 * self.FACTOR_X
-		start_button_height = 34 * self.FACTOR_Y
-		start_button_x_offset = 49 * self.FACTOR_X
-		start_button_y_offset = 459 * self.FACTOR_Y
-		self.start_button = Utility.Button(self.MENU_GUI_MIDDLE_X + start_button_x_offset, self.MENU_GUI_MIDDLE_Y + start_button_y_offset, start_button_width, start_button_height)	
-
-		QUIT_BUTTON_WIDTH = 371 * self.FACTOR_X
-		QUIT_BUTTON_HEIGHT = 34 * self.FACTOR_Y
-		QUIT_BUTTON_X_OFFSET = 516 * self.FACTOR_X
-		QUIT_BUTTON_Y_OFFSET = 459 * self.FACTOR_Y
-		self.QUIT_BUTTON = Utility.Button(self.MENU_GUI_MIDDLE_X + QUIT_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + QUIT_BUTTON_Y_OFFSET, QUIT_BUTTON_WIDTH, QUIT_BUTTON_HEIGHT)	
-
-		OPTIONS_BUTTON_WIDTH = 371 * self.FACTOR_X
-		OPTIONS_BUTTON_HEIGHT = 34 * self.FACTOR_Y
-		OPTIONS_BUTTON_X_OFFSET = 516 * self.FACTOR_X
-		OPTIONS_BUTTON_Y_OFFSET = 403 * self.FACTOR_Y
-		self.OPTIONS_BUTTON = Utility.Button(self.MENU_GUI_MIDDLE_X + OPTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + OPTIONS_BUTTON_Y_OFFSET, OPTIONS_BUTTON_WIDTH, OPTIONS_BUTTON_HEIGHT)
+		#------------------------------------------------------------------------- BUTTONS ---------------------------------------------------------------------------#
+		###############################################################################################################################################################
 
 
+		###############################################################################################################################################################
+		#----------------------------------------------------------------------- VIDEO INTRO -------------------------------------------------------------------------#
 		self.main_menu_intro_video = Video("game_intro.mp4", size=(936 * self.FACTOR_X, 378 * self.FACTOR_Y))
 		self.main_menu_intro_video.set_volume(0)
 
+		#----------------------------------------------------------------------- VIDEO INTRO -------------------------------------------------------------------------#
+		###############################################################################################################################################################
+
 	def get_button_by_interaction(self, mouse_rect):
-		if self.start_button.rect.colliderect(mouse_rect):
+		if self.START_BUTTON.rect.colliderect(mouse_rect):
 			return 'start'
 		elif self.OPTIONS_BUTTON.rect.colliderect(mouse_rect):
 			return 'options'
@@ -370,37 +427,41 @@ class MainMenu:
 	def click_button(self, mouse_rect):
 		clicked_button = self.get_button_by_interaction(mouse_rect)
 		if clicked_button != None:
+			global Options_Menu
+			global is_in_main_menu_screen
+			global is_in_new_game_screen
+			global is_options_menu_open	
+			global RUNNING			
+
 			if clicked_button == 'start':
 				self.main_menu_intro_video.toggle_pause()
 
-				global Options_Menu
-				Options_Menu.music_slider.value = 60
-				Options_Menu.music_slider.update()
-				pygame.mixer.music.set_volume(Options_Menu.music_slider.value/100)
+				Options_Menu.MUSIC_SLIDER.value = 60
+				Options_Menu.MUSIC_SLIDER.update()
+				pygame.mixer.music.set_volume(Options_Menu.MUSIC_SLIDER.value/100)
 
-				global is_in_main_menu_screen
 				is_in_main_menu_screen = False
 
-				self.hover_over_button_sound.fadeout(150)
-				self.click_menu_sound.play()
-			elif clicked_button == 'options':
-				self.hover_over_button_sound.fadeout(150)
-				self.click_menu_sound.play()
+				is_in_new_game_screen = True
 
-				global is_options_menu_open
-				is_options_menu_open = True
-			elif clicked_button == 'quit':		
-				self.hover_over_button_sound.fadeout(150)
-				self.click_menu_sound.play()
-				
-				global RUNNING
-				RUNNING = False								
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+			elif clicked_button == 'options':
+				is_options_menu_open = True	
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+			elif clicked_button == 'quit':	
+				RUNNING = False	
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
 
 	def hover_button(self, mouse_rect):
 		hovered_button = self.get_button_by_interaction(mouse_rect)
 		if hovered_button != None:
 			if hovered_button != self.last_hovered_button:
-				self.hover_over_button_sound.play()
+				self.HOVER_OVER_BUTTON_SOUND.play()
 
 				self.last_hovered_button = hovered_button
 				self.hovered_button = self.last_hovered_button
@@ -409,28 +470,163 @@ class MainMenu:
 			self.hovered_button = self.last_hovered_button
 
 	def draw(self, SCREEN):
-		SCREEN.blit(self.main_menu_backgound, (0, 0))
+		SCREEN.blit(self.MAIN_MENU_BACKGROUND, (0, 0))
 
-		SCREEN.blit(self.python_logo, (0, self.SCREEN_HEIGHT - self.python_logo.get_height()))
+		SCREEN.blit(self.PYTHON_LOGO, (0, self.SCREEN_HEIGHT - self.PYTHON_LOGO.get_height()))
 
-		SCREEN.blit(self.game_logo, (60 * self.FACTOR_X, 20 * self.FACTOR_Y))	
+		SCREEN.blit(self.GAME_LOGO, (60 * self.FACTOR_X, 20 * self.FACTOR_Y))	
 		
 		self.main_menu_intro_video.draw(SCREEN, (self.MENU_GUI_MIDDLE_X + 2 * self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 2 * self.FACTOR_Y))
 
 		if self.main_menu_intro_video.frames >= 608:
 			self.main_menu_intro_video.restart()	
 
-		SCREEN.blit(self.menu_gui, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
+		SCREEN.blit(self.MENU_GUI, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
 
 		if self.hovered_button != None:
 			if self.hovered_button == 'start':
-				pygame.draw.rect(SCREEN, (23, 255, 23), (self.start_button.rect[0]-1, self.start_button.rect[1]-1, self.start_button.rect[2]+2, self.start_button.rect[3]+2), 4)
+				pygame.draw.rect(SCREEN, (23, 255, 23), (self.START_BUTTON.rect[0]-1, self.START_BUTTON.rect[1]-1, self.START_BUTTON.rect[2]+2,
+															self.START_BUTTON.rect[3]+2), 4)
 			elif self.hovered_button == 'quit':
-				pygame.draw.rect(SCREEN, (255, 23, 23), (self.QUIT_BUTTON.rect[0]-1, self.QUIT_BUTTON.rect[1]-1, self.QUIT_BUTTON.rect[2]+2, self.QUIT_BUTTON.rect[3]+2), 4)
+				pygame.draw.rect(SCREEN, (255, 23, 23), (self.QUIT_BUTTON.rect[0]-1, self.QUIT_BUTTON.rect[1]-1, self.QUIT_BUTTON.rect[2]+2,
+															self.QUIT_BUTTON.rect[3]+2), 4)
 			elif self.hovered_button == 'options':
-				pygame.draw.rect(SCREEN, (23, 255, 23), (self.OPTIONS_BUTTON.rect[0]-1, self.OPTIONS_BUTTON.rect[1]-1, self.OPTIONS_BUTTON.rect[2]+2, self.OPTIONS_BUTTON.rect[3]+2), 4)
+				pygame.draw.rect(SCREEN, (23, 255, 23), (self.OPTIONS_BUTTON.rect[0]-1, self.OPTIONS_BUTTON.rect[1]-1, self.OPTIONS_BUTTON.rect[2]+2,
+															self.OPTIONS_BUTTON.rect[3]+2), 4)
 		else:
-			self.hover_over_button_sound.fadeout(200)
+			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)
+
+class NewGameMenu:
+	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, GAME_LOGO, PYTHON_LOGO, MAIN_MENU_BACKGROUND, MENU_GUI, HOVER_OVER_BUTTON_SOUND, CLICK_BUTTON_SOUND):
+
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
+		self.SCREEN_WIDTH:int               = SCREEN_WIDTH
+		self.SCREEN_HEIGHT:int              = SCREEN_HEIGHT	
+		self.REFERENCE_SCREEN_SIZE_X:int    = 1920
+		self.REFERENCE_SCREEN_SIZE_y:int    = 1080
+		self.FACTOR_X:float                 = self.SCREEN_WIDTH / self.REFERENCE_SCREEN_SIZE_X
+		self.FACTOR_Y:float                 = self.SCREEN_HEIGHT / self.REFERENCE_SCREEN_SIZE_y
+
+		MENU_GUI_WIDTH:int 					= MENU_GUI.get_width()
+		MENU_GUI_HEIGHT:int 				= MENU_GUI.get_height()
+		self.MENU_GUI_MIDDLE_X:int 			= int(SCREEN_WIDTH/2 - MENU_GUI_WIDTH/2)
+		self.MENU_GUI_MIDDLE_Y:int 			= int(SCREEN_HEIGHT/2 - MENU_GUI_HEIGHT/2)			
+
+		self.HOVER_OVER_BUTTON_SOUND 		= HOVER_OVER_BUTTON_SOUND
+		self.CLICK_BUTTON_SOUND 			= CLICK_BUTTON_SOUND
+		self.hovered_button 				= None
+		self.last_hovered_button 			= None		
+
+		self.MAIN_MENU_BACKGROUND 			= MAIN_MENU_BACKGROUND
+
+		self.MENU_GUI 						= MENU_GUI
+
+		self.GAME_LOGO 						= GAME_LOGO
+
+		self.PYTHON_LOGO 					= PYTHON_LOGO
+
+		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
+		###############################################################################################################################################################	
+
+
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------- BUTTONS ---------------------------------------------------------------------------#
+		NEW_GAME_BUTTON_WIDTH 				= 371 * self.FACTOR_X
+		NEW_GAME_BUTON_HEIGHT 				= 34 * self.FACTOR_Y
+		NEW_GAME_BUTON_X_OFFSET 			= 59 * self.FACTOR_X
+		NEW_GAME_BUTON_Y_OFFSET 			= 28 * self.FACTOR_Y
+		self.NEW_GAME_BUTON 				= Utility.Button(self.MENU_GUI_MIDDLE_X + NEW_GAME_BUTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + NEW_GAME_BUTON_Y_OFFSET,
+												NEW_GAME_BUTTON_WIDTH, NEW_GAME_BUTON_HEIGHT)
+
+		LOAD_GAME_BUTTON_WIDTH 				= 371 * self.FACTOR_X
+		LOAD_SAVE_BUTON_HEIGHT 				= 34 * self.FACTOR_Y
+		LOAD_SAVE_BUTON_X_OFFSET 			= 59 * self.FACTOR_X
+		LOAD_SAVE_BUTON_Y_OFFSET 			= 79 * self.FACTOR_Y
+		self.LOAD_SAVE_BUTTON 				= Utility.Button(self.MENU_GUI_MIDDLE_X + LOAD_SAVE_BUTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + LOAD_SAVE_BUTON_Y_OFFSET,
+												LOAD_GAME_BUTTON_WIDTH, LOAD_SAVE_BUTON_HEIGHT)
+
+		BACK_BUTTON_WIDTH 					= 371 * self.FACTOR_X
+		BACK_BUTTON_HEIGHT 					= 34 * self.FACTOR_Y
+		BACK_BUTTON_X_OFFSET 				= 59 * self.FACTOR_X
+		BACK_BUTTON_Y_OFFSET 				= 162 * self.FACTOR_Y
+		self.BACK_BUTTON 					= Utility.Button(self.MENU_GUI_MIDDLE_X + BACK_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + BACK_BUTTON_Y_OFFSET,
+												BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)						
+		
+		#------------------------------------------------------------------------- BUTTONS ---------------------------------------------------------------------------#
+		###############################################################################################################################################################
+
+	def get_button_by_interaction(self, mouse_rect):
+		if self.NEW_GAME_BUTON.rect.colliderect(mouse_rect):
+			return 'new_game'
+		elif self.LOAD_SAVE_BUTTON.rect.colliderect(mouse_rect):
+			return 'load_save'
+		elif self.BACK_BUTTON.rect.colliderect(mouse_rect):
+			return 'back'	
+		else:
+			return None
+
+	def click_button(self, mouse_rect):
+		clicked_button = self.get_button_by_interaction(mouse_rect)
+		if clicked_button != None:
+			global Main_Menu
+			global Options_Menu
+			global is_in_main_menu_screen
+			global is_in_new_game_screen
+
+			if clicked_button == 'new_game':
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+			elif clicked_button == 'load_save':
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+			elif clicked_button == 'back':
+				Main_Menu.main_menu_intro_video.toggle_pause()
+
+				Options_Menu.MUSIC_SLIDER.value = 0
+				Options_Menu.MUSIC_SLIDER.update()
+				pygame.mixer.music.set_volume(Options_Menu.MUSIC_SLIDER.value/100)
+
+				is_in_main_menu_screen = True
+
+				is_in_new_game_screen = False
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+
+	def hover_button(self, mouse_rect):
+		hovered_button = self.get_button_by_interaction(mouse_rect)
+		if hovered_button != None:
+			if hovered_button != self.last_hovered_button:
+				self.HOVER_OVER_BUTTON_SOUND.play()
+
+				self.last_hovered_button = hovered_button
+				self.hovered_button = self.last_hovered_button
+		else:
+			self.last_hovered_button = None
+			self.hovered_button = self.last_hovered_button
+
+	def draw(self, SCREEN):
+		SCREEN.blit(self.MAIN_MENU_BACKGROUND, (0, 0))
+
+		SCREEN.blit(self.PYTHON_LOGO, (0, self.SCREEN_HEIGHT - self.PYTHON_LOGO.get_height()))
+
+		SCREEN.blit(self.GAME_LOGO, (60 * self.FACTOR_X, 20 * self.FACTOR_Y))	
+
+		SCREEN.blit(self.MENU_GUI, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
+
+		if self.hovered_button != None:
+			if self.hovered_button == 'new_game':
+				pygame.draw.rect(SCREEN, (23, 255, 23), (self.NEW_GAME_BUTON.rect[0]-1, self.NEW_GAME_BUTON.rect[1]-1, self.NEW_GAME_BUTON.rect[2]+2,
+															self.NEW_GAME_BUTON.rect[3]+2), 4)
+			elif self.hovered_button == 'load_save':
+				pygame.draw.rect(SCREEN, (23, 255, 23), (self.LOAD_SAVE_BUTTON.rect[0]-1, self.LOAD_SAVE_BUTTON.rect[1]-1, self.LOAD_SAVE_BUTTON.rect[2]+2,
+															self.LOAD_SAVE_BUTTON.rect[3]+2), 4)
+			elif self.hovered_button == 'back':
+				pygame.draw.rect(SCREEN, (255, 23, 23), (self.BACK_BUTTON.rect[0]-1, self.BACK_BUTTON.rect[1]-1, self.BACK_BUTTON.rect[2]+2,
+															self.BACK_BUTTON.rect[3]+2), 4)
+		else:
+			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)
 
 #------------------------------------------------------------------------ MAIN MENU---------------------------------------------------------------------------#
 ###############################################################################################################################################################
