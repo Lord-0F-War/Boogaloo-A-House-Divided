@@ -72,7 +72,7 @@ def polygon_intersects_rectangle(polygon_vertices, rect):
 class ScalableFont:
 	def __init__(self, font_name, font_size):
 		self.exe_folder = os.path.dirname(sys.argv[0])
-		self.fonts_folder = os.path.join(self.exe_folder, 'Fonts')
+		self.fonts_folder = os.path.join(self.exe_folder, 'FONTS')
 		
 		self.font_name = font_name
 		self.font_path = os.path.join(self.fonts_folder, self.font_name)

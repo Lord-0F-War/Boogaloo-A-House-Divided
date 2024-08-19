@@ -74,7 +74,7 @@ class ESCMenu:
 			global is_in_esc_menu
 			global is_options_menu_open
 			global is_in_main_menu_screen
-			global is_in_new_game_screen
+			global is_in_new_game_load_game_screen
 			global RUNNING
 			global Main_Menu
 			global Options_Menu			
@@ -91,7 +91,7 @@ class ESCMenu:
 
 				is_in_main_menu_screen = True
 
-				is_in_new_game_screen = False
+				is_in_new_game_load_game_screen = False
 
 				Main_Menu.main_menu_intro_video.toggle_pause()
 
@@ -429,7 +429,7 @@ class MainMenu:
 		if clicked_button != None:
 			global Options_Menu
 			global is_in_main_menu_screen
-			global is_in_new_game_screen
+			global is_in_new_game_load_game_screen
 			global is_options_menu_open	
 			global RUNNING			
 
@@ -442,7 +442,7 @@ class MainMenu:
 
 				is_in_main_menu_screen = False
 
-				is_in_new_game_screen = True
+				is_in_new_game_load_game_screen = True
 
 				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
 				self.CLICK_BUTTON_SOUND.play()
@@ -496,7 +496,7 @@ class MainMenu:
 		else:
 			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)
 
-class NewGameMenu:
+class NewGameLoadGameMenu:
 	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, GAME_LOGO, PYTHON_LOGO, MAIN_MENU_BACKGROUND, MENU_GUI, HOVER_OVER_BUTTON_SOUND, CLICK_BUTTON_SOUND):
 
 		###############################################################################################################################################################
@@ -572,9 +572,13 @@ class NewGameMenu:
 			global Main_Menu
 			global Options_Menu
 			global is_in_main_menu_screen
+			global is_in_new_game_load_game_screen
 			global is_in_new_game_screen
 
 			if clicked_button == 'new_game':
+				is_in_new_game_screen = True
+				is_in_new_game_load_game_screen = False
+
 				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
 				self.CLICK_BUTTON_SOUND.play()
 			elif clicked_button == 'load_save':
@@ -589,7 +593,7 @@ class NewGameMenu:
 
 				is_in_main_menu_screen = True
 
-				is_in_new_game_screen = False
+				is_in_new_game_load_game_screen = False
 
 				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
 				self.CLICK_BUTTON_SOUND.play()
@@ -629,4 +633,101 @@ class NewGameMenu:
 			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)
 
 #------------------------------------------------------------------------ MAIN MENU---------------------------------------------------------------------------#
+###############################################################################################################################################################
+
+
+###############################################################################################################################################################
+#------------------------------------------------------------------------- NEW GAME---------------------------------------------------------------------------#
+class NewGameMenu:
+	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, MENU_GUI, CHARACTER_CREATION_SHEET, HOVER_OVER_BUTTON_SOUND, CLICK_BUTTON_SOUND):
+
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
+		self.SCREEN_WIDTH:int               = SCREEN_WIDTH
+		self.SCREEN_HEIGHT:int              = SCREEN_HEIGHT	
+		self.REFERENCE_SCREEN_SIZE_X:int    = 1920
+		self.REFERENCE_SCREEN_SIZE_y:int    = 1080
+		self.FACTOR_X:float                 = self.SCREEN_WIDTH / self.REFERENCE_SCREEN_SIZE_X
+		self.FACTOR_Y:float                 = self.SCREEN_HEIGHT / self.REFERENCE_SCREEN_SIZE_y
+
+		MENU_GUI_WIDTH:int 					= MENU_GUI.get_width()
+		MENU_GUI_HEIGHT:int 				= MENU_GUI.get_height()
+		self.MENU_GUI_MIDDLE_X:int 			= int(SCREEN_WIDTH/2 - MENU_GUI_WIDTH/2)
+		self.MENU_GUI_MIDDLE_Y:int 			= int(SCREEN_HEIGHT/2 - MENU_GUI_HEIGHT/2)			
+
+		self.HOVER_OVER_BUTTON_SOUND 		= HOVER_OVER_BUTTON_SOUND
+		self.CLICK_BUTTON_SOUND 			= CLICK_BUTTON_SOUND
+		self.hovered_button 				= None
+		self.last_hovered_button 			= None		
+
+		self.MENU_GUI 						= MENU_GUI
+		self.CHARACTER_CREATION_SHEET 		= CHARACTER_CREATION_SHEET
+
+		self.CHARACTER_CREATION_SHEET_SURFACE = pygame.Surface((self.CHARACTER_CREATION_SHEET.get_width(), self.CHARACTER_CREATION_SHEET.get_height()), pygame.SRCALPHA)
+		self.CHARACTER_CREATION_SHEET_SURFACE.blit(self.CHARACTER_CREATION_SHEET, (0, 0))
+
+		self.font20 = Utility.ScalableFont('Aldrich.ttf', 20)
+		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
+		###############################################################################################################################################################	
+
+		self.receive_player_keybord_input = False
+		self.variable_to_receive_player_keybord_input = None
+
+		self.ASSIGN_CHARACTER_NAME_BOX_RECT = pygame.Rect(33, 37, 263, 16)
+		self.character_name = ['']
+
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------- BUTTONS ---------------------------------------------------------------------------#
+
+		#------------------------------------------------------------------------- BUTTONS ---------------------------------------------------------------------------#
+		###############################################################################################################################################################
+
+	def get_button_by_interaction(self, mouse_rect):
+		if self.ASSIGN_CHARACTER_NAME_BOX_RECT.colliderect(mouse_rect):
+			return 'ASSIGN_CHARACTER_NAME'	
+		else:
+			return None
+
+	def click_button(self, mouse_rect):
+		clicked_button = self.get_button_by_interaction(mouse_rect)
+		if clicked_button != None:
+			if clicked_button == 'ASSIGN_CHARACTER_NAME':
+				self.receive_player_keybord_input = True
+
+				self.variable_to_receive_player_keybord_input = self.character_name
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+		else:
+			self.receive_player_keybord_input = False
+			self.variable_to_receive_player_keybord_input = None
+
+	def hover_button(self, mouse_rect):
+		hovered_button = self.get_button_by_interaction(mouse_rect)
+		if hovered_button != None:
+			if hovered_button != self.last_hovered_button:
+				self.HOVER_OVER_BUTTON_SOUND.play()
+
+				self.last_hovered_button = hovered_button
+				self.hovered_button = self.last_hovered_button
+		else:
+			self.last_hovered_button = None
+			self.hovered_button = self.last_hovered_button
+
+	def draw(self, SCREEN):
+		SCREEN.blit(self.MENU_GUI, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
+
+		character_name_text_render = self.font20.render(str(self.character_name[0]), True, (255,255,255))	
+		SCREEN.blit(character_name_text_render, (33, 37))
+
+		SCREEN.blit(self.CHARACTER_CREATION_SHEET_SURFACE.subsurface(0, 0, self.CHARACTER_CREATION_SHEET_SURFACE.get_width(), 1000 * self.FACTOR_Y), (439 * self.FACTOR_X, 14 * self.FACTOR_Y))		
+
+
+		if self.hovered_button != None:
+			pass
+		else:
+			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)
+
+
+#------------------------------------------------------------------------- NEW GAME---------------------------------------------------------------------------#
 ###############################################################################################################################################################

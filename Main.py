@@ -35,13 +35,11 @@ class GameLoader:
 
         ###########################################################################################################################################################
         # -------------------------------------------------------------------- INTERFACE FOLDER ------------------------------------------------------------------#
+        INTERFACE_FOLDER                    = os.path.join(GFX_FOLDER,      'INTERFACE')
 
 
         ###########################################################################################################################################################
         #--------------------------------------------------------------------------------------------------------------------------------------- MAIN MENU FOLDER #
-        INTERFACE_FOLDER                    = os.path.join(GFX_FOLDER,      'INTERFACE')
-
-
         MAIN_MENU_FOLDER                    = os.path.join(INTERFACE_FOLDER,      'MAIN_MENU')
 
         main_menu_background_source 	    = pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'main_menu_background.png')).convert_alpha()
@@ -60,12 +58,28 @@ class GameLoader:
         global main_menu_UI
         main_menu_UI                        = pygame.transform.smoothscale_by(main_menu_UI_source, (FACTOR_X, FACTOR_Y))
 
-        new_game_menu_UI_source 			= pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'new_game_menu_UI.png')).convert_alpha()
-        global new_game_menu_UI
-        new_game_menu_UI                    = pygame.transform.smoothscale_by(new_game_menu_UI_source, (FACTOR_X, FACTOR_Y))        
+        new_game_load_game_menu_UI_source 	= pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'new_game_load_game_menu_UI.png')).convert_alpha()
+        global new_game_load_game_menu_UI
+        new_game_load_game_menu_UI          = pygame.transform.smoothscale_by(new_game_load_game_menu_UI_source, (FACTOR_X, FACTOR_Y))        
         
         #--------------------------------------------------------------------------------------------------------------------------------------- MAIN MENU FOLDER #
         ###########################################################################################################################################################
+
+
+        ###########################################################################################################################################################
+        #---------------------------------------------------------------------------------------------------------------------------------------- NEW GAME FOLDER # 
+        NEW_GAME_MENU_FOLDER                = os.path.join(INTERFACE_FOLDER,      'NEW_GAME_MENU')
+
+        new_game_menu_UI_source 	        = pygame.image.load(os.path.join(NEW_GAME_MENU_FOLDER, 'new_game_menu_UI.png')).convert_alpha()
+        global new_game_menu_UI
+        new_game_menu_UI                    = pygame.transform.smoothscale_by(new_game_menu_UI_source, (FACTOR_X, FACTOR_Y))
+
+        character_creation_sheet_UI_source 	= pygame.image.load(os.path.join(NEW_GAME_MENU_FOLDER, 'character_creation_sheet.png')).convert_alpha()
+        global character_creation_sheet_UI
+        character_creation_sheet_UI         = pygame.transform.smoothscale_by(character_creation_sheet_UI_source, (FACTOR_X, FACTOR_Y))                 
+        
+        #---------------------------------------------------------------------------------------------------------------------------------------- NEW GAME FOLDER #
+        ###########################################################################################################################################################                
 
 
         ###########################################################################################################################################################
@@ -133,8 +147,8 @@ class GameLoader:
         return music_files_dic
 
     def set_variables(self):
-        global screen_center
-        screen_center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+        global RUNNING
+        RUNNING = True 
 
         global mouse_pos
         mouse_pos = pygame.mouse.get_pos()
@@ -149,29 +163,21 @@ class GameLoader:
         global main_menu_music_started
         main_menu_music_started = False
 
-        global RUNNING
-        RUNNING = True 
 
         global is_options_menu_open
         is_options_menu_open = False
-
         global is_in_esc_menu
         is_in_esc_menu = False
 
+
         global is_in_main_menu_screen
         is_in_main_menu_screen = True
+        
+        global is_in_new_game_load_game_screen
+        is_in_new_game_load_game_screen = False
 
         global is_in_new_game_screen
-        is_in_new_game_screen = False
-
-        global is_in_country_selection_screen
-        is_in_country_selection_screen = False
-
-        global is_in_game_screen
-        is_in_game_screen = False
-
-        global to_draw
-        to_draw = True
+        is_in_new_game_screen = False        
 
     def create_classes(self):
         ###########################################################################################################################################################
@@ -191,21 +197,28 @@ class GameLoader:
 
 
         global Main_Menu
-        Main_Menu = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background, main_menu_UI,
-            Sounds_Manager.generic_hover_over_button_sound, Sounds_Manager.generic_click_button_sound) 
+        Main_Menu                               = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background, main_menu_UI,
+                                                    Sounds_Manager.generic_hover_over_button_sound, Sounds_Manager.generic_click_button_sound) 
         
+        global New_Game_Load_Game_Menu
+        New_Game_Load_Game_Menu                 = NewGameLoadGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background,
+                                                    new_game_load_game_menu_UI, Sounds_Manager.generic_hover_over_button_sound,
+                                                    Sounds_Manager.generic_click_button_sound)
+
         global New_Game_Menu
-        New_Game_Menu = NewGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background, new_game_menu_UI,
-            Sounds_Manager.generic_hover_over_button_sound, Sounds_Manager.generic_click_button_sound)         
+        New_Game_Menu                           = NewGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, new_game_menu_UI, character_creation_sheet_UI, 
+                                                            Sounds_Manager.generic_hover_over_button_sound,
+                                                    Sounds_Manager.generic_click_button_sound)                   
+
 
 
         global Options_Menu
-        Options_Menu = OptionsMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_options_menu, Sounds_Manager.generic_hover_over_button_sound,
-            Sounds_Manager.generic_click_button_sound, Sounds_Manager, Main_Menu)
+        Options_Menu                            = OptionsMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_options_menu, Sounds_Manager.generic_hover_over_button_sound,
+                                                    Sounds_Manager.generic_click_button_sound, Sounds_Manager, Main_Menu)
         
         global ESC_Menu
-        ESC_Menu = ESCMenu(SCREEN_WIDTH, SCREEN_HEIGHT, esc_menu_background, Sounds_Manager.generic_hover_over_button_sound,
-            Sounds_Manager.generic_click_button_sound)
+        ESC_Menu                                = ESCMenu(SCREEN_WIDTH, SCREEN_HEIGHT, esc_menu_background, Sounds_Manager.generic_hover_over_button_sound,
+                                                    Sounds_Manager.generic_click_button_sound)
         
         #-------------------------------------------------------------------------------------------------------------------------------------------------- MENUS #
         ###########################################################################################################################################################
@@ -216,7 +229,7 @@ class GameLoader:
         import ScreenManager
 
         global Screen_Manager
-        Screen_Manager = ScreenManager.Screen(SCREEN_WIDTH, SCREEN_HEIGHT, ESC_Menu, Options_Menu, Main_Menu, New_Game_Menu)
+        Screen_Manager = ScreenManager.Screen(SCREEN_WIDTH, SCREEN_HEIGHT, ESC_Menu, Options_Menu, Main_Menu, New_Game_Load_Game_Menu, New_Game_Menu)
         #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
         ###########################################################################################################################################################
 
@@ -255,7 +268,7 @@ while RUNNING:
 
     ###############################################################################################################################################################
     # MAIN MENU --------------------------------------------------------------------------------------------------------------------------------------------------#
-    if is_in_main_menu_screen == True:
+    if is_in_main_menu_screen:
         
         ###########################################################################################################################################################
         #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
@@ -316,11 +329,11 @@ while RUNNING:
         #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
         ###########################################################################################################################################################
 
-    if is_in_new_game_screen == True:
+    if is_in_new_game_load_game_screen:
         
         ###########################################################################################################################################################
         #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
-        Screen_Manager.render_new_game_menu(Options_Menu.BRIGHTNESS_SLIDER.value, is_options_menu_open, is_in_esc_menu)
+        Screen_Manager.render_new_game_load_game_menu(Options_Menu.BRIGHTNESS_SLIDER.value, is_options_menu_open, is_in_esc_menu)
 
         #---------------------------------------------------------------------------------------------------------------------------------------------------------#
         ###########################################################################################################################################################
@@ -359,6 +372,81 @@ while RUNNING:
                 elif is_in_esc_menu == True:
                     ESC_Menu.click_button(mouse_rect)
                 else:
+                    New_Game_Load_Game_Menu.click_button(mouse_rect)
+
+            #---------------------------------------------------------------------------------------------------------------------------------------------- MOUSE #
+            #######################################################################################################################################################
+
+
+        #--------------------------------------------------------------------- PYGAME EVENTS ---------------------------------------------------------------------#
+        ###########################################################################################################################################################
+
+
+        ###########################################################################################################################################################
+        #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
+        if is_options_menu_open == False and is_in_esc_menu == False:				
+            New_Game_Load_Game_Menu.hover_button(mouse_rect)
+
+        #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
+        ###########################################################################################################################################################
+
+    # MAIN MENU --------------------------------------------------------------------------------------------------------------------------------------------------#
+    ###############################################################################################################################################################
+
+
+    ###############################################################################################################################################################
+    # NEW GAME MENU ----------------------------------------------------------------------------------------------------------------------------------------------#
+    if is_in_new_game_screen:
+        
+        ###########################################################################################################################################################
+        #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
+        Screen_Manager.render_new_game_menu(Options_Menu.BRIGHTNESS_SLIDER.value, is_options_menu_open, is_in_esc_menu)
+
+        #---------------------------------------------------------------------------------------------------------------------------------------------------------#
+        ###########################################################################################################################################################
+
+
+        ###########################################################################################################################################################
+        #--------------------------------------------------------------------- PYGAME EVENTS ---------------------------------------------------------------------#
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_rect = pygame.Rect(mouse_pos, (1, 1))					
+
+        for event in PYGAME_EVENTS:
+            if event.type == QUIT_EVENT:
+                RUNNING = False
+
+            #######################################################################################################################################################
+            #------------------------------------------------------------------------------------------------------------------------------------------- KEYBOARD # 
+            keys = pygame.key.get_pressed()	
+
+            if event.type == pygame.KEYDOWN:
+                if keys[pygame.K_ESCAPE]:
+                    is_in_esc_menu = not is_in_esc_menu
+                    is_options_menu_open = False
+                
+                if New_Game_Menu.receive_player_keybord_input == True:
+                    key_name = pygame.key.name(event.key)
+                    if len(key_name) == 1 and key_name.isalpha():
+                        New_Game_Menu.variable_to_receive_player_keybord_input[0] += key_name
+
+                    elif keys[pygame.K_BACKSPACE]:
+                        New_Game_Menu.variable_to_receive_player_keybord_input[0] = New_Game_Menu.variable_to_receive_player_keybord_input[0][:-1]
+
+            #------------------------------------------------------------------------------------------------------------------------------------------- KEYBOARD #
+            #######################################################################################################################################################
+
+
+            #######################################################################################################################################################
+            #---------------------------------------------------------------------------------------------------------------------------------------------- MOUSE #
+            if event.type == pygame.MOUSEBUTTONUP:	
+                pass
+            
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if is_options_menu_open == True:
+                    Options_Menu.click_button(mouse_rect)
+                elif is_in_esc_menu == True:
+                    ESC_Menu.click_button(mouse_rect)
+                else:
                     New_Game_Menu.click_button(mouse_rect)
 
             #---------------------------------------------------------------------------------------------------------------------------------------------- MOUSE #
@@ -377,12 +465,8 @@ while RUNNING:
         #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
         ###########################################################################################################################################################
 
-    # MAIN MENU --------------------------------------------------------------------------------------------------------------------------------------------------#
+    # NEW GAME MENU ----------------------------------------------------------------------------------------------------------------------------------------------#
     ###############################################################################################################################################################
-
-
-
-
 
 
 
