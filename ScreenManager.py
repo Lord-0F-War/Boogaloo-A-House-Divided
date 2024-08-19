@@ -75,7 +75,7 @@ class Screen:
         pygame.display.update(self.SCREEN_RECT)
 
     def render_new_game_menu(self, brightness_value, is_options_menu_open, is_in_esc_menu):
-        self.SCREEN.fill((0, 0, 0))
+        self.SCREEN.fill((127, 127, 127))
         self.SURFACE_ALFA.fill((0, 0, 0, 0))
         self.BRIGHTNESS_SURFACE.fill((0, 0, 0, 0))
 

@@ -197,27 +197,27 @@ class GameLoader:
 
 
         global Main_Menu
-        Main_Menu                               = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background, main_menu_UI,
-                                                    Sounds_Manager.generic_hover_over_button_sound, Sounds_Manager.generic_click_button_sound) 
+        Main_Menu                               = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background, main_menu_UI,                # type: ignore
+                                                    Sounds_Manager.generic_hover_over_button_sound, Sounds_Manager.generic_click_button_sound)
         
         global New_Game_Load_Game_Menu
-        New_Game_Load_Game_Menu                 = NewGameLoadGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background,
+        New_Game_Load_Game_Menu                 = NewGameLoadGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_logo, python_logo, main_menu_background,                   # type: ignore
                                                     new_game_load_game_menu_UI, Sounds_Manager.generic_hover_over_button_sound,
                                                     Sounds_Manager.generic_click_button_sound)
 
         global New_Game_Menu
-        New_Game_Menu                           = NewGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, new_game_menu_UI, character_creation_sheet_UI, 
+        New_Game_Menu                           = NewGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, new_game_menu_UI, character_creation_sheet_UI,                          # type: ignore
                                                             Sounds_Manager.generic_hover_over_button_sound,
                                                     Sounds_Manager.generic_click_button_sound)                   
 
 
 
         global Options_Menu
-        Options_Menu                            = OptionsMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_options_menu, Sounds_Manager.generic_hover_over_button_sound,
+        Options_Menu                            = OptionsMenu(SCREEN_WIDTH, SCREEN_HEIGHT, game_options_menu, Sounds_Manager.generic_hover_over_button_sound,      # type: ignore
                                                     Sounds_Manager.generic_click_button_sound, Sounds_Manager, Main_Menu)
         
         global ESC_Menu
-        ESC_Menu                                = ESCMenu(SCREEN_WIDTH, SCREEN_HEIGHT, esc_menu_background, Sounds_Manager.generic_hover_over_button_sound,
+        ESC_Menu                                = ESCMenu(SCREEN_WIDTH, SCREEN_HEIGHT, esc_menu_background, Sounds_Manager.generic_hover_over_button_sound,        # type: ignore
                                                     Sounds_Manager.generic_click_button_sound)
         
         #-------------------------------------------------------------------------------------------------------------------------------------------------- MENUS #
@@ -417,7 +417,8 @@ while RUNNING:
 
             #######################################################################################################################################################
             #------------------------------------------------------------------------------------------------------------------------------------------- KEYBOARD # 
-            keys = pygame.key.get_pressed()	
+            keys = pygame.key.get_pressed()
+            mods = pygame.key.get_mods()	
 
             if event.type == pygame.KEYDOWN:
                 if keys[pygame.K_ESCAPE]:
@@ -426,11 +427,21 @@ while RUNNING:
                 
                 if New_Game_Menu.receive_player_keybord_input == True:
                     key_name = pygame.key.name(event.key)
-                    if len(key_name) == 1 and key_name.isalpha():
-                        New_Game_Menu.variable_to_receive_player_keybord_input[0] += key_name
 
-                    elif keys[pygame.K_BACKSPACE]:
-                        New_Game_Menu.variable_to_receive_player_keybord_input[0] = New_Game_Menu.variable_to_receive_player_keybord_input[0][:-1]
+                    if len(New_Game_Menu.variable_to_receive_player_keybord_input['content']) < New_Game_Menu.variable_to_receive_player_keybord_input['maximum_size']:
+                        if len(key_name) == 1 and key_name.isalpha() and New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == str:
+                            # Check if either shift key is pressed to determine uppercase
+                            if mods & pygame.KMOD_SHIFT or mods & pygame.KMOD_CAPS:
+                                key_name = key_name.upper()                        
+                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name
+                        elif len(key_name) == 1 and key_name.isnumeric() and New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == int:                      
+                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name  
+
+                        elif keys[pygame.K_SPACE]:
+                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += ' '                                                       
+
+                    if keys[pygame.K_BACKSPACE]:
+                        New_Game_Menu.variable_to_receive_player_keybord_input['content'] = New_Game_Menu.variable_to_receive_player_keybord_input['content'][:-1]
 
             #------------------------------------------------------------------------------------------------------------------------------------------- KEYBOARD #
             #######################################################################################################################################################
@@ -461,6 +472,8 @@ while RUNNING:
         #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
         if is_options_menu_open == False and is_in_esc_menu == False:				
             New_Game_Menu.hover_button(mouse_rect)
+
+            New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.handle_event(PYGAME_EVENTS)
 
         #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
         ###########################################################################################################################################################

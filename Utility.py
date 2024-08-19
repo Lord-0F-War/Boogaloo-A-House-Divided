@@ -133,52 +133,54 @@ class Slide:
 
 
 class Scroll_Bar:
-	def __init__(self, x_pos, y_pos, scroll_height, scroll_range, scroll_color, bar_color, bar_width=20):
+	def __init__(self, x_pos, y_pos, scroll_height, scroll_range, bar_color, bar_width=20, scroll_type = 'rect'):
 		self.x_pos = x_pos
 		self.y_pos = y_pos
 
 		self.scroll_height = scroll_height
 		self.scroll_range = scroll_range
-		self.scroll_color = scroll_color
 		self.bar_color = bar_color
 		self.bar_width = bar_width
+
+		self.scroll_type = scroll_type
 
 		self.dragging = False
 
 		self.scroll_position = 0  # Initial scroll position
 
 	def draw(self, screen):
-		# Draw the scroll background
-		pygame.draw.rect(screen, self.scroll_color, (self.x_pos, self.y_pos, self.bar_width, self.scroll_height))
-
 		# Calculate the position and height of the scroll bar
 		bar_height = 50
 		bar_position = (self.scroll_position / self.scroll_range) * (self.scroll_height - bar_height)
 
-		# Draw the scroll bar
-		pygame.draw.rect(screen, self.bar_color, (self.x_pos, self.y_pos + bar_position, self.bar_width, bar_height))
+		if self.scroll_type == 'rect':
+			# Draw the scroll bar
+			pygame.draw.rect(screen, self.bar_color, (self.x_pos, self.y_pos + bar_position, self.bar_width, bar_height))
+		elif self.scroll_type == 'ball':
+			pygame.draw.circle(screen, self.bar_color, (self.x_pos, self.y_pos + bar_position), self.bar_width)
 
 	def is_mouse_over_scrollbar(self, event):
 		x, y = event.pos
 		scrollbar_rect = pygame.Rect(self.x_pos, self.y_pos, self.bar_width, self.scroll_height)
 		return scrollbar_rect.collidepoint(x, y)
 
-	def handle_event(self, event):
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			if event.button == 1:  # Left mouse button
-				if self.is_mouse_over_scrollbar(event):
-					self.dragging = True
+	def handle_event(self, events):
+		for event in events:
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				if event.button == 1:  # Left mouse button
+					if self.is_mouse_over_scrollbar(event):
+						self.dragging = True
+						mouse_y = event.pos[1] - self.y_pos
+						# Update scroll position based on the mouse position
+						self.scroll_position = min(self.scroll_range, max(0, int((mouse_y / self.scroll_height) * self.scroll_range)))					
+			elif event.type == pygame.MOUSEBUTTONUP:
+				if event.button == 1:  # Left mouse button
+					self.dragging = False
+			elif event.type == pygame.MOUSEMOTION:
+				if self.dragging:
 					mouse_y = event.pos[1] - self.y_pos
 					# Update scroll position based on the mouse position
-					self.scroll_position = min(self.scroll_range, max(0, int((mouse_y / self.scroll_height) * self.scroll_range)))					
-		elif event.type == pygame.MOUSEBUTTONUP:
-			if event.button == 1:  # Left mouse button
-				self.dragging = False
-		elif event.type == pygame.MOUSEMOTION:
-			if self.dragging:
-				mouse_y = event.pos[1] - self.y_pos
-				# Update scroll position based on the mouse position
-				self.scroll_position = min(self.scroll_range, max(0, int((mouse_y / self.scroll_height) * self.scroll_range)))
+					self.scroll_position = min(self.scroll_range, max(0, int((mouse_y / self.scroll_height) * self.scroll_range)))
 		
 	def get_scroll_position(self):
 		return self.scroll_position
