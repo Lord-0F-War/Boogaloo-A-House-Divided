@@ -429,19 +429,42 @@ while RUNNING:
                     key_name = pygame.key.name(event.key)
 
                     if len(New_Game_Menu.variable_to_receive_player_keybord_input['content']) < New_Game_Menu.variable_to_receive_player_keybord_input['maximum_size']:
-                        if len(key_name) == 1 and key_name.isalpha() and New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == str:
-                            # Check if either shift key is pressed to determine uppercase
-                            if mods & pygame.KMOD_SHIFT or mods & pygame.KMOD_CAPS:
-                                key_name = key_name.upper()                        
-                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name
-                        elif len(key_name) == 1 and key_name.isnumeric() and New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == int:                      
-                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name  
+                        #########################################################################################################
+                        if New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == str:
+                            if  len(key_name) == 1 and key_name.isalpha():
+                                # Check if either shift key is pressed to determine uppercase
+                                if mods & pygame.KMOD_SHIFT or mods & pygame.KMOD_CAPS:
+                                    key_name = key_name.upper()                        
+                                New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name
+                                
+                        #########################################################################################################
 
-                        elif keys[pygame.K_SPACE]:
-                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += ' '                                                       
+                        #########################################################################################################
+                        if New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == int:
+                            if len(key_name) == 1 and key_name.isnumeric():
+                                if New_Game_Menu.variable_to_receive_player_keybord_input['content'] == '0':
+                                    New_Game_Menu.variable_to_receive_player_keybord_input['content'] = '' 
+
+                                New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name
+                            elif key_name.startswith('[') and key_name.endswith(']'):
+                                if New_Game_Menu.variable_to_receive_player_keybord_input['content'] == '0':
+                                    New_Game_Menu.variable_to_receive_player_keybord_input['content'] = '' 
+
+                                New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name[1:-1]                                     
+
+                        #########################################################################################################
+
+                        #########################################################################################################
+                        if keys[pygame.K_SPACE]:
+                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += ' ' 
+
+                        #########################################################################################################
+
 
                     if keys[pygame.K_BACKSPACE]:
                         New_Game_Menu.variable_to_receive_player_keybord_input['content'] = New_Game_Menu.variable_to_receive_player_keybord_input['content'][:-1]
+                        if New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == int and len(New_Game_Menu.variable_to_receive_player_keybord_input['content']) == 0:
+                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += '0'                                                                                                           
 
             #------------------------------------------------------------------------------------------------------------------------------------------- KEYBOARD #
             #######################################################################################################################################################
@@ -449,16 +472,34 @@ while RUNNING:
 
             #######################################################################################################################################################
             #---------------------------------------------------------------------------------------------------------------------------------------------- MOUSE #
-            if event.type == pygame.MOUSEBUTTONUP:	
+            if event.type == pygame.MOUSEBUTTONUP and event.button < 4:	
                 pass
             
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button < 4:
                 if is_options_menu_open == True:
                     Options_Menu.click_button(mouse_rect)
                 elif is_in_esc_menu == True:
                     ESC_Menu.click_button(mouse_rect)
                 else:
                     New_Game_Menu.click_button(mouse_rect)
+            
+            elif event.type == pygame.MOUSEWHEEL:
+                CHARACTER_CREATION_SHEET_RECT = pygame.Rect(
+                                                            424 * New_Game_Menu.FACTOR_X,                                       # START X
+                                                            14 * New_Game_Menu.FACTOR_Y,                                        # START Y
+                                                            New_Game_Menu.CHARACTER_CREATION_SHEET_SURFACE.get_width() + 15,    # WIDTH
+                                                            1000 * New_Game_Menu.FACTOR_Y                                       # HEIGHT
+                                                            )
+                
+                if CHARACTER_CREATION_SHEET_RECT.colliderect(mouse_rect):
+                    if event.y > 0:
+                        New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position -= event.y * 30
+                        if New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position < 0:
+                            New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position = 0
+                    elif event.y < 0:
+                        New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position += abs(event.y) * 30
+                        if New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position > New_Game_Menu.CHARACTER_CREATION_SHEET.get_height() - 1000 * New_Game_Menu.FACTOR_Y:
+                            New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position = New_Game_Menu.CHARACTER_CREATION_SHEET.get_height() - 1000 * New_Game_Menu.FACTOR_Y
 
             #---------------------------------------------------------------------------------------------------------------------------------------------- MOUSE #
             #######################################################################################################################################################

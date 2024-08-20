@@ -691,6 +691,7 @@ class NewGameMenu:
 		self.receive_player_keybord_input 				= False
 		self.variable_to_receive_player_keybord_input 	= None
 
+		# ID
 		self.ASSIGN_CHARACTER_NAME_BOX_RECT 			= pygame.Rect(88, 33, 453, 20)
 		self.character_name 							=  {	
 																'content' 		: '',
@@ -716,7 +717,63 @@ class NewGameMenu:
 																'maximum_size' 	: 3,
 																'content_type' 	: int,
 																'x_offset' 		: 25
-															}	
+															}
+
+
+		# TRAITS
+		self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT 		= pygame.Rect(858, 32, 38, 20)
+		self.character_strenght							=  {	
+																'content' 		: '0',
+																'rect' 			: self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT,
+																'maximum_size' 	: 3,
+																'content_type' 	: int,
+																'x_offset' 		: 4
+															}
+
+		self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT 	= pygame.Rect(1155, 32, 38, 20)
+		self.character_constituion						=  {	
+																'content' 		: '0',
+																'rect' 			: self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT,
+																'maximum_size' 	: 3,
+																'content_type' 	: int,
+																'x_offset' 		: 4
+															}
+
+		self.ASSIGN_CHARACTER_AGILITY_BOX_RECT 			= pygame.Rect(1335, 32, 38, 20)
+		self.character_agility 							=  {	
+																'content' 		: '0',
+																'rect' 			: self.ASSIGN_CHARACTER_AGILITY_BOX_RECT,
+																'maximum_size' 	: 3,
+																'content_type' 	: int,
+																'x_offset' 		: 4
+															}
+
+		self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT 		= pygame.Rect(903, 339, 38, 20)
+		self.character_charisma							=  {	
+																'content' 		: '0',
+																'rect' 			: self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT,
+																'maximum_size' 	: 3,
+																'content_type' 	: int,
+																'x_offset' 		: 4
+															}
+
+		self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT 	= pygame.Rect(1259, 339, 38, 20)
+		self.character_intelligence						=  {	
+																'content' 		: '0',
+																'rect' 			: self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT,
+																'maximum_size' 	: 3,
+																'content_type' 	: int,
+																'x_offset' 		: 4
+															}
+
+		self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT 		= pygame.Rect(913, 565, 38, 20)
+		self.character_education 						=  {	
+																'content' 		: '0',
+																'rect' 			: self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT,
+																'maximum_size' 	: 3,
+																'content_type' 	: int,
+																'x_offset' 		: 4
+															}					
 
 		#------------------------------------------------------------------------ TEX BOXES --------------------------------------------------------------------------#
 		###############################################################################################################################################################
@@ -731,15 +788,38 @@ class NewGameMenu:
 	def get_button_by_interaction(self, mouse_rect):
 		if self.ASSIGN_CHARACTER_NAME_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.image_offset_y - 13, 1, 1)):
 			return 'ASSIGN_CHARACTER_NAME'	
+		
 		elif self.ASSIGN_CHARACTER_AGE_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.image_offset_y - 13, 1, 1)):
 			return 'ASSIGN_CHARACTER_AGE'
+		
 		elif self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.image_offset_y - 13, 1, 1)):
-			return 'ASSIGN_CHARACTER_WEIGHT'					
+			return 'ASSIGN_CHARACTER_WEIGHT'
+
+		
+		elif self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.image_offset_y - 13, 1, 1)):
+			return 'ASSIGN_CHARACTER_STRENGHT'
+		
+		elif self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.image_offset_y - 13, 1, 1)):
+			return 'ASSIGN_CHARACTER_CONSTITUTION'	
+		
+		elif self.ASSIGN_CHARACTER_AGILITY_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.image_offset_y - 13, 1, 1)):
+			return 'ASSIGN_CHARACTER_AGILITY'
+		
+		elif self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.image_offset_y - 13, 1, 1)):
+			return 'ASSIGN_CHARACTER_CHARISMA'	
+		
+		elif self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.image_offset_y - 13, 1, 1)):
+			return 'ASSIGN_CHARACTER_INTELLIGENCE'
+		
+		elif self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.image_offset_y - 13, 1, 1)):
+			return 'ASSIGN_CHARACTER_EDUCATION'											
+		
 		else:
 			return None
 
 	def click_button(self, mouse_rect):
 		clicked_button = self.get_button_by_interaction(mouse_rect)
+
 		if clicked_button != None:
 			if clicked_button == 'ASSIGN_CHARACTER_NAME':
 				self.receive_player_keybord_input = True
@@ -761,7 +841,54 @@ class NewGameMenu:
 				self.variable_to_receive_player_keybord_input = self.character_weight
 
 				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()								
+				self.CLICK_BUTTON_SOUND.play()	
+
+
+
+			elif clicked_button == 'ASSIGN_CHARACTER_STRENGHT':
+				self.receive_player_keybord_input = True
+
+				self.variable_to_receive_player_keybord_input = self.character_strenght
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+			elif clicked_button == 'ASSIGN_CHARACTER_CONSTITUTION':
+				self.receive_player_keybord_input = True
+
+				self.variable_to_receive_player_keybord_input = self.character_constituion
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()	
+			elif clicked_button == 'ASSIGN_CHARACTER_AGILITY':
+				self.receive_player_keybord_input = True
+
+				self.variable_to_receive_player_keybord_input = self.character_agility
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+			elif clicked_button == 'ASSIGN_CHARACTER_CHARISMA':
+				self.receive_player_keybord_input = True
+
+				self.variable_to_receive_player_keybord_input = self.character_charisma
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()	
+			elif clicked_button == 'ASSIGN_CHARACTER_INTELLIGENCE':
+				self.receive_player_keybord_input = True
+
+				self.variable_to_receive_player_keybord_input = self.character_intelligence
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()
+			elif clicked_button == 'ASSIGN_CHARACTER_EDUCATION':
+				self.receive_player_keybord_input = True
+
+				self.variable_to_receive_player_keybord_input = self.character_education
+
+				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+				self.CLICK_BUTTON_SOUND.play()																				
+		
+		
 		else:
 			self.receive_player_keybord_input = False
 			self.variable_to_receive_player_keybord_input = None
@@ -779,66 +906,93 @@ class NewGameMenu:
 			self.hovered_button = self.last_hovered_button
 
 	def draw(self, SCREEN):
-		try:
-			self.image_offset_y = self.CHARACTER_CREATION_SHEET_SCROLL_BAR.get_scroll_position()			
+		self.image_offset_y = self.CHARACTER_CREATION_SHEET_SCROLL_BAR.get_scroll_position()			
 
 
-			self.CHARACTER_CREATION_SHEET_SCROLL_BAR.draw(SCREEN)
+		self.CHARACTER_CREATION_SHEET_SCROLL_BAR.draw(SCREEN)
 
 
-			######  BACKGROUND  ######
-			SCREEN.blit(self.MENU_GUI, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
+
+		######  BACKGROUND  ######
+		SCREEN.blit(self.MENU_GUI, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
 
 
-			######  TEXT RENDERS  ######
-			character_name_text_render 			= self.font20.render(	str(self.character_name['content']), 		True, 	(255,255,255))
-			character_age_text_render 			= self.font20.render(	str(self.character_age['content']), 		True, 	(255,255,255))
-			character_weight_text_render 		= self.font20.render(	str(self.character_weight['content']), 		True, 	(255,255,255))	
 
-			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 	(	self.character_name['rect'][0]			+ self.character_name['x_offset']											
-																							,   self.character_name['rect'][1] 		+ 1))
+		######  TEXT RENDERS  ######
+		character_name_text_render 			= self.font20.render(	str(self.character_name['content']), 			True, 	(255,255,255))
+		character_age_text_render 			= self.font20.render(	str(self.character_age['content']), 			True, 	(255,255,255))
+		character_weight_text_render 		= self.font20.render(	str(self.character_weight['content']), 			True, 	(255,255,255))	
 
-			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_age_text_render, 	(	self.character_age['rect'][0] 			+ self.character_age['x_offset']		
-																							,   self.character_age['rect'][1] 		+ 1))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 			(	self.character_name['rect'][0]				+ self.character_name['x_offset']											
+																								,   self.character_name['rect'][1] 			+ 1))
 
-			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_weight_text_render, 	(	self.character_weight['rect'][0] 		+ self.character_weight['x_offset']		
-																							,   self.character_weight['rect'][1] 	+ 1))				
-			
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_age_text_render, 			(	self.character_age['rect'][0] 				+ self.character_age['x_offset']		
+																								,   self.character_age['rect'][1] 			+ 1))
 
-			if self.receive_player_keybord_input == True:
-				current_time = pygame.time.get_ticks()
-				visibility_duration = 250
-				cycle_duration = visibility_duration * 2
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_weight_text_render, 			(	self.character_weight['rect'][0] 			+ self.character_weight['x_offset']		
+																								,   self.character_weight['rect'][1] 		+ 1))				
+		
 
-				if (current_time % cycle_duration) < visibility_duration:
-					x = self.variable_to_receive_player_keybord_input['rect'][0] + self.variable_to_receive_player_keybord_input['x_offset'] + self.font20.render(str(self.variable_to_receive_player_keybord_input['content']), True, (255,255,255)).get_width()
-					y = self.variable_to_receive_player_keybord_input['rect'][1]
-					pygame.draw.rect(self.CHARACTER_CREATION_INFORMATION_SURFACE, (255,255,255), (x, y, 2, 18 * self.FACTOR_Y))
+		character_strenght_text_render 		= self.font20.render(	str(self.character_strenght['content']), 		True, 	(255,255,255))
+		character_constituion_text_render 	= self.font20.render(	str(self.character_constituion['content']), 	True, 	(255,255,255))
+		character_agility_text_render 		= self.font20.render(	str(self.character_agility['content']), 		True, 	(255,255,255))			
+		character_charisma_text_render 		= self.font20.render(	str(self.character_charisma['content']), 		True, 	(255,255,255))
+		character_intelligence_text_render 	= self.font20.render(	str(self.character_intelligence['content']),	True, 	(255,255,255))
+		character_education_text_render 	= self.font20.render(	str(self.character_education['content']), 		True, 	(255,255,255))	
 
 
-			######  SUBSURFACES  ######
-			SCREEN.blit(self.CHARACTER_CREATION_SHEET_SURFACE.subsurface(				0,															# START X
-																						self.image_offset_y,										# START Y
-																						self.CHARACTER_CREATION_SHEET_SURFACE.get_width(),			# WIDTH
-																						1000 * self.FACTOR_Y),										# HEIGHT
-																						(439 * self.FACTOR_X, 14 * self.FACTOR_Y))					# BLIT POS
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_strenght_text_render, 		(	self.character_strenght['rect'][0]			+ self.character_strenght['x_offset']											
+																								,   self.character_strenght['rect'][1] 		+ 1))
 
-			SCREEN.blit(self.CHARACTER_CREATION_INFORMATION_SURFACE.subsurface(			0,															# START X
-																						self.image_offset_y,										# START Y
-																						self.CHARACTER_CREATION_INFORMATION_SURFACE.get_width(),	# WIDTH
-																						1000 * self.FACTOR_Y),										# HEIGHT
-																						(439 * self.FACTOR_X, 14 * self.FACTOR_Y))					# BLIT POS
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constituion_text_render, 	(	self.character_constituion['rect'][0] 		+ self.character_constituion['x_offset']		
+																								,   self.character_constituion['rect'][1] 	+ 1))
 
-			self.CHARACTER_CREATION_INFORMATION_SURFACE.fill((0, 0, 0, 0))				
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_agility_text_render, 		(	self.character_agility['rect'][0] 			+ self.character_agility['x_offset']		
+																								,   self.character_agility['rect'][1] 		+ 1))
+		
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_charisma_text_render, 		(	self.character_charisma['rect'][0]			+ self.character_charisma['x_offset']											
+																								,   self.character_charisma['rect'][1] 		+ 1))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_intelligence_text_render, 	(	self.character_intelligence['rect'][0] 		+ self.character_intelligence['x_offset']		
+																								,   self.character_intelligence['rect'][1] 	+ 1))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_education_text_render, 		(	self.character_education['rect'][0] 		+ self.character_education['x_offset']		
+																								,   self.character_education['rect'][1] 	+ 1))			
 
 
-			######  BUTTONS ######
-			if self.hovered_button != None:
-				pass
-			else:
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(200)
-		except Exception as e:
-			print("An error occurred:")
-			traceback.print_exc()
+
+		if self.receive_player_keybord_input == True:
+			current_time = pygame.time.get_ticks()
+			visibility_duration = 250
+			cycle_duration = visibility_duration * 2
+
+			if (current_time % cycle_duration) < visibility_duration:
+				x = self.variable_to_receive_player_keybord_input['rect'][0] + self.variable_to_receive_player_keybord_input['x_offset'] + self.font20.render(str(self.variable_to_receive_player_keybord_input['content']), True, (255,255,255)).get_width()
+				y = self.variable_to_receive_player_keybord_input['rect'][1]
+				pygame.draw.rect(self.CHARACTER_CREATION_INFORMATION_SURFACE, (255,255,255), (x, y, 2, 18 * self.FACTOR_Y))
+
+
+		######  SUBSURFACES  ######
+		SCREEN.blit(self.CHARACTER_CREATION_SHEET_SURFACE.subsurface(				0,															# START X
+																					self.image_offset_y,										# START Y
+																					self.CHARACTER_CREATION_SHEET_SURFACE.get_width(),			# WIDTH
+																					1000 * self.FACTOR_Y),										# HEIGHT
+																					(439 * self.FACTOR_X, 14 * self.FACTOR_Y))					# BLIT POS
+
+		SCREEN.blit(self.CHARACTER_CREATION_INFORMATION_SURFACE.subsurface(			0,															# START X
+																					self.image_offset_y,										# START Y
+																					self.CHARACTER_CREATION_INFORMATION_SURFACE.get_width(),	# WIDTH
+																					1000 * self.FACTOR_Y),										# HEIGHT
+																					(439 * self.FACTOR_X, 14 * self.FACTOR_Y))					# BLIT POS
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.fill((0, 0, 0, 0))				
+
+
+		######  BUTTONS ######
+		if self.hovered_button != None:
+			pass
+		else:
+			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)
+
 #------------------------------------------------------------------------- NEW GAME---------------------------------------------------------------------------#
 ###############################################################################################################################################################
