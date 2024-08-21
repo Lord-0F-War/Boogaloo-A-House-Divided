@@ -3,6 +3,7 @@ import Utility
 from PygameManager import pygame
 from pyvidplayer import Video
 from json import load as json_load, dump as json_dump
+import numpy as np
 
 import traceback
 
@@ -644,7 +645,9 @@ class NewGameLoadGameMenu:
 ###############################################################################################################################################################
 #------------------------------------------------------------------------- NEW GAME---------------------------------------------------------------------------#
 class NewGameMenu:
-	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, MENU_GUI, CHARACTER_CREATION_SHEET, HOVER_OVER_BUTTON_SOUND, CLICK_BUTTON_SOUND):
+	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, MENU_GUI, CHARACTER_CREATION_SHEET, HOVER_OVER_BUTTON_SOUND, CLICK_BUTTON_SOUND, CHARACTER_BRAIN_SPRITE,
+				CHARACTER_HEART_SPRITE, CHARACTER_LUNGS_SPRITE, CHARACTER_LIVER_SPRITE, CHARACTER_STOMACH_SPRITE, CHARACTER_KIDNEYS_SPRITE,
+				CHARACTER_INTESTINE_SPRITE, CHARACTER_ORGANS_COLLIDER_SPRITE, CHARACTER_SILHOUETTE):
 
 		###############################################################################################################################################################
 		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
@@ -668,11 +671,55 @@ class NewGameMenu:
 		self.MENU_GUI 						= MENU_GUI
 		self.CHARACTER_CREATION_SHEET 		= CHARACTER_CREATION_SHEET
 
+		self.CHARACTER_BRAIN_SPRITE 		= CHARACTER_BRAIN_SPRITE
+		self.CHARACTER_HEART_SPRITE 		= CHARACTER_HEART_SPRITE
+		self.CHARACTER_LUNGS_SPRITE 		= CHARACTER_LUNGS_SPRITE
+		self.CHARACTER_LIVER_SPRITE 		= CHARACTER_LIVER_SPRITE
+		self.CHARACTER_STOMACH_SPRITE 		= CHARACTER_STOMACH_SPRITE
+		self.CHARACTER_KIDNEYS_SPRITE 		= CHARACTER_KIDNEYS_SPRITE
+		self.CHARACTER_INTESTINE_SPRITE 	= CHARACTER_INTESTINE_SPRITE
+
+		self.CHARACTER_ORGANS_COLLIDER_SPRITE 	= CHARACTER_ORGANS_COLLIDER_SPRITE
+		self.CHARACTER_SILHOUETTE 				= CHARACTER_SILHOUETTE
+
+		self.organ_to_draw = None
+		self.character_organs_collider_colors = {
+			'CHARACTER_BRAIN_SPRITE'		: (255,0,0),
+			'CHARACTER_HEART_SPRITE'		: (255,216,0),
+			'CHARACTER_LUNGS_SPRITE'		: (255,106,0),
+			'CHARACTER_LIVER_SPRITE'		: (182,255,0),
+			'CHARACTER_STOMACH_SPRITE'		: (0,255,33),
+			'CHARACTER_KIDNEYS_SPRITE'		: (0,255,144),
+			'CHARACTER_INTESTINE_SPRITE'	: (0,255,255)
+		}
+
+		self.organs_updated_color_dict = {
+			'CHARACTER_BRAIN_SPRITE'		: None,
+			'CHARACTER_HEART_SPRITE'		: None,
+			'CHARACTER_LUNGS_SPRITE'		: None,
+			'CHARACTER_LIVER_SPRITE'		: None,
+			'CHARACTER_STOMACH_SPRITE'		: None,
+			'CHARACTER_KIDNEYS_SPRITE'		: None,
+			'CHARACTER_INTESTINE_SPRITE'	: None
+		}
+		self.organs_updated_image_dict = {
+			'CHARACTER_BRAIN_SPRITE'		: None,
+			'CHARACTER_HEART_SPRITE'		: None,
+			'CHARACTER_LUNGS_SPRITE'		: None,
+			'CHARACTER_LIVER_SPRITE'		: None,
+			'CHARACTER_STOMACH_SPRITE'		: None,
+			'CHARACTER_KIDNEYS_SPRITE'		: None,
+			'CHARACTER_INTESTINE_SPRITE'	: None
+		}				
+
 
 		self.CHARACTER_CREATION_SHEET_SURFACE 			= pygame.Surface((self.CHARACTER_CREATION_SHEET.get_width(), self.CHARACTER_CREATION_SHEET.get_height()), pygame.SRCALPHA)
 		self.CHARACTER_CREATION_SHEET_SURFACE.blit(self.CHARACTER_CREATION_SHEET, (0, 0))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE 	= pygame.Surface((self.CHARACTER_CREATION_SHEET.get_width(), self.CHARACTER_CREATION_SHEET.get_height()), pygame.SRCALPHA)
+		
+		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE 	= pygame.Surface((self.CHARACTER_CREATION_SHEET.get_width(), self.CHARACTER_CREATION_SHEET.get_height()), pygame.SRCALPHA)
+		self.CHARACTER_CREATION_ORGANS_SURFACE 	= pygame.Surface((self.CHARACTER_CREATION_SHEET.get_width(), self.CHARACTER_CREATION_SHEET.get_height()), pygame.SRCALPHA)
 
 
 		self.CHARACTER_CREATION_SHEET_SCROLL_BAR 		= Utility.Scroll_Bar(423 * self.FACTOR_X, 13 * self.FACTOR_Y, 1053 * self.FACTOR_Y,
@@ -817,6 +864,26 @@ class NewGameMenu:
 		else:
 			return None
 
+	def get_organ_by_interaction(self, mouse_pos):
+		try:
+			if self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_BRAIN_SPRITE']:
+				return 'CHARACTER_BRAIN_SPRITE'
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_HEART_SPRITE']:
+				return 'CHARACTER_HEART_SPRITE'
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_LUNGS_SPRITE']:
+				return 'CHARACTER_LUNGS_SPRITE'
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_LIVER_SPRITE']:
+				return 'CHARACTER_LIVER_SPRITE'
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_STOMACH_SPRITE']:
+				return 'CHARACTER_STOMACH_SPRITE'
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_KIDNEYS_SPRITE']:
+				return 'CHARACTER_KIDNEYS_SPRITE'
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_INTESTINE_SPRITE']:
+				return 'CHARACTER_INTESTINE_SPRITE'															
+					
+		except Exception as e:
+			return None		
+
 	def click_button(self, mouse_rect):
 		clicked_button = self.get_button_by_interaction(mouse_rect)
 
@@ -905,6 +972,135 @@ class NewGameMenu:
 			self.last_hovered_button = None
 			self.hovered_button = self.last_hovered_button
 
+	def hover_organs(self, mouse_rect):
+		hovered_organ = self.get_organ_by_interaction(mouse_rect)
+		if hovered_organ == 'CHARACTER_BRAIN_SPRITE':
+			self.organ_to_draw = 'CHARACTER_BRAIN_SPRITE'
+		elif hovered_organ == 'CHARACTER_HEART_SPRITE':
+			self.organ_to_draw = 'CHARACTER_HEART_SPRITE'
+		elif hovered_organ == 'CHARACTER_LUNGS_SPRITE':
+			self.organ_to_draw = 'CHARACTER_LUNGS_SPRITE'
+		elif hovered_organ == 'CHARACTER_LIVER_SPRITE':
+			self.organ_to_draw = 'CHARACTER_LIVER_SPRITE'
+		elif hovered_organ == 'CHARACTER_STOMACH_SPRITE':
+			self.organ_to_draw = 'CHARACTER_STOMACH_SPRITE'
+		elif hovered_organ == 'CHARACTER_KIDNEYS_SPRITE':
+			self.organ_to_draw = 'CHARACTER_KIDNEYS_SPRITE'
+		elif hovered_organ == 'CHARACTER_INTESTINE_SPRITE':
+			self.organ_to_draw = 'CHARACTER_INTESTINE_SPRITE'																	
+
+		else:
+			self.organ_to_draw = None
+
+	def received_player_keybord_input(self, key_name, keys, mods):
+		if len(self.variable_to_receive_player_keybord_input['content']) < self.variable_to_receive_player_keybord_input['maximum_size']:
+			#########################################################################################################
+			if self.variable_to_receive_player_keybord_input['content_type'] == str:
+				if  len(key_name) == 1 and key_name.isalpha():
+					# Check if either shift key is pressed to determine uppercase
+					if mods & pygame.KMOD_SHIFT or mods & pygame.KMOD_CAPS:
+						key_name = key_name.upper()                        
+					self.variable_to_receive_player_keybord_input['content'] += key_name
+					
+			#########################################################################################################
+
+			#########################################################################################################
+			if self.variable_to_receive_player_keybord_input['content_type'] == int:
+				if len(key_name) == 1 and key_name.isnumeric():
+					if self.variable_to_receive_player_keybord_input['content'] == '0':
+						self.variable_to_receive_player_keybord_input['content'] = '' 
+
+					self.variable_to_receive_player_keybord_input['content'] += key_name
+				elif key_name.startswith('[') and key_name.endswith(']'):
+					if self.variable_to_receive_player_keybord_input['content'] == '0':
+						self.variable_to_receive_player_keybord_input['content'] = '' 
+
+					self.variable_to_receive_player_keybord_input['content'] += key_name[1:-1]                                     
+
+			#########################################################################################################
+
+			#########################################################################################################
+			if keys[pygame.K_SPACE]:
+				self.variable_to_receive_player_keybord_input['content'] += ' ' 
+
+			#########################################################################################################
+
+		if keys[pygame.K_BACKSPACE]:
+			self.variable_to_receive_player_keybord_input['content'] = self.variable_to_receive_player_keybord_input['content'][:-1]
+			if self.variable_to_receive_player_keybord_input['content_type'] == int and len(self.variable_to_receive_player_keybord_input['content']) == 0:
+				self.variable_to_receive_player_keybord_input['content'] += '0'
+
+	def received_player_mousewheel_input(self, wheel_movement, mouse_rect):
+		CHARACTER_CREATION_SHEET_RECT = pygame.Rect(
+													424 * self.FACTOR_X,                                       # START X
+													14 * self.FACTOR_Y,                                        # START Y
+													self.CHARACTER_CREATION_SHEET_SURFACE.get_width() + 15,    # WIDTH
+													1000 * self.FACTOR_Y                                       # HEIGHT
+													)
+		
+		if CHARACTER_CREATION_SHEET_RECT.colliderect(mouse_rect):
+			if wheel_movement > 0:
+				self.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position -= wheel_movement * 30
+				if self.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position < 0:
+					self.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position = 0
+			elif wheel_movement < 0:
+				self.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position += abs(wheel_movement) * 30
+				if self.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position > self.CHARACTER_CREATION_SHEET.get_height() - 1000 * self.FACTOR_Y:
+					self.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position = self.CHARACTER_CREATION_SHEET.get_height() - 1000 * self.FACTOR_Y						 		
+
+	def change_white_to_color(self, sprite, color):
+		sprite_name = sprite[1]
+		if self.organs_updated_color_dict[sprite_name] != color:
+			self.organs_updated_color_dict[sprite_name] = color
+
+			sprite = sprite[0]
+
+			# Ensure the sprite has an alpha channel
+			sprite = sprite.convert_alpha()
+			
+			# Create a new surface with the same size and alpha channel
+			new_sprite = pygame.Surface(sprite.get_size(), pygame.SRCALPHA)
+			
+			# Convert the sprite's pixels to a NumPy array
+			sprite_array = pygame.surfarray.array3d(sprite)
+			alpha_array = pygame.surfarray.array_alpha(sprite)
+			
+			# Create a mask where the white pixels are (considering a tolerance for near-white)
+			white_mask = (sprite_array[:, :, 0] >= 80) & (sprite_array[:, :, 1] >= 80) & (sprite_array[:, :, 2] >= 80) & (alpha_array > 0)
+			
+			# Apply the new color only to the white areas
+			sprite_array[white_mask] = color
+			
+			# Copy the modified sprite_array and alpha_array to the new surface
+			new_sprite_array = pygame.surfarray.pixels3d(new_sprite)
+			new_alpha_array = pygame.surfarray.pixels_alpha(new_sprite)
+			
+			new_sprite_array[:, :, :] = sprite_array
+			new_alpha_array[:, :] = alpha_array
+
+			self.organs_updated_image_dict[sprite_name] = new_sprite			
+
+			return new_sprite
+		return self.organs_updated_image_dict[sprite_name]
+
+	def get_color_from_health(self, health, max_health):
+		# Ensure health is within bounds
+		health = max(0, min(health, max_health))
+		
+		# Calculate the percentage of health
+		health_percentage = health / max_health
+		
+		# Define the start and end colors
+		color_dead = (127, 0, 0)  
+		color_alive = (0, 127, 0)  
+		
+		# Interpolate between the two colors
+		r = int(color_dead[0] * (1 - health_percentage) + color_alive[0] * health_percentage)
+		g = int(color_dead[1] * (1 - health_percentage) + color_alive[1] * health_percentage)
+		b = int(color_dead[2] * (1 - health_percentage) + color_alive[2] * health_percentage)
+		
+		return (r, g, b)
+
 	def draw(self, SCREEN):
 		self.image_offset_y = self.CHARACTER_CREATION_SHEET_SCROLL_BAR.get_scroll_position()			
 
@@ -916,6 +1112,75 @@ class NewGameMenu:
 		######  BACKGROUND  ######
 		SCREEN.blit(self.MENU_GUI, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
 
+
+
+		######  HEALTH  ######
+		brain_color 		= self.get_color_from_health(100, 100)
+		heart_color 		= self.get_color_from_health(100, 100)
+		kidneys_color 		= self.get_color_from_health(100, 100)
+		stomach_color 		= self.get_color_from_health(100, 100)
+		liver_color 		= self.get_color_from_health(100, 100)
+		lungs_color 		= self.get_color_from_health(100, 100)
+		instestine_color 	= self.get_color_from_health(100, 100)
+
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(self.CHARACTER_SILHOUETTE, 																						(	0											
+																																											,   340))		
+		
+		
+		if 'CHARACTER_BRAIN_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
+			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_BRAIN_SPRITE, 'CHARACTER_BRAIN_SPRITE'), brain_color), 					(	0											
+																																												,   340))
+		else:
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_BRAIN_SPRITE, 'CHARACTER_BRAIN_SPRITE'), brain_color), 					(	0											
+																																												,   340))
+		
+		if 'CHARACTER_HEART_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
+			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_HEART_SPRITE, 'CHARACTER_HEART_SPRITE'), heart_color), 					(	0											
+																																												,   340))
+		else:
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_HEART_SPRITE, 'CHARACTER_HEART_SPRITE'), heart_color), 					(	0											
+																																												,   340))
+		
+		if 'CHARACTER_KIDNEYS_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
+			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_KIDNEYS_SPRITE, 'CHARACTER_KIDNEYS_SPRITE'), kidneys_color), 			(	0											
+																																												,   340))
+		else:
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_KIDNEYS_SPRITE, 'CHARACTER_KIDNEYS_SPRITE'), kidneys_color), 			(	0											
+																																												,   340))
+		
+		if 'CHARACTER_STOMACH_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
+			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_STOMACH_SPRITE, 'CHARACTER_STOMACH_SPRITE'), stomach_color), 			(	0											
+																																												,   340))
+		else:
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_STOMACH_SPRITE, 'CHARACTER_STOMACH_SPRITE'), stomach_color), 			(	0											
+																																												,   340))
+		
+		if 'CHARACTER_LIVER_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
+			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_LIVER_SPRITE, 'CHARACTER_LIVER_SPRITE'), liver_color), 					(	0											
+																																												,   340))
+		else:
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_LIVER_SPRITE, 'CHARACTER_LIVER_SPRITE'), liver_color), 					(	0											
+																																												,   340))
+		
+		if 'CHARACTER_LUNGS_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
+			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_LUNGS_SPRITE, 'CHARACTER_LUNGS_SPRITE'), lungs_color), 					(	0											
+																																												,   340))
+		else:
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_LUNGS_SPRITE, 'CHARACTER_LUNGS_SPRITE'), lungs_color), 					(	0											
+																																												,   340))
+		
+		if 'CHARACTER_INTESTINE_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
+			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_INTESTINE_SPRITE, 'CHARACTER_INTESTINE_SPRITE'), instestine_color), 	(	0											
+																																												,   340))
+		else:
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_INTESTINE_SPRITE, 'CHARACTER_INTESTINE_SPRITE'), instestine_color), 	(	0											
+																																												,   340))
+
+		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.set_alpha(80)
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE, (0, 0))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(self.CHARACTER_CREATION_ORGANS_SURFACE, (0, 0))
 
 
 		######  TEXT RENDERS  ######
@@ -985,14 +1250,16 @@ class NewGameMenu:
 																					1000 * self.FACTOR_Y),										# HEIGHT
 																					(439 * self.FACTOR_X, 14 * self.FACTOR_Y))					# BLIT POS
 
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.fill((0, 0, 0, 0))				
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.fill((0, 0, 0, 0))
+		self.CHARACTER_CREATION_ORGANS_SURFACE.fill((0, 0, 0, 0))
+		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.fill((0, 0, 0, 0))				
 
 
 		######  BUTTONS ######
 		if self.hovered_button != None:
 			pass
 		else:
-			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)
+			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)				
 
 #------------------------------------------------------------------------- NEW GAME---------------------------------------------------------------------------#
 ###############################################################################################################################################################

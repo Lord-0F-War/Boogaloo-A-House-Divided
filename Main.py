@@ -76,8 +76,30 @@ class GameLoader:
 
         character_creation_sheet_UI_source 	= pygame.image.load(os.path.join(NEW_GAME_MENU_FOLDER, 'character_creation_sheet.png')).convert_alpha()
         global character_creation_sheet_UI
-        character_creation_sheet_UI         = pygame.transform.smoothscale_by(character_creation_sheet_UI_source, (FACTOR_X, FACTOR_Y))                 
+        character_creation_sheet_UI         = pygame.transform.smoothscale_by(character_creation_sheet_UI_source, (FACTOR_X, FACTOR_Y))
+
+
+        organs_spirtesheet_source 	        = pygame.image.load(os.path.join(NEW_GAME_MENU_FOLDER, 'organs_spritesheet.png')).convert_alpha()
         
+        global character_brain_sprite
+        character_brain_sprite              = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(0, 0, 304, 600), (FACTOR_X, FACTOR_Y))
+        global character_heart_sprite
+        character_heart_sprite              = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(305, 0, 304, 600), (FACTOR_X, FACTOR_Y))
+        global character_lungs_sprite
+        character_lungs_sprite              = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(609, 0, 304, 600), (FACTOR_X, FACTOR_Y))
+        global character_liver_sprite
+        character_liver_sprite              = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(913, 0, 304, 600), (FACTOR_X, FACTOR_Y))
+        global character_stomach_sprite
+        character_stomach_sprite            = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(1217, 0, 304, 600), (FACTOR_X, FACTOR_Y))
+        global character_kidneys_sprite
+        character_kidneys_sprite            = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(1521, 0, 304, 600), (FACTOR_X, FACTOR_Y))
+        global character_intestine_sprite
+        character_intestine_sprite          = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(1825, 0, 304, 600), (FACTOR_X, FACTOR_Y))
+        global character_organs_collider_sprite
+        character_organs_collider_sprite    = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(2129, 0, 304, 600), (FACTOR_X, FACTOR_Y))        
+        global character_silhouette
+        character_silhouette                = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(2433, 0, 304, 600), (FACTOR_X, FACTOR_Y))                                                           
+
         #---------------------------------------------------------------------------------------------------------------------------------------- NEW GAME FOLDER #
         ###########################################################################################################################################################                
 
@@ -207,8 +229,10 @@ class GameLoader:
 
         global New_Game_Menu
         New_Game_Menu                           = NewGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, new_game_menu_UI, character_creation_sheet_UI,                          # type: ignore
-                                                            Sounds_Manager.generic_hover_over_button_sound,
-                                                    Sounds_Manager.generic_click_button_sound)                   
+                                                    Sounds_Manager.generic_hover_over_button_sound, Sounds_Manager.generic_click_button_sound,
+                                                    character_brain_sprite, character_heart_sprite, character_lungs_sprite, character_liver_sprite,
+                                                    character_stomach_sprite, character_kidneys_sprite, character_intestine_sprite, character_organs_collider_sprite,
+                                                    character_silhouette)                   
 
 
 
@@ -402,7 +426,10 @@ while RUNNING:
         #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
         Screen_Manager.render_new_game_menu(Options_Menu.BRIGHTNESS_SLIDER.value, is_options_menu_open, is_in_esc_menu)
 
-        #---------------------------------------------------------------------------------------------------------------------------------------------------------#
+        fps = CLOCK.get_fps()
+        # Update the window title with the current FPS count
+        pygame.display.set_caption(f"FPS: {fps:.2f}")
+        #----------------------------------------------------------------------------------------------------------------------------------------- SCREEN MANAGER #
         ###########################################################################################################################################################
 
 
@@ -427,44 +454,7 @@ while RUNNING:
                 
                 if New_Game_Menu.receive_player_keybord_input == True:
                     key_name = pygame.key.name(event.key)
-
-                    if len(New_Game_Menu.variable_to_receive_player_keybord_input['content']) < New_Game_Menu.variable_to_receive_player_keybord_input['maximum_size']:
-                        #########################################################################################################
-                        if New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == str:
-                            if  len(key_name) == 1 and key_name.isalpha():
-                                # Check if either shift key is pressed to determine uppercase
-                                if mods & pygame.KMOD_SHIFT or mods & pygame.KMOD_CAPS:
-                                    key_name = key_name.upper()                        
-                                New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name
-                                
-                        #########################################################################################################
-
-                        #########################################################################################################
-                        if New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == int:
-                            if len(key_name) == 1 and key_name.isnumeric():
-                                if New_Game_Menu.variable_to_receive_player_keybord_input['content'] == '0':
-                                    New_Game_Menu.variable_to_receive_player_keybord_input['content'] = '' 
-
-                                New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name
-                            elif key_name.startswith('[') and key_name.endswith(']'):
-                                if New_Game_Menu.variable_to_receive_player_keybord_input['content'] == '0':
-                                    New_Game_Menu.variable_to_receive_player_keybord_input['content'] = '' 
-
-                                New_Game_Menu.variable_to_receive_player_keybord_input['content'] += key_name[1:-1]                                     
-
-                        #########################################################################################################
-
-                        #########################################################################################################
-                        if keys[pygame.K_SPACE]:
-                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += ' ' 
-
-                        #########################################################################################################
-
-
-                    if keys[pygame.K_BACKSPACE]:
-                        New_Game_Menu.variable_to_receive_player_keybord_input['content'] = New_Game_Menu.variable_to_receive_player_keybord_input['content'][:-1]
-                        if New_Game_Menu.variable_to_receive_player_keybord_input['content_type'] == int and len(New_Game_Menu.variable_to_receive_player_keybord_input['content']) == 0:
-                            New_Game_Menu.variable_to_receive_player_keybord_input['content'] += '0'                                                                                                           
+                    New_Game_Menu.received_player_keybord_input(key_name, keys, mods)
 
             #------------------------------------------------------------------------------------------------------------------------------------------- KEYBOARD #
             #######################################################################################################################################################
@@ -484,22 +474,7 @@ while RUNNING:
                     New_Game_Menu.click_button(mouse_rect)
             
             elif event.type == pygame.MOUSEWHEEL:
-                CHARACTER_CREATION_SHEET_RECT = pygame.Rect(
-                                                            424 * New_Game_Menu.FACTOR_X,                                       # START X
-                                                            14 * New_Game_Menu.FACTOR_Y,                                        # START Y
-                                                            New_Game_Menu.CHARACTER_CREATION_SHEET_SURFACE.get_width() + 15,    # WIDTH
-                                                            1000 * New_Game_Menu.FACTOR_Y                                       # HEIGHT
-                                                            )
-                
-                if CHARACTER_CREATION_SHEET_RECT.colliderect(mouse_rect):
-                    if event.y > 0:
-                        New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position -= event.y * 30
-                        if New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position < 0:
-                            New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position = 0
-                    elif event.y < 0:
-                        New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position += abs(event.y) * 30
-                        if New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position > New_Game_Menu.CHARACTER_CREATION_SHEET.get_height() - 1000 * New_Game_Menu.FACTOR_Y:
-                            New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.scroll_position = New_Game_Menu.CHARACTER_CREATION_SHEET.get_height() - 1000 * New_Game_Menu.FACTOR_Y
+                New_Game_Menu.received_player_mousewheel_input(event.y, mouse_rect)
 
             #---------------------------------------------------------------------------------------------------------------------------------------------- MOUSE #
             #######################################################################################################################################################
@@ -513,6 +488,7 @@ while RUNNING:
         #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
         if is_options_menu_open == False and is_in_esc_menu == False:				
             New_Game_Menu.hover_button(mouse_rect)
+            New_Game_Menu.hover_organs(mouse_pos)
 
             New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.handle_event(PYGAME_EVENTS)
 
