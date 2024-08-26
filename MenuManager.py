@@ -4,6 +4,9 @@ from PygameManager import pygame
 from pyvidplayer import Video
 from json import load as json_load, dump as json_dump
 import numpy as np
+import os
+import sys
+from datetime import datetime
 
 import traceback
 
@@ -734,93 +737,46 @@ class NewGameMenu:
 
 
 		###############################################################################################################################################################
+		#------------------------------------------------------------------------ LOAD JSON --------------------------------------------------------------------------#
+		MAIN_FOLDER 				= os.path.dirname(sys.argv[0])
+		SAVES_FOLDER				= os.path.join(MAIN_FOLDER, 'saves')
+		SAVEFILE_BASELINE_PATH 		= os.path.join(SAVES_FOLDER, 'save_source.json')
+
+		savefile_baseline_data 		= self.load_savefile_baseline(SAVEFILE_BASELINE_PATH)
+
+		saved_file_path 			= self.save_file_with_sys_date(savefile_baseline_data, SAVES_FOLDER)
+
+		self.load_save_file(saved_file_path)
+
+		#------------------------------------------------------------------------ LOAD JSON --------------------------------------------------------------------------#
+		###############################################################################################################################################################
+
+
+		###############################################################################################################################################################
 		#------------------------------------------------------------------------ TEX BOXES --------------------------------------------------------------------------#
 		self.receive_player_keybord_input 				= False
 		self.variable_to_receive_player_keybord_input 	= None
 
 		# ID
 		self.ASSIGN_CHARACTER_NAME_BOX_RECT 			= pygame.Rect(88, 33, 453, 20)
-		self.character_name 							=  {	
-																'content' 		: '',
-																'rect' 			: self.ASSIGN_CHARACTER_NAME_BOX_RECT,
-																'maximum_size' 	: 34,
-																'content_type' 	: str,
-																'x_offset' 		: 4
-															}
 
 		self.ASSIGN_CHARACTER_AGE_BOX_RECT 				= pygame.Rect(616, 82, 59, 20)
-		self.character_age 								=  {	
-																'content' 		: '0',
-																'rect' 			: self.ASSIGN_CHARACTER_AGE_BOX_RECT,
-																'maximum_size' 	: 3,
-																'content_type' 	: int,
-																'x_offset' 		: 19
-															}
 
 		self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT 			= pygame.Rect(107, 278, 59, 20)
-		self.character_weight 							=  {	
-																'content' 		: '95',
-																'rect' 			: self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT,
-																'maximum_size' 	: 3,
-																'content_type' 	: int,
-																'x_offset' 		: 25
-															}
 
 
 		# TRAITS
 		self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT 		= pygame.Rect(858, 32, 38, 20)
-		self.character_strenght							=  {	
-																'content' 		: '0',
-																'rect' 			: self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT,
-																'maximum_size' 	: 3,
-																'content_type' 	: int,
-																'x_offset' 		: 4
-															}
 
 		self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT 	= pygame.Rect(1155, 32, 38, 20)
-		self.character_constituion						=  {	
-																'content' 		: '0',
-																'rect' 			: self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT,
-																'maximum_size' 	: 3,
-																'content_type' 	: int,
-																'x_offset' 		: 4
-															}
 
 		self.ASSIGN_CHARACTER_AGILITY_BOX_RECT 			= pygame.Rect(1335, 32, 38, 20)
-		self.character_agility 							=  {	
-																'content' 		: '0',
-																'rect' 			: self.ASSIGN_CHARACTER_AGILITY_BOX_RECT,
-																'maximum_size' 	: 3,
-																'content_type' 	: int,
-																'x_offset' 		: 4
-															}
 
 		self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT 		= pygame.Rect(903, 339, 38, 20)
-		self.character_charisma							=  {	
-																'content' 		: '0',
-																'rect' 			: self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT,
-																'maximum_size' 	: 3,
-																'content_type' 	: int,
-																'x_offset' 		: 4
-															}
 
 		self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT 	= pygame.Rect(1259, 339, 38, 20)
-		self.character_intelligence						=  {	
-																'content' 		: '0',
-																'rect' 			: self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT,
-																'maximum_size' 	: 3,
-																'content_type' 	: int,
-																'x_offset' 		: 4
-															}
 
 		self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT 		= pygame.Rect(913, 565, 38, 20)
-		self.character_education 						=  {	
-																'content' 		: '0',
-																'rect' 			: self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT,
-																'maximum_size' 	: 3,
-																'content_type' 	: int,
-																'x_offset' 		: 4
-															}					
 
 		#------------------------------------------------------------------------ TEX BOXES --------------------------------------------------------------------------#
 		###############################################################################################################################################################
@@ -866,19 +822,19 @@ class NewGameMenu:
 
 	def get_organ_by_interaction(self, mouse_pos):
 		try:
-			if self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_BRAIN_SPRITE']:
+			if self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.image_offset_y)) == self.character_organs_collider_colors['CHARACTER_BRAIN_SPRITE']:
 				return 'CHARACTER_BRAIN_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_HEART_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.image_offset_y)) == self.character_organs_collider_colors['CHARACTER_HEART_SPRITE']:
 				return 'CHARACTER_HEART_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_LUNGS_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.image_offset_y)) == self.character_organs_collider_colors['CHARACTER_LUNGS_SPRITE']:
 				return 'CHARACTER_LUNGS_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_LIVER_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.image_offset_y)) == self.character_organs_collider_colors['CHARACTER_LIVER_SPRITE']:
 				return 'CHARACTER_LIVER_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_STOMACH_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.image_offset_y)) == self.character_organs_collider_colors['CHARACTER_STOMACH_SPRITE']:
 				return 'CHARACTER_STOMACH_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_KIDNEYS_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.image_offset_y)) == self.character_organs_collider_colors['CHARACTER_KIDNEYS_SPRITE']:
 				return 'CHARACTER_KIDNEYS_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354)) == self.character_organs_collider_colors['CHARACTER_INTESTINE_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.image_offset_y)) == self.character_organs_collider_colors['CHARACTER_INTESTINE_SPRITE']:
 				return 'CHARACTER_INTESTINE_SPRITE'															
 					
 		except Exception as e:
@@ -968,7 +924,7 @@ class NewGameMenu:
 
 				self.last_hovered_button = hovered_button
 				self.hovered_button = self.last_hovered_button
-		else:
+		elif self.organ_to_draw == None and hovered_button == None:
 			self.last_hovered_button = None
 			self.hovered_button = self.last_hovered_button
 
@@ -988,47 +944,53 @@ class NewGameMenu:
 			self.organ_to_draw = 'CHARACTER_KIDNEYS_SPRITE'
 		elif hovered_organ == 'CHARACTER_INTESTINE_SPRITE':
 			self.organ_to_draw = 'CHARACTER_INTESTINE_SPRITE'																	
-
 		else:
 			self.organ_to_draw = None
+		
+		if self.organ_to_draw != None:
+			if self.organ_to_draw != self.last_hovered_button:
+				self.HOVER_OVER_BUTTON_SOUND.play()
+				self.last_hovered_button = self.organ_to_draw
+		elif self.hovered_button == None:
+			self.last_hovered_button = None
 
 	def received_player_keybord_input(self, key_name, keys, mods):
-		if len(self.variable_to_receive_player_keybord_input['content']) < self.variable_to_receive_player_keybord_input['maximum_size']:
+		if len(self.variable_to_receive_player_keybord_input['value']) < self.variable_to_receive_player_keybord_input['maximum_size']:
 			#########################################################################################################
 			if self.variable_to_receive_player_keybord_input['content_type'] == str:
 				if  len(key_name) == 1 and key_name.isalpha():
 					# Check if either shift key is pressed to determine uppercase
 					if mods & pygame.KMOD_SHIFT or mods & pygame.KMOD_CAPS:
 						key_name = key_name.upper()                        
-					self.variable_to_receive_player_keybord_input['content'] += key_name
+					self.variable_to_receive_player_keybord_input['value'] += key_name
 					
 			#########################################################################################################
 
 			#########################################################################################################
 			if self.variable_to_receive_player_keybord_input['content_type'] == int:
 				if len(key_name) == 1 and key_name.isnumeric():
-					if self.variable_to_receive_player_keybord_input['content'] == '0':
-						self.variable_to_receive_player_keybord_input['content'] = '' 
+					if self.variable_to_receive_player_keybord_input['value'] == '0':
+						self.variable_to_receive_player_keybord_input['value'] = '' 
 
-					self.variable_to_receive_player_keybord_input['content'] += key_name
+					self.variable_to_receive_player_keybord_input['value'] += key_name
 				elif key_name.startswith('[') and key_name.endswith(']'):
-					if self.variable_to_receive_player_keybord_input['content'] == '0':
-						self.variable_to_receive_player_keybord_input['content'] = '' 
+					if self.variable_to_receive_player_keybord_input['value'] == '0':
+						self.variable_to_receive_player_keybord_input['value'] = '' 
 
-					self.variable_to_receive_player_keybord_input['content'] += key_name[1:-1]                                     
+					self.variable_to_receive_player_keybord_input['value'] += key_name[1:-1]                                     
 
 			#########################################################################################################
 
 			#########################################################################################################
 			if keys[pygame.K_SPACE]:
-				self.variable_to_receive_player_keybord_input['content'] += ' ' 
+				self.variable_to_receive_player_keybord_input['value'] += ' ' 
 
 			#########################################################################################################
 
 		if keys[pygame.K_BACKSPACE]:
-			self.variable_to_receive_player_keybord_input['content'] = self.variable_to_receive_player_keybord_input['content'][:-1]
-			if self.variable_to_receive_player_keybord_input['content_type'] == int and len(self.variable_to_receive_player_keybord_input['content']) == 0:
-				self.variable_to_receive_player_keybord_input['content'] += '0'
+			self.variable_to_receive_player_keybord_input['value'] = self.variable_to_receive_player_keybord_input['value'][:-1]
+			if self.variable_to_receive_player_keybord_input['content_type'] == int and len(self.variable_to_receive_player_keybord_input['value']) == 0:
+				self.variable_to_receive_player_keybord_input['value'] += '0'
 
 	def received_player_mousewheel_input(self, wheel_movement, mouse_rect):
 		CHARACTER_CREATION_SHEET_RECT = pygame.Rect(
@@ -1184,45 +1146,45 @@ class NewGameMenu:
 
 
 		######  TEXT RENDERS  ######
-		character_name_text_render 			= self.font20.render(	str(self.character_name['content']), 			True, 	(255,255,255))
-		character_age_text_render 			= self.font20.render(	str(self.character_age['content']), 			True, 	(255,255,255))
-		character_weight_text_render 		= self.font20.render(	str(self.character_weight['content']), 			True, 	(255,255,255))	
+		character_name_text_render 			= self.font20.render(	str(self.character_name['value']), 			True, 	(255,255,255))
+		character_age_text_render 			= self.font20.render(	str(self.character_age['value']), 			True, 	(255,255,255))
+		character_weight_text_render 		= self.font20.render(	str(self.character_weight['value']), 		True, 	(255,255,255))	
 
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 			(	self.character_name['rect'][0]				+ self.character_name['x_offset']											
-																								,   self.character_name['rect'][1] 			+ 1))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 		(	self.ASSIGN_CHARACTER_NAME_BOX_RECT[0]				+ self.character_name['x_offset']											
+																							,   self.ASSIGN_CHARACTER_NAME_BOX_RECT[1] 			+ 1))
 
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_age_text_render, 			(	self.character_age['rect'][0] 				+ self.character_age['x_offset']		
-																								,   self.character_age['rect'][1] 			+ 1))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_age_text_render, 		(	self.ASSIGN_CHARACTER_AGE_BOX_RECT[0] 				+ self.character_age['x_offset']		
+																							,   self.ASSIGN_CHARACTER_AGE_BOX_RECT[1] 			+ 1))
 
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_weight_text_render, 			(	self.character_weight['rect'][0] 			+ self.character_weight['x_offset']		
-																								,   self.character_weight['rect'][1] 		+ 1))				
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_weight_text_render, 		(	self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[0] 			+ self.character_weight['x_offset']		
+																							,   self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[1] 		+ 1))				
 		
 
-		character_strenght_text_render 		= self.font20.render(	str(self.character_strenght['content']), 		True, 	(255,255,255))
-		character_constituion_text_render 	= self.font20.render(	str(self.character_constituion['content']), 	True, 	(255,255,255))
-		character_agility_text_render 		= self.font20.render(	str(self.character_agility['content']), 		True, 	(255,255,255))			
-		character_charisma_text_render 		= self.font20.render(	str(self.character_charisma['content']), 		True, 	(255,255,255))
-		character_intelligence_text_render 	= self.font20.render(	str(self.character_intelligence['content']),	True, 	(255,255,255))
-		character_education_text_render 	= self.font20.render(	str(self.character_education['content']), 		True, 	(255,255,255))	
+		character_strenght_text_render 		= self.font20.render(	str(self.character_strenght['value']), 		True, 	(255,255,255))
+		character_constituion_text_render 	= self.font20.render(	str(self.character_constituion['value']), 	True, 	(255,255,255))
+		character_agility_text_render 		= self.font20.render(	str(self.character_agility['value']), 		True, 	(255,255,255))			
+		character_charisma_text_render 		= self.font20.render(	str(self.character_charisma['value']), 		True, 	(255,255,255))
+		character_intelligence_text_render 	= self.font20.render(	str(self.character_intelligence['value']),	True, 	(255,255,255))
+		character_education_text_render 	= self.font20.render(	str(self.character_education['value']), 		True, 	(255,255,255))	
 
 
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_strenght_text_render, 		(	self.character_strenght['rect'][0]			+ self.character_strenght['x_offset']											
-																								,   self.character_strenght['rect'][1] 		+ 1))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_strenght_text_render, 		(	self.ASSIGN_CHARACTER_NAME_BOX_RECT[0]			+ self.character_strenght['x_offset']											
+																								,   self.ASSIGN_CHARACTER_NAME_BOX_RECT[1] 		+ 1))
 
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constituion_text_render, 	(	self.character_constituion['rect'][0] 		+ self.character_constituion['x_offset']		
-																								,   self.character_constituion['rect'][1] 	+ 1))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constituion_text_render, 	(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0] 		+ self.character_constituion['x_offset']		
+																								,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 	+ 1))
 
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_agility_text_render, 		(	self.character_agility['rect'][0] 			+ self.character_agility['x_offset']		
-																								,   self.character_agility['rect'][1] 		+ 1))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_agility_text_render, 		(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0] 			+ self.character_agility['x_offset']		
+																								,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		+ 1))
 		
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_charisma_text_render, 		(	self.character_charisma['rect'][0]			+ self.character_charisma['x_offset']											
-																								,   self.character_charisma['rect'][1] 		+ 1))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_charisma_text_render, 		(	self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[0]			+ self.character_charisma['x_offset']											
+																								,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		+ 1))
 
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_intelligence_text_render, 	(	self.character_intelligence['rect'][0] 		+ self.character_intelligence['x_offset']		
-																								,   self.character_intelligence['rect'][1] 	+ 1))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_intelligence_text_render, 	(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0] 		+ self.character_intelligence['x_offset']		
+																								,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 	+ 1))
 
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_education_text_render, 		(	self.character_education['rect'][0] 		+ self.character_education['x_offset']		
-																								,   self.character_education['rect'][1] 	+ 1))			
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_education_text_render, 		(	self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] 		+ self.character_education['x_offset']		
+																								,   self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] 	+ 1))			
 
 
 
@@ -1232,8 +1194,9 @@ class NewGameMenu:
 			cycle_duration = visibility_duration * 2
 
 			if (current_time % cycle_duration) < visibility_duration:
-				x = self.variable_to_receive_player_keybord_input['rect'][0] + self.variable_to_receive_player_keybord_input['x_offset'] + self.font20.render(str(self.variable_to_receive_player_keybord_input['content']), True, (255,255,255)).get_width()
-				y = self.variable_to_receive_player_keybord_input['rect'][1]
+				variable_to_receive_player_keybord_input_rect = getattr(self, self.variable_to_receive_player_keybord_input['rect'])
+				x = variable_to_receive_player_keybord_input_rect[0] + self.variable_to_receive_player_keybord_input['x_offset'] + self.font20.render(str(self.variable_to_receive_player_keybord_input['value']), True, (255,255,255)).get_width()
+				y = variable_to_receive_player_keybord_input_rect[1]
 				pygame.draw.rect(self.CHARACTER_CREATION_INFORMATION_SURFACE, (255,255,255), (x, y, 2, 18 * self.FACTOR_Y))
 
 
@@ -1260,6 +1223,57 @@ class NewGameMenu:
 			pass
 		else:
 			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)				
+
+	def load_savefile_baseline(self, savefile_baseline_path):
+		with open(savefile_baseline_path, 'r') as file:
+			baseline_data = json_load(file)
+		return baseline_data
+
+	def save_file_with_sys_date(self, file_data_to_save, directory_to_save):
+		current_date = datetime.now().strftime("%Y_%m_%d_%H_%M")
+		filename = f"save_{current_date}.json"
+		saved_file_path = os.path.join(directory_to_save, filename)
+		
+		with open(saved_file_path, 'w') as file:
+			json_dump(file_data_to_save, file, indent=4)
+		
+		return saved_file_path	
+
+	def load_save_file(self, file_path):
+		with open(file_path, 'r') as file:
+			save_data = json_load(file)
+		
+		# ID
+		self.character_name 			= save_data[0]["character_name"]
+		self.character_age 				= save_data[0]["character_age"]
+		self.character_weight 			= save_data[0]["character_weight"]
+
+		# TRAITS
+		self.character_strenght 		= save_data[0]["character_strenght"]
+		self.character_constituion 		= save_data[0]["character_constituion"]
+		self.character_agility 			= save_data[0]["character_agility"]
+		self.character_charisma 		= save_data[0]["character_charisma"]
+		self.character_intelligence 	= save_data[0]["character_intelligence"]
+		self.character_education 		= save_data[0]["character_education"]				
+
+	def save_to_file(self, file_path):
+		save_data = [
+			{
+				"character_name": self.character_name,
+				"character_age": self.character_age,
+				"character_weight": self.character_weight,
+				
+				"character_strenght": self.character_strenght,
+				"character_constituion": self.character_constituion,
+				"character_agility": self.character_agility,
+				"character_charisma": self.character_charisma,
+				"character_intelligence": self.character_intelligence,
+				"character_education": self.character_education
+			}
+		]
+		
+		with open(file_path, 'w') as file:
+			json_dump(save_data, file, indent=4)		
 
 #------------------------------------------------------------------------- NEW GAME---------------------------------------------------------------------------#
 ###############################################################################################################################################################

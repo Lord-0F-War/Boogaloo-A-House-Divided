@@ -30,17 +30,17 @@ FACTOR_Y:int                    = SCREEN_HEIGHT / REFERENCE_SCREEN_SIZE_y
 
 class GameLoader:
     def load_assets(self):
-        GFX_FOLDER                          = os.path.join(MAIN_FOLDER,     'GFX')
+        GFX_FOLDER                          = os.path.join(MAIN_FOLDER,     'gfx')
 
 
         ###########################################################################################################################################################
         # -------------------------------------------------------------------- INTERFACE FOLDER ------------------------------------------------------------------#
-        INTERFACE_FOLDER                    = os.path.join(GFX_FOLDER,      'INTERFACE')
+        INTERFACE_FOLDER                    = os.path.join(GFX_FOLDER,      'interface')
 
 
         ###########################################################################################################################################################
         #--------------------------------------------------------------------------------------------------------------------------------------- MAIN MENU FOLDER #
-        MAIN_MENU_FOLDER                    = os.path.join(INTERFACE_FOLDER,      'MAIN_MENU')
+        MAIN_MENU_FOLDER                    = os.path.join(INTERFACE_FOLDER,      'main_menu')
 
         main_menu_background_source 	    = pygame.image.load(os.path.join(MAIN_MENU_FOLDER, 'main_menu_background.png')).convert_alpha()
         global main_menu_background
@@ -68,7 +68,7 @@ class GameLoader:
 
         ###########################################################################################################################################################
         #---------------------------------------------------------------------------------------------------------------------------------------- NEW GAME FOLDER # 
-        NEW_GAME_MENU_FOLDER                = os.path.join(INTERFACE_FOLDER,      'NEW_GAME_MENU')
+        NEW_GAME_MENU_FOLDER                = os.path.join(INTERFACE_FOLDER,      'new_game_menu')
 
         new_game_menu_UI_source 	        = pygame.image.load(os.path.join(NEW_GAME_MENU_FOLDER, 'new_game_menu_UI.png')).convert_alpha()
         global new_game_menu_UI
@@ -106,7 +106,7 @@ class GameLoader:
 
         ###########################################################################################################################################################
         #------------------------------------------------------------------------------------------------------------------------------------ OPTIONS MENU FOLDER #
-        OPTIONS_MENU_FOLDER                 = os.path.join(INTERFACE_FOLDER,      'OPTIONS_MENU')
+        OPTIONS_MENU_FOLDER                 = os.path.join(INTERFACE_FOLDER,      'options_menu')
 
         game_options_menu_source 			= pygame.image.load(os.path.join(OPTIONS_MENU_FOLDER, 'game_options_menu.png')).convert_alpha()
         global game_options_menu
@@ -118,7 +118,7 @@ class GameLoader:
 
         ###########################################################################################################################################################
         #---------------------------------------------------------------------------------------------------------------------------------------- ESC MENU FOLDER #
-        ESC_MENU_FOLDER                     = os.path.join(INTERFACE_FOLDER,      'ESC_MENU')
+        ESC_MENU_FOLDER                     = os.path.join(INTERFACE_FOLDER,      'esc_menu')
 
         esc_menu_background_source 		    = pygame.image.load(os.path.join(ESC_MENU_FOLDER, 'esc_menu_background.png')).convert_alpha()
         global esc_menu_background
@@ -134,7 +134,7 @@ class GameLoader:
 
         ###########################################################################################################################################################
         # ---------------------------------------------------------------------- SOUNDS FOLDER -------------------------------------------------------------------#
-        SOUNDS_FOLDER = os.path.join(MAIN_FOLDER, 'SOUNDS')
+        SOUNDS_FOLDER = os.path.join(MAIN_FOLDER, 'sounds')
 
 
         global generic_hover_over_button_sound
@@ -149,7 +149,7 @@ class GameLoader:
         ###########################################################################################################################################################
         # ---------------------------------------------------------------------- MUSICS FOLDER -------------------------------------------------------------------#    
         global music_files_dic
-        music_files_dic = self.load_music_files(os.path.join(MAIN_FOLDER, 'MUSICS'))
+        music_files_dic = self.load_music_files(os.path.join(MAIN_FOLDER, 'musics'))
 
         # ---------------------------------------------------------------------- MUSICS FOLDER -------------------------------------------------------------------#
         ############################################################################################################################################################ 
