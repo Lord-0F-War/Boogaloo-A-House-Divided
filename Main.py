@@ -491,6 +491,7 @@ while RUNNING:
             New_Game_Menu.hover_organs(mouse_pos)
 
             New_Game_Menu.CHARACTER_CREATION_SHEET_SCROLL_BAR.handle_event(PYGAME_EVENTS)
+            New_Game_Menu.CHARACTER_SELECTION_SCROLL_BAR.handle_event(PYGAME_EVENTS)
 
         #------------------------------------------------------------------------------------------------------------------------------------------- UPDATE CLASS #
         ###########################################################################################################################################################
