@@ -80,13 +80,7 @@ class Screen:
         self.SURFACE_ALFA.fill((0, 0, 0, 0))
         self.BRIGHTNESS_SURFACE.fill((0, 0, 0, 0))
 
-        start_time = time.time()
         self.New_Game_Menu.draw(self.SCREEN)
-        end_time = time.time()
-
-        elapsed_time = end_time - start_time
-
-        #print(f"The function took {elapsed_time:.6f} seconds to run.")
 
         if is_in_esc_menu == True:
             self.ESC_Menu.draw(self.SURFACE_ALFA)
