@@ -10,6 +10,7 @@ from datetime import datetime
 import copy
 import random
 import traceback
+import time
 
 
 ###############################################################################################################################################################
@@ -730,8 +731,8 @@ class NewGameMenu:
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE 		= pygame.Surface((self.CHARACTER_CREATION_SHEET.get_width(), self.CHARACTER_CREATION_SHEET.get_height()), pygame.SRCALPHA)
 		
-		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE 	= pygame.Surface((self.CHARACTER_CREATION_SHEET.get_width(), self.CHARACTER_CREATION_SHEET.get_height()), pygame.SRCALPHA)
-		self.CHARACTER_CREATION_ORGANS_SURFACE 				= pygame.Surface((self.CHARACTER_CREATION_SHEET.get_width(), self.CHARACTER_CREATION_SHEET.get_height()), pygame.SRCALPHA)
+		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE 	= pygame.Surface((350, 953), pygame.SRCALPHA)
+		self.CHARACTER_CREATION_ORGANS_SURFACE 				= pygame.Surface((725, 953), pygame.SRCALPHA)
 
 
 		self.CHARACTER_CREATION_SHEET_SCROLL_BAR 			= Utility.Scroll_Bar(423 * self.FACTOR_X, 13 * self.FACTOR_Y, 1053 * self.FACTOR_Y,
@@ -1206,9 +1207,9 @@ class NewGameMenu:
 
 		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.set_alpha(80)
 
+
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE, (0, 0))
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(self.CHARACTER_CREATION_ORGANS_SURFACE, (0, 0))
-
 
 
 		######  TEXT RENDERS  ######
@@ -1273,7 +1274,6 @@ class NewGameMenu:
 																									,   self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[1] 				+ 9))						
 
 
-
 		character_strenght_text_render 		= self.font20.render(	str(self.selected_character['character_strenght']['value']), 		True, 	(255,255,255))
 		character_constituion_text_render 	= self.font20.render(	str(self.selected_character['character_constituion']['value']), 	True, 	(255,255,255))
 		character_agility_text_render 		= self.font20.render(	str(self.selected_character['character_agility']['value']), 		True, 	(255,255,255))			
@@ -1299,7 +1299,6 @@ class NewGameMenu:
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_education_text_render, 		(	self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] 		+ self.selected_character['character_education']['x_offset']		
 																								,   self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] 	+ 1))			
-
 
 
 		if self.receive_player_keybord_input == True:
@@ -1331,7 +1330,7 @@ class NewGameMenu:
 		self.CHARACTER_CREATION_ORGANS_SURFACE.fill((0, 0, 0, 0))
 		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.fill((0, 0, 0, 0))				
 
-		
+
 		#----------------------------------------------------------------------- CHAR CREATION -----------------------------------------------------------------------#
 		###############################################################################################################################################################
 
