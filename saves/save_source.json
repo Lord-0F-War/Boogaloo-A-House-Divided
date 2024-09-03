@@ -24,9 +24,16 @@
 
 
 
+        "character_nationality": {
+            "value"         : "",
+            "x_offset" 		: 6            
+        },        
+
+
+
 
         "character_strenght": {
-            "value"         : 1,
+            "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_STRENGHT_BOX_RECT",            
             "maximum_size" 	: 3,
             "content_type" 	: "int",
@@ -36,7 +43,7 @@
         },
         
         "character_constituion": {
-            "value"         : 2,
+            "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT",            
             "maximum_size" 	: 3,
             "content_type" 	: "int",
@@ -46,7 +53,7 @@
         },
 
         "character_agility": {
-            "value"         : 3,
+            "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_AGILITY_BOX_RECT",            
             "maximum_size" 	: 3,
             "content_type" 	: "int",
@@ -56,7 +63,7 @@
         },
         
         "character_charisma": {
-            "value"         : 4,
+            "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_CHARISMA_BOX_RECT",            
             "maximum_size" 	: 3,
             "content_type" 	: "int",
@@ -66,7 +73,7 @@
         },
         
         "character_intelligence": {
-            "value"         : 5,
+            "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT",            
             "maximum_size" 	: 3,
             "content_type" 	: "int",
@@ -76,7 +83,7 @@
         },
         
         "character_education": {
-            "value"         : 6,
+            "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_EDUCATION_BOX_RECT",            
             "maximum_size" 	: 3,
             "content_type" 	: "int",

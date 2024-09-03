@@ -1,6 +1,7 @@
 
 import sys
 import os
+import glob
 from json import load as json_load
 from PygameManager import pygame
 
@@ -502,4 +503,16 @@ while RUNNING:
 
 
 
+
+
+
+SAVES_FOLDER				= os.path.join(MAIN_FOLDER, 'saves')
+files_to_delete = glob.glob(os.path.join(SAVES_FOLDER, 'temp*'))
+
+# Loop through the temp files and delete them
+for file in files_to_delete:
+    os.remove(file)
+
+
+# ITS SO JOEVER IF YOU ARE HERE:
 pygame.quit()

@@ -8,7 +8,7 @@ import os
 import sys
 from datetime import datetime
 import copy
-
+import random
 import traceback
 
 
@@ -792,6 +792,8 @@ class NewGameMenu:
 
 		self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT 			= pygame.Rect(107, 278, 59, 20)
 
+		self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT 		= pygame.Rect(157, 75, 384, 32)
+
 
 		# TRAITS
 		self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT 		= pygame.Rect(858, 32, 38, 20)
@@ -955,6 +957,9 @@ class NewGameMenu:
 				rect = pygame.Rect(rect)
 				if rect.colliderect(mouse_rect):
 					self.characters.append(copy.deepcopy(self.blank_character_sheet))
+					self.set_random_atributes_for_new_character(self.characters[-1])
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()
 
 
 			self.receive_player_keybord_input = False
@@ -1200,9 +1205,10 @@ class NewGameMenu:
 
 
 		######  TEXT RENDERS  ######
-		character_name_text_render 			= self.font20.render(	str(self.selected_character['character_name']['value']), 			True, 	(255,255,255))
-		character_age_text_render 			= self.font20.render(	str(self.selected_character['character_age']['value']), 			True, 	(255,255,255))
-		character_weight_text_render 		= self.font20.render(	str(self.selected_character['character_weight']['value']), 			True, 	(255,255,255))	
+		character_name_text_render 			= self.font20.render(	str(self.selected_character['character_name']['value']), 						True, 	(255,255,255))
+		character_age_text_render 			= self.font20.render(	str(self.selected_character['character_age']['value']), 						True, 	(255,255,255))
+		character_weight_text_render 		= self.font20.render(	str(self.selected_character['character_weight']['value']), 						True, 	(255,255,255))
+		character_nationality_text_render 	= self.font20.render(	self.selected_character['character_nationality']['value'].capitalize(), 		True, 	(255,255,255))		
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 		(	self.ASSIGN_CHARACTER_NAME_BOX_RECT[0]				+ self.selected_character['character_name']['x_offset']											
 																							,   self.ASSIGN_CHARACTER_NAME_BOX_RECT[1] 			+ 1))
@@ -1213,6 +1219,10 @@ class NewGameMenu:
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_weight_text_render, 		(	self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[0] 			+ self.selected_character['character_weight']['x_offset']		
 																							,   self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[1] 		+ 1))				
 		
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_nationality_text_render, (	self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[0] 		+ self.selected_character['character_nationality']['x_offset']		
+																							,   self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[1] 	+ 9))
+
+
 
 		character_strenght_text_render 		= self.font20.render(	str(self.selected_character['character_strenght']['value']), 		True, 	(255,255,255))
 		character_constituion_text_render 	= self.font20.render(	str(self.selected_character['character_constituion']['value']), 	True, 	(255,255,255))
@@ -1292,7 +1302,7 @@ class NewGameMenu:
 
 			character_name_text_render = self.font16.render(str(character['character_name']['value']), 	True,  (255,255,255))
 
-			self.CHARACTER_SELECTION_SURFACE.blit(character_name_text_render, (8, 40 + ((index * 100) + 10 * index if index > 0 else 0)))
+			self.CHARACTER_SELECTION_SURFACE.blit(character_name_text_render, (8, 10 + ((index * 100) + 10 * index if index > 0 else 0)))
 
 
 		rect = (0, (index+1) * 100 + 10 * (index+1), 376, 30)
@@ -1345,7 +1355,36 @@ class NewGameMenu:
 
 		self.blank_character_sheet = copy.deepcopy(self.characters[0])
 
-		self.selected_character = self.characters[0]			
+		self.selected_character = self.characters[0]
+
+		self.set_random_atributes_for_new_character(self.selected_character)
+
+	def set_random_atributes_for_new_character(self, character):
+		MAIN_FOLDER 				= os.path.dirname(sys.argv[0])
+		COMMON_FOLDER				= os.path.join(MAIN_FOLDER, 'common')
+		CHARACTER_FOLDER			= os.path.join(COMMON_FOLDER, 'character')
+		NATIONALITIES_PATH 			= os.path.join(CHARACTER_FOLDER, 'nationalities.json')
+		NAMES_PATH 					= os.path.join(CHARACTER_FOLDER, 'names.json')
+
+		with open(NATIONALITIES_PATH, 'r') as file:
+			nationalities_data : dict = json_load(file)
+
+		random_nationality = random.choice(list(nationalities_data.items()))
+		character['character_nationality']['value'] = random_nationality[0]
+
+
+		with open(NAMES_PATH, 'r') as file:
+			names_data : dict = json_load(file)		
+
+		character_name_culture = random_nationality[1]['culture']
+		if character_name_culture in names_data:
+			random_first_name = random.choice(names_data[character_name_culture][0])
+			random_last_name = random.choice(names_data[character_name_culture][1])
+			character['character_name']['value'] = random_first_name + ' ' + random_last_name
+
+
+		character['character_age']['value'] 		= random.randint(17, 65)
+		character['character_weight']['value'] 		= random.randint(70, 120)
 
 	def save_to_file(self, file_path):
 		save_data = [
