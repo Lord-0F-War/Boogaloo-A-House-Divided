@@ -792,7 +792,13 @@ class NewGameMenu:
 
 		self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT 			= pygame.Rect(107, 278, 59, 20)
 
-		self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT 		= pygame.Rect(157, 75, 384, 32)
+		self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT 				= pygame.Rect(157, 75, 384, 32)
+
+		self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT 		= pygame.Rect(252, 124, 442, 32)
+
+		self.ASSIGN_CHARACTER_CAREERS_BOX_RECT 					= pygame.Rect(120, 173, 574, 32)
+
+		self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT 					= pygame.Rect(120, 222, 574, 32)
 
 
 		# TRAITS
@@ -1204,11 +1210,46 @@ class NewGameMenu:
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(self.CHARACTER_CREATION_ORGANS_SURFACE, (0, 0))
 
 
+
 		######  TEXT RENDERS  ######
 		character_name_text_render 			= self.font20.render(	str(self.selected_character['character_name']['value']), 						True, 	(255,255,255))
 		character_age_text_render 			= self.font20.render(	str(self.selected_character['character_age']['value']), 						True, 	(255,255,255))
 		character_weight_text_render 		= self.font20.render(	str(self.selected_character['character_weight']['value']), 						True, 	(255,255,255))
-		character_nationality_text_render 	= self.font20.render(	self.selected_character['character_nationality']['value'].capitalize(), 		True, 	(255,255,255))		
+		character_nationality_text_render 	= self.font20.render(	self.selected_character['character_nationality']['value'].capitalize(), 		True, 	(255,255,255))
+
+
+		languages_list = list(self.selected_character['character_languages_fluency']['value'].keys())
+		languages = ', '.join(str(language).capitalize() for language in languages_list)
+		character_languages_fluency_text_render = self.font20.render(languages,  True, 	(255,255,255))
+		
+		max_length = len(languages)
+		while character_languages_fluency_text_render.get_width() > 415:
+			max_length -= 1
+			languages = languages[:max_length - 3] + '...'
+			character_languages_fluency_text_render = self.font20.render(languages,  True, 	(255,255,255))
+	
+
+		careers_list = list(self.selected_character['character_careers']['value'].keys())
+		careers = ', '.join(str(career).capitalize() for career in careers_list)
+		character_careers_text_render = self.font20.render(careers,  True, 	(255,255,255))
+		
+		max_length = len(careers)
+		while character_careers_text_render.get_width() > 415:
+			max_length -= 1
+			careers = careers[:max_length - 3] + '...'
+			character_careers_text_render = self.font20.render(careers,  True, 	(255,255,255))
+
+
+		hobbies_list = list(self.selected_character['character_hobbies']['value'].keys())
+		hobbies = ', '.join(str(hobbie).capitalize() for hobbie in hobbies_list)
+		character_hobbies_text_render = self.font20.render(hobbies,  True, 	(255,255,255))
+		
+		max_length = len(hobbies)
+		while character_hobbies_text_render.get_width() > 415:
+			max_length -= 1
+			hobbies = hobbies[:max_length - 3] + '...'
+			character_hobbies_text_render = self.font20.render(hobbies,  True, 	(255,255,255))			
+
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 		(	self.ASSIGN_CHARACTER_NAME_BOX_RECT[0]				+ self.selected_character['character_name']['x_offset']											
 																							,   self.ASSIGN_CHARACTER_NAME_BOX_RECT[1] 			+ 1))
@@ -1221,6 +1262,15 @@ class NewGameMenu:
 		
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_nationality_text_render, (	self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[0] 		+ self.selected_character['character_nationality']['x_offset']		
 																							,   self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[1] 	+ 9))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_languages_fluency_text_render, 	(	self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT[0] 	+ self.selected_character['character_languages_fluency']['x_offset']		
+																									,   self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT[1] 	+ 9))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_careers_text_render, 			(	self.ASSIGN_CHARACTER_CAREERS_BOX_RECT[0] 				+ self.selected_character['character_careers']['x_offset']		
+																									,   self.ASSIGN_CHARACTER_CAREERS_BOX_RECT[1] 				+ 9))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_hobbies_text_render, 			(	self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[0] 				+ self.selected_character['character_hobbies']['x_offset']		
+																									,   self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[1] 				+ 9))						
 
 
 
@@ -1363,6 +1413,7 @@ class NewGameMenu:
 		MAIN_FOLDER 				= os.path.dirname(sys.argv[0])
 		COMMON_FOLDER				= os.path.join(MAIN_FOLDER, 'common')
 		CHARACTER_FOLDER			= os.path.join(COMMON_FOLDER, 'character')
+
 		NATIONALITIES_PATH 			= os.path.join(CHARACTER_FOLDER, 'nationalities.json')
 		NAMES_PATH 					= os.path.join(CHARACTER_FOLDER, 'names.json')
 
@@ -1385,6 +1436,39 @@ class NewGameMenu:
 
 		character['character_age']['value'] 		= random.randint(17, 65)
 		character['character_weight']['value'] 		= random.randint(70, 120)
+
+
+
+		LANGUAGES_PATH 				= os.path.join(CHARACTER_FOLDER, 'languages.json')
+
+		with open(LANGUAGES_PATH, 'r') as file:
+			languages_data : dict = json_load(file)
+
+		character_languages_fluency = random.choices(list(languages_data.items()), k = random.randint(1, len(list(languages_data.keys()))))
+
+		character['character_languages_fluency']['value'] = dict(character_languages_fluency)
+
+
+
+		CAREERS_PATH 				= os.path.join(CHARACTER_FOLDER, 'careers.json')
+
+		with open(CAREERS_PATH, 'r') as file:
+			careers_data : dict = json_load(file)	
+
+		character_careers = random.choices(list(careers_data.items()), k = random.randint(1, len(list(careers_data.keys()))))
+
+		character['character_careers']['value'] = dict(character_careers)
+
+
+
+		HOBBIES_PATH 				= os.path.join(CHARACTER_FOLDER, 'hobbies.json')
+
+		with open(HOBBIES_PATH, 'r') as file:
+			hobbies_data : dict = json_load(file)	
+
+		character_hobbies = random.choices(list(hobbies_data.items()), k = random.randint(1, len(list(hobbies_data.keys()))))
+
+		character['character_hobbies']['value'] = dict(character_hobbies)							
 
 	def save_to_file(self, file_path):
 		save_data = [

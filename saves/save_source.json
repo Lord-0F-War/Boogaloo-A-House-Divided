@@ -27,7 +27,19 @@
         "character_nationality": {
             "value"         : "",
             "x_offset" 		: 6            
-        },        
+        },
+        "character_languages_fluency": {
+            "value"         : {},
+            "x_offset" 		: 6            
+        },  
+        "character_careers": {
+            "value"         : {},
+            "x_offset" 		: 6            
+        },  
+        "character_hobbies": {
+            "value"         : {},
+            "x_offset" 		: 6            
+        },                                  
 
 
 

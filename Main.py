@@ -268,7 +268,7 @@ pygame.event.clear()
 while RUNNING:
 
     #------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
-    CLOCK.tick(60)
+    CLOCK.tick()
     PYGAME_EVENTS = pygame.event.get()
     
     if is_options_menu_open == True:
