@@ -756,7 +756,7 @@ class NewGameMenu:
 
 		#############################################################################################################################################
 
-
+		self.font22 = Utility.ScalableFont('Aldrich.ttf', 22)
 		self.font20 = Utility.ScalableFont('Aldrich.ttf', 20)
 		self.font16 = Utility.ScalableFont('Aldrich.ttf', 16)
 
@@ -800,6 +800,8 @@ class NewGameMenu:
 		self.ASSIGN_CHARACTER_CAREERS_BOX_RECT 					= pygame.Rect(120, 173, 574, 32)
 
 		self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT 					= pygame.Rect(120, 222, 574, 32)
+
+		self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT 				= pygame.Rect(395, 271, 299, 32)
 
 
 		# TRAITS
@@ -1047,9 +1049,10 @@ class NewGameMenu:
 			self.variable_to_receive_player_keybord_input['value'] = str(self.variable_to_receive_player_keybord_input['value'])
 			self.variable_to_receive_player_keybord_input['value'] = self.variable_to_receive_player_keybord_input['value'][:-1]
 			if self.variable_to_receive_player_keybord_input['content_type'] == 'int':
-				self.variable_to_receive_player_keybord_input['value'] = str(self.variable_to_receive_player_keybord_input['value'])
 				if len(str(self.variable_to_receive_player_keybord_input['value'])) == 0:
 					self.variable_to_receive_player_keybord_input['value'] = 0
+				else:
+					self.variable_to_receive_player_keybord_input['value'] = int(self.variable_to_receive_player_keybord_input['value'])
 
 	def received_player_mousewheel_input(self, wheel_movement, mouse_rect):
 
@@ -1125,7 +1128,7 @@ class NewGameMenu:
 		b = int(color_dead[2] * (1 - health_percentage) + color_alive[2] * health_percentage)
 		
 		return (r, g, b)
-	
+
 	def get_color_from_value_size(self, value, max_value):
 		# Ensure value is within bounds
 		value = max(0, min(value, max_value))
@@ -1134,8 +1137,8 @@ class NewGameMenu:
 		value_percentage = value / max_value
 		
 		# Define the start and end colors
-		color_dead = (200, 0, 0)  
-		color_alive = (0, 200, 0)  
+		color_dead = (220, 10, 10)  
+		color_alive = (10, 220, 10)  
 		
 		# Interpolate between the two colors
 		r = int(color_dead[0] * (1 - value_percentage) + color_alive[0] * value_percentage)
@@ -1268,7 +1271,22 @@ class NewGameMenu:
 		while character_hobbies_text_render.get_width() > 415:
 			max_length -= 1
 			hobbies = hobbies[:max_length - 3] + '...'
-			character_hobbies_text_render = self.font20.render(hobbies,  True, 	(255,255,255))			
+			character_hobbies_text_render = self.font20.render(hobbies,  True, 	(255,255,255))
+
+
+		education_list = list(self.selected_character['character_schooling']['value'].keys())
+		educations = ', '.join(
+			education.replace('_', ' ').strip().title()
+			for education in education_list
+		)
+
+		character_educations_text_render = self.font20.render(educations,  True, 	(255,255,255))
+		
+		max_length = len(educations)
+		while character_educations_text_render.get_width() > 260:
+			max_length -= 1
+			educations = educations[:max_length - 3] + '...'
+			character_educations_text_render = self.font20.render(educations,  True, 	(255,255,255))						
 
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 		(	self.ASSIGN_CHARACTER_NAME_BOX_RECT[0]				+ self.selected_character['character_name']['x_offset']											
@@ -1290,45 +1308,49 @@ class NewGameMenu:
 																									,   self.ASSIGN_CHARACTER_CAREERS_BOX_RECT[1] 				+ 9))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_hobbies_text_render, 			(	self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[0] 				+ self.selected_character['character_hobbies']['x_offset']		
-																									,   self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[1] 				+ 9))						
+																									,   self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[1] 				+ 9))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_educations_text_render, 			(	self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT[0] 			+ self.selected_character['character_schooling']['x_offset']		
+																									,   self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT[1] 			+ 9))								
 
 
-		character_strenght_text_render 		= self.font20.render(	str(self.selected_character['character_strenght']['value']), 		True, 	
+
+		character_strenght_text_render 		= self.font22.render(	str(self.selected_character['character_strenght']['value']), 		True, 	
 																		self.get_color_from_value_size(self.selected_character['character_strenght']['value'], 10))
 		
-		character_constituion_text_render 	= self.font20.render(	str(self.selected_character['character_constituion']['value']), 	True, 	
+		character_constituion_text_render 	= self.font22.render(	str(self.selected_character['character_constituion']['value']), 	True, 	
 																		self.get_color_from_value_size(self.selected_character['character_constituion']['value'], 10))
 		
-		character_agility_text_render 		= self.font20.render(	str(self.selected_character['character_agility']['value']), 		True, 	
+		character_agility_text_render 		= self.font22.render(	str(self.selected_character['character_agility']['value']), 		True, 	
 																		self.get_color_from_value_size(self.selected_character['character_agility']['value'], 10))			
 		
-		character_charisma_text_render 		= self.font20.render(	str(self.selected_character['character_charisma']['value']), 		True, 	
+		character_charisma_text_render 		= self.font22.render(	str(self.selected_character['character_charisma']['value']), 		True, 	
 																		self.get_color_from_value_size(self.selected_character['character_charisma']['value'], 10))
 		
-		character_intelligence_text_render 	= self.font20.render(	str(self.selected_character['character_intelligence']['value']),	True, 	
+		character_intelligence_text_render 	= self.font22.render(	str(self.selected_character['character_intelligence']['value']),	True, 	
 																		self.get_color_from_value_size(self.selected_character['character_intelligence']['value'], 10))
 		
-		character_education_text_render 	= self.font20.render(	str(self.selected_character['character_education']['value']), 		True, 	
+		character_education_text_render 	= self.font22.render(	str(self.selected_character['character_education']['value']), 		True, 	
 																		self.get_color_from_value_size(self.selected_character['character_education']['value'], 10))	
 
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_strenght_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]			+ self.selected_character['character_strenght']['x_offset']											
-																								,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		+ 1))
+																								,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		- 1))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constituion_text_render, 	(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0] 		+ self.selected_character['character_constituion']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 	+ 1))
+																								,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 	- 1))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_agility_text_render, 		(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0] 			+ self.selected_character['character_agility']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		+ 1))
+																								,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		- 1))
 		
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_charisma_text_render, 		(	self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[0]			+ self.selected_character['character_charisma']['x_offset']											
-																								,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		+ 1))
+																								,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		- 1))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_intelligence_text_render, 	(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0] 		+ self.selected_character['character_intelligence']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 	+ 1))
+																								,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 	- 1))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_education_text_render, 		(	self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] 		+ self.selected_character['character_education']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] 	+ 1))			
+																								,   self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] 	- 1))			
 
 
 		if self.receive_player_keybord_input == True:
@@ -1443,12 +1465,11 @@ class NewGameMenu:
 		COMMON_FOLDER				= os.path.join(MAIN_FOLDER, 'common')
 		CHARACTER_FOLDER			= os.path.join(COMMON_FOLDER, 'character')
 
-		NATIONALITIES_PATH 			= os.path.join(CHARACTER_FOLDER, 'nationalities.json')
-		NAMES_PATH 					= os.path.join(CHARACTER_FOLDER, 'names.json')
-
 
 		###############################################################################################################################################################
 		#---------------------------------------------------------------------- NATIONALITIES ------------------------------------------------------------------------#
+		NATIONALITIES_PATH 			= os.path.join(CHARACTER_FOLDER, 'nationalities.json')
+		
 		with open(NATIONALITIES_PATH, 'r') as file:
 			nationalities_data : dict = json_load(file)
 
@@ -1461,7 +1482,9 @@ class NewGameMenu:
 
 
 		###############################################################################################################################################################
-		#-------------------------------------------------------------------------- NAMES ----------------------------------------------------------------------------#		
+		#-------------------------------------------------------------------------- NAMES ----------------------------------------------------------------------------#
+		NAMES_PATH 					= os.path.join(CHARACTER_FOLDER, 'names.json')
+
 		with open(NAMES_PATH, 'r') as file:
 			names_data : dict = json_load(file)		
 
@@ -1561,10 +1584,58 @@ class NewGameMenu:
 
 
 		###############################################################################################################################################################
-		#--------------------------------------------------------------------------- AGE -----------------------------------------------------------------------------#
+		#---------------------------------------------------------------------------- AGE ----------------------------------------------------------------------------#
 		character['character_age']['value'] 		= random.randint(17, 65)
 
-		# AGING
+		#---------------------------------------------------------------------------- AGE ----------------------------------------------------------------------------#
+		###############################################################################################################################################################
+
+
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------- EDUCATION -------------------------------------------------------------------------#
+		EDUCATION_PATH 				= os.path.join(CHARACTER_FOLDER, 'education.json')
+
+		with open(EDUCATION_PATH, 'r') as file:
+			education_data : dict = json_load(file)
+
+		high_school = list(education_data.items())[0]
+		key1, value1 = high_school
+
+		character['character_schooling']['value'] = {key1: value1}
+
+
+		character_intelligence = min(10, character['character_intelligence']['value'])
+		
+		# Normalize x to the range [0, 1] where x=1 maps to 0 and x=10 maps to 1
+		character_intelligence_normalized = (character_intelligence - 1) / 9
+		
+		# Use a logistic function to calculate a
+		sharpness = 12.0
+		a = 1 / (1 + np.exp(-sharpness * (character_intelligence_normalized - 0.38)))
+
+		# Adjust a so that it peaks at x=10 and is lowest at x=1
+		a = 1 - a
+
+		# Calculate b ensuring that a + b = 1
+		b = 1 - a
+
+
+		if character['character_age']['value'] >= 22 and random.choices([0, 1], (a, b)):
+			# Filter items based on the education requirement
+			filtered_items = {k: v for k, v in education_data.items() if v['requirement'] <= character_intelligence}
+
+			# Choose a random item from the filtered dictionary
+			random_education = random.choice(list(filtered_items.items()))
+
+			key2, value2 = random_education
+			character['character_schooling']['value'].update({key2 : value2})					
+
+		#------------------------------------------------------------------------- EDUCATION -------------------------------------------------------------------------#
+		###############################################################################################################################################################
+
+
+		###############################################################################################################################################################
+		#--------------------------------------------------------------------------- AGING ---------------------------------------------------------------------------#
 		if character['character_age']['value'] >= 29:
 			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
 		
@@ -1607,7 +1678,7 @@ class NewGameMenu:
 			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0
 			character['character_intelligence']['value'] -= random.choices([0, 1], [0.1, 0.9])[0] if character['character_intelligence']['value'] > 1 else 0																											
 
-		#--------------------------------------------------------------------------- AGE -----------------------------------------------------------------------------#
+		#--------------------------------------------------------------------------- AGING ---------------------------------------------------------------------------#
 		###############################################################################################################################################################
 
 

@@ -1,0 +1,17 @@
+{
+    "high_school": {
+        "type": "generic",
+        "requirement" : 1,
+        "special_point": 3
+    },
+    "medical_school": {
+        "type": "medical",
+        "requirement" : 6,
+        "special_point": 8
+    },
+    "law_school": {
+        "type": "law",
+        "requirement" : 5,
+        "special_point": 4
+    }              
+}

@@ -12,14 +12,14 @@
             "rect" 			: "ASSIGN_CHARACTER_AGE_BOX_RECT",            
             "maximum_size" 	: 3,
             "content_type" 	: "int",
-            "x_offset" 		: 19            
+            "x_offset" 		: 25            
         },
         "character_weight": {
             "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_WEIGHT_BOX_RECT",            
             "maximum_size" 	: 3,
             "content_type" 	: "int",
-            "x_offset" 		: 25            
+            "x_offset" 		: 18            
         },
 
 
@@ -39,7 +39,11 @@
         "character_hobbies": {
             "value"         : {},
             "x_offset" 		: 6            
-        },                                  
+        },
+        "character_schooling": {
+            "value"         : {},
+            "x_offset" 		: 6            
+        },                                            
 
 
 
@@ -47,7 +51,7 @@
         "character_strenght": {
             "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_STRENGHT_BOX_RECT",            
-            "maximum_size" 	: 3,
+            "maximum_size" 	: 2,
             "content_type" 	: "int",
             "x_offset" 		: 4,             
 
@@ -57,7 +61,7 @@
         "character_constituion": {
             "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT",            
-            "maximum_size" 	: 3,
+            "maximum_size" 	: 2,
             "content_type" 	: "int",
             "x_offset" 		: 4,
 
@@ -67,7 +71,7 @@
         "character_agility": {
             "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_AGILITY_BOX_RECT",            
-            "maximum_size" 	: 3,
+            "maximum_size" 	: 2,
             "content_type" 	: "int",
             "x_offset" 		: 4,
 
@@ -77,7 +81,7 @@
         "character_charisma": {
             "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_CHARISMA_BOX_RECT",            
-            "maximum_size" 	: 3,
+            "maximum_size" 	: 2,
             "content_type" 	: "int",
             "x_offset" 		: 4,
 
@@ -87,7 +91,7 @@
         "character_intelligence": {
             "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT",            
-            "maximum_size" 	: 3,
+            "maximum_size" 	: 2,
             "content_type" 	: "int",
             "x_offset" 		: 4,
 
@@ -97,7 +101,7 @@
         "character_education": {
             "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_EDUCATION_BOX_RECT",            
-            "maximum_size" 	: 3,
+            "maximum_size" 	: 2,
             "content_type" 	: "int",
             "x_offset" 		: 4,
 
