@@ -756,9 +756,9 @@ class NewGameMenu:
 
 		#############################################################################################################################################
 
-		self.font22 = Utility.ScalableFont('Aldrich.ttf', 22)
-		self.font20 = Utility.ScalableFont('Aldrich.ttf', 20)
-		self.font16 = Utility.ScalableFont('Aldrich.ttf', 16)
+		self.font22 = Utility.ScalableFont('menu.ttf', 22)
+		self.font20 = Utility.ScalableFont('menu.ttf', 20)
+		self.font16 = Utility.ScalableFont('menu.ttf', 16)
 
 		self.character_creation_image_offset_y = 0
 		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
@@ -792,6 +792,8 @@ class NewGameMenu:
 		self.ASSIGN_CHARACTER_AGE_BOX_RECT 				= pygame.Rect(616, 82, 59, 20)
 
 		self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT 			= pygame.Rect(107, 278, 59, 20)
+
+		self.ASSIGN_CHARACTER_GENDER_BOX_RECT 			= pygame.Rect(656, 33, 38, 20)
 
 		self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT 				= pygame.Rect(157, 75, 384, 32)
 
@@ -1234,11 +1236,12 @@ class NewGameMenu:
 
 
 		######  TEXT RENDERS  ######
-		character_name_text_render 			= self.font20.render(	str(self.selected_character['character_name']['value']), 						True, 	(255,255,255))
-		character_age_text_render 			= self.font20.render(	str(self.selected_character['character_age']['value']), 						True, 	(255,255,255))
-		character_weight_text_render 		= self.font20.render(	str(self.selected_character['character_weight']['value']), 						True, 	(255,255,255))
+		character_name_text_render 			= self.font20.render(	str(self.selected_character['character_name']['value']), 		True, 	(255,255,255))
+		character_age_text_render 			= self.font20.render(	str(self.selected_character['character_age']['value']), 		True, 	(255,255,255))
+		character_weight_text_render 		= self.font20.render(	str(self.selected_character['character_weight']['value']), 		True, 	(255,255,255))
+		character_gender_text_render 		= self.font22.render(	str(self.selected_character['character_gender']['value']), 		True, 	(0,148,255))
 
-		character_nationality_text_render 	= self.font20.render(list(self.selected_character['character_nationality']['value'].keys())[0].capitalize(), 		True, 	(255,255,255))
+		character_nationality_text_render 	= self.font20.render(list(self.selected_character['character_nationality']['value'].keys())[0].capitalize(), 	True, 	(255,255,255))
 
 
 		languages_list = list(self.selected_character['character_languages_fluency']['value'].keys())
@@ -1290,28 +1293,31 @@ class NewGameMenu:
 
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 		(	self.ASSIGN_CHARACTER_NAME_BOX_RECT[0]				+ self.selected_character['character_name']['x_offset']											
-																							,   self.ASSIGN_CHARACTER_NAME_BOX_RECT[1] 			+ 1))
+																							,   self.ASSIGN_CHARACTER_NAME_BOX_RECT[1] 			- 6))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_age_text_render, 		(	self.ASSIGN_CHARACTER_AGE_BOX_RECT[0] 				+ self.selected_character['character_age']['x_offset']		
-																							,   self.ASSIGN_CHARACTER_AGE_BOX_RECT[1] 			+ 1))
+																							,   self.ASSIGN_CHARACTER_AGE_BOX_RECT[1] 			- 8))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_weight_text_render, 		(	self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[0] 			+ self.selected_character['character_weight']['x_offset']		
-																							,   self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[1] 		+ 1))				
+																							,   self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[1] 		- 8))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_gender_text_render, 		(	self.ASSIGN_CHARACTER_GENDER_BOX_RECT[0] 			+ self.selected_character['character_gender']['x_offset']		
+																							,   self.ASSIGN_CHARACTER_GENDER_BOX_RECT[1] 		- 10))							
 		
-		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_nationality_text_render, (	self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[0] 		+ self.selected_character['character_nationality']['x_offset']		
-																							,   self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[1] 	+ 9))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_nationality_text_render, (	self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[0] 					+ self.selected_character['character_nationality']['x_offset']		
+																							,   self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[1] 					+ 3))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_languages_fluency_text_render, 	(	self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT[0] 	+ self.selected_character['character_languages_fluency']['x_offset']		
-																									,   self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT[1] 	+ 9))
+																									,   self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT[1] 	+ 3))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_careers_text_render, 			(	self.ASSIGN_CHARACTER_CAREERS_BOX_RECT[0] 				+ self.selected_character['character_careers']['x_offset']		
-																									,   self.ASSIGN_CHARACTER_CAREERS_BOX_RECT[1] 				+ 9))
+																									,   self.ASSIGN_CHARACTER_CAREERS_BOX_RECT[1] 				+ 3))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_hobbies_text_render, 			(	self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[0] 				+ self.selected_character['character_hobbies']['x_offset']		
-																									,   self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[1] 				+ 9))
+																									,   self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[1] 				+ 3))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_educations_text_render, 			(	self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT[0] 			+ self.selected_character['character_schooling']['x_offset']		
-																									,   self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT[1] 			+ 9))								
+																									,   self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT[1] 			+ 3))								
 
 
 
@@ -1335,22 +1341,22 @@ class NewGameMenu:
 
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_strenght_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]			+ self.selected_character['character_strenght']['x_offset']											
-																								,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		- 1))
+																								,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		- 8))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constituion_text_render, 	(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0] 		+ self.selected_character['character_constituion']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 	- 1))
+																								,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 	- 8))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_agility_text_render, 		(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0] 			+ self.selected_character['character_agility']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		- 1))
+																								,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		- 8))
 		
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_charisma_text_render, 		(	self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[0]			+ self.selected_character['character_charisma']['x_offset']											
-																								,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		- 1))
+																								,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		- 8))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_intelligence_text_render, 	(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0] 		+ self.selected_character['character_intelligence']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 	- 1))
+																								,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 	- 8))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_education_text_render, 		(	self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] 		+ self.selected_character['character_education']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] 	- 1))			
+																								,   self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] 	- 8))			
 
 
 		if self.receive_player_keybord_input == True:
@@ -1625,7 +1631,8 @@ class NewGameMenu:
 			filtered_items = {k: v for k, v in education_data.items() if v['requirement'] <= character_intelligence}
 
 			# Choose a random item from the filtered dictionary
-			random_education = random.choice(list(filtered_items.items()))
+			if len(filtered_items) > 0:
+				random_education = random.choice(list(filtered_items.items()))
 
 			key2, value2 = random_education
 			character['character_schooling']['value'].update({key2 : value2})					

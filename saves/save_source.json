@@ -19,8 +19,12 @@
             "rect" 			: "ASSIGN_CHARACTER_WEIGHT_BOX_RECT",            
             "maximum_size" 	: 3,
             "content_type" 	: "int",
-            "x_offset" 		: 18            
+            "x_offset" 		: 16            
         },
+        "character_gender": {
+            "value"         : "M",
+            "x_offset" 		: 12            
+        },        
 
 
 
