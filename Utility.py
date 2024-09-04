@@ -6,8 +6,12 @@ from pygame.locals import *
 from shapely.geometry import Polygon
 import math
 from math import sin,cos,radians
+import random
 
 
+def roll_dice(size, subtraction):
+    # Roll 'subtraction' number of 'size'-sided dice and subtract 'subtraction' from the total
+    return sum(random.randint(1, size) for _ in range(subtraction)) - subtraction
 
 def generate_fading_colors(num_values, base_color):
 	colors = []

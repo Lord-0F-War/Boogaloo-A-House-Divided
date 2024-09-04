@@ -1125,6 +1125,24 @@ class NewGameMenu:
 		b = int(color_dead[2] * (1 - health_percentage) + color_alive[2] * health_percentage)
 		
 		return (r, g, b)
+	
+	def get_color_from_value_size(self, value, max_value):
+		# Ensure value is within bounds
+		value = max(0, min(value, max_value))
+		
+		# Calculate the percentage
+		value_percentage = value / max_value
+		
+		# Define the start and end colors
+		color_dead = (200, 0, 0)  
+		color_alive = (0, 200, 0)  
+		
+		# Interpolate between the two colors
+		r = int(color_dead[0] * (1 - value_percentage) + color_alive[0] * value_percentage)
+		g = int(color_dead[1] * (1 - value_percentage) + color_alive[1] * value_percentage)
+		b = int(color_dead[2] * (1 - value_percentage) + color_alive[2] * value_percentage)
+		
+		return (r, g, b)	
 
 	def draw(self, SCREEN):
 
@@ -1144,9 +1162,9 @@ class NewGameMenu:
 
 		######  HEALTH  ######
 		brain_color 		= self.get_color_from_health(100, 100)
-		heart_color 		= self.get_color_from_health(100, 100)
+		heart_color 		= self.get_color_from_health(50, 100)
 		kidneys_color 		= self.get_color_from_health(100, 100)
-		stomach_color 		= self.get_color_from_health(100, 100)
+		stomach_color 		= self.get_color_from_health(10, 100)
 		liver_color 		= self.get_color_from_health(100, 100)
 		lungs_color 		= self.get_color_from_health(100, 100)
 		instestine_color 	= self.get_color_from_health(100, 100)
@@ -1216,7 +1234,8 @@ class NewGameMenu:
 		character_name_text_render 			= self.font20.render(	str(self.selected_character['character_name']['value']), 						True, 	(255,255,255))
 		character_age_text_render 			= self.font20.render(	str(self.selected_character['character_age']['value']), 						True, 	(255,255,255))
 		character_weight_text_render 		= self.font20.render(	str(self.selected_character['character_weight']['value']), 						True, 	(255,255,255))
-		character_nationality_text_render 	= self.font20.render(	self.selected_character['character_nationality']['value'].capitalize(), 		True, 	(255,255,255))
+
+		character_nationality_text_render 	= self.font20.render(list(self.selected_character['character_nationality']['value'].keys())[0].capitalize(), 		True, 	(255,255,255))
 
 
 		languages_list = list(self.selected_character['character_languages_fluency']['value'].keys())
@@ -1274,12 +1293,23 @@ class NewGameMenu:
 																									,   self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[1] 				+ 9))						
 
 
-		character_strenght_text_render 		= self.font20.render(	str(self.selected_character['character_strenght']['value']), 		True, 	(255,255,255))
-		character_constituion_text_render 	= self.font20.render(	str(self.selected_character['character_constituion']['value']), 	True, 	(255,255,255))
-		character_agility_text_render 		= self.font20.render(	str(self.selected_character['character_agility']['value']), 		True, 	(255,255,255))			
-		character_charisma_text_render 		= self.font20.render(	str(self.selected_character['character_charisma']['value']), 		True, 	(255,255,255))
-		character_intelligence_text_render 	= self.font20.render(	str(self.selected_character['character_intelligence']['value']),	True, 	(255,255,255))
-		character_education_text_render 	= self.font20.render(	str(self.selected_character['character_education']['value']), 		True, 	(255,255,255))	
+		character_strenght_text_render 		= self.font20.render(	str(self.selected_character['character_strenght']['value']), 		True, 	
+																		self.get_color_from_value_size(self.selected_character['character_strenght']['value'], 10))
+		
+		character_constituion_text_render 	= self.font20.render(	str(self.selected_character['character_constituion']['value']), 	True, 	
+																		self.get_color_from_value_size(self.selected_character['character_constituion']['value'], 10))
+		
+		character_agility_text_render 		= self.font20.render(	str(self.selected_character['character_agility']['value']), 		True, 	
+																		self.get_color_from_value_size(self.selected_character['character_agility']['value'], 10))			
+		
+		character_charisma_text_render 		= self.font20.render(	str(self.selected_character['character_charisma']['value']), 		True, 	
+																		self.get_color_from_value_size(self.selected_character['character_charisma']['value'], 10))
+		
+		character_intelligence_text_render 	= self.font20.render(	str(self.selected_character['character_intelligence']['value']),	True, 	
+																		self.get_color_from_value_size(self.selected_character['character_intelligence']['value'], 10))
+		
+		character_education_text_render 	= self.font20.render(	str(self.selected_character['character_education']['value']), 		True, 	
+																		self.get_color_from_value_size(self.selected_character['character_education']['value'], 10))	
 
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_strenght_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]			+ self.selected_character['character_strenght']['x_offset']											
@@ -1416,39 +1446,59 @@ class NewGameMenu:
 		NATIONALITIES_PATH 			= os.path.join(CHARACTER_FOLDER, 'nationalities.json')
 		NAMES_PATH 					= os.path.join(CHARACTER_FOLDER, 'names.json')
 
+
+		###############################################################################################################################################################
+		#---------------------------------------------------------------------- NATIONALITIES ------------------------------------------------------------------------#
 		with open(NATIONALITIES_PATH, 'r') as file:
 			nationalities_data : dict = json_load(file)
 
 		random_nationality = random.choice(list(nationalities_data.items()))
-		character['character_nationality']['value'] = random_nationality[0]
+		key, value = random_nationality
+		character['character_nationality']['value'] = {key: value}
+
+		#---------------------------------------------------------------------- NATIONALITIES ------------------------------------------------------------------------#
+		###############################################################################################################################################################
 
 
+		###############################################################################################################################################################
+		#-------------------------------------------------------------------------- NAMES ----------------------------------------------------------------------------#		
 		with open(NAMES_PATH, 'r') as file:
 			names_data : dict = json_load(file)		
 
-		character_name_culture = random_nationality[1]['culture']
+		first_key = list(character['character_nationality']['value'].keys())[0]
+		character_name_culture = character['character_nationality']['value'][first_key]['culture']
 		if character_name_culture in names_data:
 			random_first_name = random.choice(names_data[character_name_culture][0])
 			random_last_name = random.choice(names_data[character_name_culture][1])
 			character['character_name']['value'] = random_first_name + ' ' + random_last_name
 
-
-		character['character_age']['value'] 		= random.randint(17, 65)
-		character['character_weight']['value'] 		= random.randint(70, 120)
-
+		#-------------------------------------------------------------------------- NAMES ----------------------------------------------------------------------------#	
+		###############################################################################################################################################################
 
 
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------ LANGUAGES --------------------------------------------------------------------------#
 		LANGUAGES_PATH 				= os.path.join(CHARACTER_FOLDER, 'languages.json')
 
 		with open(LANGUAGES_PATH, 'r') as file:
 			languages_data : dict = json_load(file)
 
-		character_languages_fluency = random.choices(list(languages_data.items()), k = random.randint(1, len(list(languages_data.keys()))))
-
+		character_languages_fluency = random.sample(list(languages_data.items()), k = 7)
+		character_languages_fluency.insert(0, (str(character['character_nationality']['value'][first_key]['culture']), languages_data[character['character_nationality']['value'][first_key]['culture']]))
 		character['character_languages_fluency']['value'] = dict(character_languages_fluency)
 
+		for lang, data in character['character_languages_fluency']['value'].items():
+			if lang == character['character_nationality']['value'][first_key]['culture']:
+				character['character_languages_fluency']['value'][lang]['level'] = 10
+			else:
+				character['character_languages_fluency']['value'][lang]['level'] = random.randint(1, 6)
+
+		#------------------------------------------------------------------------ LANGUAGES --------------------------------------------------------------------------#
+		###############################################################################################################################################################
 
 
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------- CAREERS ---------------------------------------------------------------------------#
 		CAREERS_PATH 				= os.path.join(CHARACTER_FOLDER, 'careers.json')
 
 		with open(CAREERS_PATH, 'r') as file:
@@ -1458,8 +1508,12 @@ class NewGameMenu:
 
 		character['character_careers']['value'] = dict(character_careers)
 
+		#------------------------------------------------------------------------- CAREERS ---------------------------------------------------------------------------#
+		###############################################################################################################################################################
 
 
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------- HOBBIES ---------------------------------------------------------------------------#
 		HOBBIES_PATH 				= os.path.join(CHARACTER_FOLDER, 'hobbies.json')
 
 		with open(HOBBIES_PATH, 'r') as file:
@@ -1467,7 +1521,102 @@ class NewGameMenu:
 
 		character_hobbies = random.choices(list(hobbies_data.items()), k = random.randint(1, len(list(hobbies_data.keys()))))
 
-		character['character_hobbies']['value'] = dict(character_hobbies)							
+		character['character_hobbies']['value'] = dict(character_hobbies)
+
+		#------------------------------------------------------------------------- HOBBIES ---------------------------------------------------------------------------#
+		###############################################################################################################################################################
+
+
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------ ATTRIBUTES -------------------------------------------------------------------------#
+		attributes = {
+        "str": Utility.roll_dice(6, 2),
+        "agl": Utility.roll_dice(6, 2),
+        "con": Utility.roll_dice(6, 2),
+        "int": Utility.roll_dice(6, 2),
+        "edu": Utility.roll_dice(6, 2),
+        "chr": Utility.roll_dice(6, 2)
+    	}
+
+		total = sum(attributes.values())
+
+		# If the total is less than 30, add points randomly to make it 30
+		if total < 30:
+			points_to_add = 30 - total
+			attributes_list = list(attributes.keys())
+			while points_to_add > 0:
+				attr = random.choice(attributes_list)
+				attributes[attr] += 1
+				points_to_add -= 1
+
+		character['character_strenght']['value'] 		= attributes['str']
+		character['character_constituion']['value'] 	= attributes['con']
+		character['character_agility']['value'] 		= attributes['agl']
+		character['character_charisma']['value'] 		= attributes['chr']
+		character['character_intelligence']['value'] 	= attributes['int']
+		character['character_education']['value'] 		= attributes['edu']
+
+		#------------------------------------------------------------------------ ATTRIBUTES -------------------------------------------------------------------------#
+		###############################################################################################################################################################
+
+
+		###############################################################################################################################################################
+		#--------------------------------------------------------------------------- AGE -----------------------------------------------------------------------------#
+		character['character_age']['value'] 		= random.randint(17, 65)
+
+		# AGING
+		if character['character_age']['value'] >= 29:
+			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
+		
+		if character['character_age']['value'] >= 33:
+			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
+
+		if character['character_age']['value'] >= 37:
+			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
+			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
+
+		if character['character_age']['value'] >= 41:
+			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
+			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0	
+		
+		if character['character_age']['value'] >= 45:
+			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
+			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
+			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0
+
+		if character['character_age']['value'] >= 49:
+			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
+			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
+			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0	
+
+		if character['character_age']['value'] >= 53:
+			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
+			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
+			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0	
+			character['character_intelligence']['value'] -= random.choices([0, 1], [0.5, 0.5])[0] if character['character_intelligence']['value'] > 1 else 0
+
+		if character['character_age']['value'] >= 57:
+			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
+			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
+			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0
+			character['character_intelligence']['value'] -= random.choices([0, 1], [0.3, 0.7])[0] if character['character_intelligence']['value'] > 1 else 0
+
+		if character['character_age']['value'] >= 61:
+			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
+			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
+			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0
+			character['character_intelligence']['value'] -= random.choices([0, 1], [0.1, 0.9])[0] if character['character_intelligence']['value'] > 1 else 0																											
+
+		#--------------------------------------------------------------------------- AGE -----------------------------------------------------------------------------#
+		###############################################################################################################################################################
+
+
+		###############################################################################################################################################################
+		#-------------------------------------------------------------------------- WEIGHT ---------------------------------------------------------------------------#
+		character['character_weight']['value'] 			= 90+(4*(attributes['str'] - attributes['agl']))
+
+		#-------------------------------------------------------------------------- WEIGHT ---------------------------------------------------------------------------#
+		###############################################################################################################################################################
 
 	def save_to_file(self, file_path):
 		save_data = [
