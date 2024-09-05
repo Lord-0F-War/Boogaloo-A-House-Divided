@@ -2,7 +2,6 @@
 import sys
 import os
 from PygameManager import pygame
-from pygame.locals import *
 from shapely.geometry import Polygon
 import math
 from math import sin,cos,radians

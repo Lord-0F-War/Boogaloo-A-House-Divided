@@ -106,7 +106,7 @@ class ESCMenu:
 
 				Main_Menu.main_menu_intro_video.toggle_pause()
 
-				Options_Menu.MUSIC_SLIDER.value = 0
+				Options_Menu.MUSIC_SLIDER.value = 40
 				Options_Menu.MUSIC_SLIDER.update()
 				pygame.mixer.music.set_volume(Options_Menu.MUSIC_SLIDER.value/100)				
 
@@ -191,7 +191,7 @@ class OptionsMenu:
 												374* self.FACTOR_X, 10* self.FACTOR_Y, 0, 180, 0)
 		
 		self.MUSIC_SLIDER 					= Utility.Slide(self.MENU_GUI_MIDDLE_X + 852* self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 135* self.FACTOR_Y,
-												374* self.FACTOR_X, 10* self.FACTOR_Y, 0, max_value = 100, initial_value = 0)
+												374* self.FACTOR_X, 10* self.FACTOR_Y, 0, max_value = 100, initial_value = 40)
 		self.SOUND_SLIDER 					= Utility.Slide(self.MENU_GUI_MIDDLE_X + 852* self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 270* self.FACTOR_Y,
 												374* self.FACTOR_X, 10* self.FACTOR_Y, 0, max_value = 100, initial_value = 40)
 		
@@ -334,7 +334,7 @@ class MainMenu:
 
 		###############################################################################################################################################################
 		#----------------------------------------------------------------------- VIDEO INTRO -------------------------------------------------------------------------#
-		self.main_menu_intro_video = Video("game_intro.mp4", size=(936 * self.FACTOR_X, 378 * self.FACTOR_Y))
+		self.main_menu_intro_video = Video("_intro.mp4", size=(936 * self.FACTOR_X, 378 * self.FACTOR_Y))
 		self.main_menu_intro_video.set_volume(0)
 
 		#----------------------------------------------------------------------- VIDEO INTRO -------------------------------------------------------------------------#
@@ -404,7 +404,7 @@ class MainMenu:
 		
 		self.main_menu_intro_video.draw(SCREEN, (self.MENU_GUI_MIDDLE_X + 2 * self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 2 * self.FACTOR_Y))
 
-		if self.main_menu_intro_video.frames >= 608:
+		if self.main_menu_intro_video.frames >= 4955:
 			self.main_menu_intro_video.restart()	
 
 		SCREEN.blit(self.MENU_GUI, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))

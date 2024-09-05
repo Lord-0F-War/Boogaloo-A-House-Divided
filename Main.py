@@ -283,7 +283,7 @@ while RUNNING:
     #------------------------------------------------------------------------------------------------------------------------------------------------------ MUSIC #
     if main_menu_music_started == False or pygame.mixer.music.get_busy() == False:
         main_menu_music_started = True
-        pygame.mixer.music.load(music_files_dic['clock-ticking'])
+        pygame.mixer.music.load(music_files_dic['main_menu'])
         pygame.mixer.music.play()
 
     #------------------------------------------------------------------------------------------------------------------------------------------------------ MUSIC #        

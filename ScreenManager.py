@@ -1,7 +1,5 @@
 
 from PygameManager import pygame
-from pygame.locals import *
-import time
 
 class Screen:
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, ESC_Menu, Options_Menu, Main_Menu, New_Game_Load_Game_Menu, New_Game_Menu):
@@ -15,7 +13,7 @@ class Screen:
         
         self.SCREEN_RECT                    = pygame.Rect([0, 0, self.SCREEN_WIDTH, self.SCREEN_HEIGHT])	
 
-        self.DISPLAY                        = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT), FULLSCREEN)
+        self.DISPLAY                        = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT), pygame.FULLSCREEN)
         self.SCREEN                         = pygame.Surface((self.SCREEN_WIDTH, self.SCREEN_HEIGHT), pygame.SRCALPHA)
         self.SURFACE_ALFA                   = pygame.Surface((self.SCREEN_WIDTH, self.SCREEN_HEIGHT), pygame.SRCALPHA)        	
 
