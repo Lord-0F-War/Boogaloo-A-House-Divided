@@ -168,9 +168,6 @@ class OptionsMenu:
 
 		self.Sounds_Manager 				= Sounds_Manager
 		self.Main_Menu 						= Main_Menu
-
-		self.clicked_resolution_button 		= f'resolution_{SCREEN_WIDTH}x{SCREEN_HEIGHT}'
-
 		#------------------------------------------------------------------------- UTILITY ---------------------------------------------------------------------------#
 		###############################################################################################################################################################			
 
@@ -182,23 +179,7 @@ class OptionsMenu:
 		BACK_BUTTON_X_OFFSET 				= 63 * self.FACTOR_X
 		BACK_BUTTON_Y_OFFSET 				= 887 * self.FACTOR_Y
 		self.BACK_BUTTON 					= Utility.Button(self.MENU_GUI_MIDDLE_X + BACK_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + BACK_BUTTON_Y_OFFSET,
-												BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)	
-		
-
-		RESOLUTIONS_BUTTON_WIDTH 			= 371 * self.FACTOR_X
-		RESOLUTIONS_BUTTON_HEIGHT 			= 34 * self.FACTOR_Y
-		RESOLUTIONS_BUTTON_X_OFFSET 		= 62 * self.FACTOR_X
-
-		self.RESOLUTION_2560x1440_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 100 * self.FACTOR_Y,
-												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)	
-		self.RESOLUTION_1920x1080_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 145 * self.FACTOR_Y,
-												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)	
-		self.RESOLUTION_1600x900_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 190 * self.FACTOR_Y,
-												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)	
-		self.RESOLUTION_1440x900_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 235 * self.FACTOR_Y,
-												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)	
-		self.RESOLUTION_1280x1024_BUTTON 	= Utility.Button(self.MENU_GUI_MIDDLE_X + RESOLUTIONS_BUTTON_X_OFFSET, self.MENU_GUI_MIDDLE_Y + 280 * self.FACTOR_Y,
-												RESOLUTIONS_BUTTON_WIDTH, RESOLUTIONS_BUTTON_HEIGHT)										
+												BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)
 
 		#------------------------------------------------------------------------- BUTTONS ---------------------------------------------------------------------------#
 		###############################################################################################################################################################
@@ -230,16 +211,6 @@ class OptionsMenu:
 	def get_button_by_interaction(self, mouse_rect):
 		if self.BACK_BUTTON.rect.colliderect(mouse_rect):
 			return 'back'
-		elif self.RESOLUTION_2560x1440_BUTTON.rect.colliderect(mouse_rect):
-			return 'resolution_2560x1440'	
-		elif self.RESOLUTION_1920x1080_BUTTON.rect.colliderect(mouse_rect):
-			return 'resolution_1920x1080'
-		elif self.RESOLUTION_1600x900_BUTTON.rect.colliderect(mouse_rect):
-			return 'resolution_1600x900'
-		elif self.RESOLUTION_1440x900_BUTTON.rect.colliderect(mouse_rect):
-			return 'resolution_1440x900'
-		elif self.RESOLUTION_1280x1024_BUTTON.rect.colliderect(mouse_rect):
-			return 'resolution_1280x1024'
 		else:
 			return None
 
@@ -255,30 +226,6 @@ class OptionsMenu:
 
 				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
 				self.CLICK_BUTTON_SOUND.play()
-
-			resolution_to_save = None
-
-			if clicked_button == 'resolution_2560x1440':
-				resolution_to_save = (2560,1440)
-			elif clicked_button == 'resolution_1920x1080':
-				resolution_to_save = (1920,1080)
-			elif clicked_button == 'resolution_1600x900':
-				resolution_to_save = (1600,900)
-			elif clicked_button == 'resolution_1440x900':
-				resolution_to_save = (1440,900)
-			elif clicked_button == 'resolution_1280x1024':
-				resolution_to_save = (1280,1024)
-
-			if resolution_to_save != None:
-				with open(f'{MAIN_FOLDER}\_settings.txt', 'r') as file:
-					configs = json_load(file)
-
-				configs["screen_width"], configs["screen_height"] = resolution_to_save
-
-				with open(f'{MAIN_FOLDER}\_settings.txt', 'w') as file:
-					json_dump(configs, file)				
-				
-				self.clicked_resolution_button = clicked_button
 		
 		return clicked_button
 
@@ -319,39 +266,7 @@ class OptionsMenu:
 		if self.hovered_button != None:
 			if self.hovered_button == 'back':
 				pygame.draw.rect(surface_alfa, (255, 23, 23), (self.BACK_BUTTON.rect[0]-1, self.BACK_BUTTON.rect[1]-1, self.BACK_BUTTON.rect[2]+2,
-																self.BACK_BUTTON.rect[3]+2), 4)			
-
-			elif self.hovered_button == 'resolution_2560x1440':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_2560x1440_BUTTON.rect[0]-1, self.RESOLUTION_2560x1440_BUTTON.rect[1]-1,
-																self.RESOLUTION_2560x1440_BUTTON.rect[2]+2, self.RESOLUTION_2560x1440_BUTTON.rect[3]+2), 4)	
-			elif self.hovered_button == 'resolution_1920x1080':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1920x1080_BUTTON.rect[0]-1, self.RESOLUTION_1920x1080_BUTTON.rect[1]-1,
-																self.RESOLUTION_1920x1080_BUTTON.rect[2]+2, self.RESOLUTION_1920x1080_BUTTON.rect[3]+2), 4)	
-			elif self.hovered_button == 'resolution_1600x900':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1600x900_BUTTON.rect[0]-1, self.RESOLUTION_1600x900_BUTTON.rect[1]-1,
-																self.RESOLUTION_1600x900_BUTTON.rect[2]+2, self.RESOLUTION_1600x900_BUTTON.rect[3]+2), 4)
-			elif self.hovered_button == 'resolution_1440x900':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1440x900_BUTTON.rect[0]-1, self.RESOLUTION_1440x900_BUTTON.rect[1]-1,
-																self.RESOLUTION_1440x900_BUTTON.rect[2]+2, self.RESOLUTION_1440x900_BUTTON.rect[3]+2), 4)
-			elif self.hovered_button == 'resolution_1280x1024':
-				pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1280x1024_BUTTON.rect[0]-1, self.RESOLUTION_1280x1024_BUTTON.rect[1]-1,
-																self.RESOLUTION_1280x1024_BUTTON.rect[2]+2, self.RESOLUTION_1280x1024_BUTTON.rect[3]+2), 4)
-
-		if self.clicked_resolution_button == 'resolution_2560x1440':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_2560x1440_BUTTON.rect[0]-1, self.RESOLUTION_2560x1440_BUTTON.rect[1]-1,
-																self.RESOLUTION_2560x1440_BUTTON.rect[2]+2, self.RESOLUTION_2560x1440_BUTTON.rect[3]+2), 4)	
-		elif self.clicked_resolution_button == 'resolution_1920x1080':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1920x1080_BUTTON.rect[0]-1, self.RESOLUTION_1920x1080_BUTTON.rect[1]-1,
-																self.RESOLUTION_1920x1080_BUTTON.rect[2]+2, self.RESOLUTION_1920x1080_BUTTON.rect[3]+2), 4)	
-		elif self.clicked_resolution_button == 'resolution_1600x900':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1600x900_BUTTON.rect[0]-1, self.RESOLUTION_1600x900_BUTTON.rect[1]-1,
-																self.RESOLUTION_1600x900_BUTTON.rect[2]+2, self.RESOLUTION_1600x900_BUTTON.rect[3]+2), 4)		
-		elif self.clicked_resolution_button == 'resolution_1440x900':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1440x900_BUTTON.rect[0]-1, self.RESOLUTION_1440x900_BUTTON.rect[1]-1,
-																self.RESOLUTION_1440x900_BUTTON.rect[2]+2, self.RESOLUTION_1440x900_BUTTON.rect[3]+2), 4)		
-		elif self.clicked_resolution_button == 'resolution_1280x1024':
-			pygame.draw.rect(surface_alfa, (23, 255, 23), (self.RESOLUTION_1280x1024_BUTTON.rect[0]-1, self.RESOLUTION_1280x1024_BUTTON.rect[1]-1,
-																self.RESOLUTION_1280x1024_BUTTON.rect[2]+2, self.RESOLUTION_1280x1024_BUTTON.rect[3]+2), 4)		
+																self.BACK_BUTTON.rect[3]+2), 4)	
 
 #---------------------------------------------------------------------- UTILITY MENUS ------------------------------------------------------------------------#
 ###############################################################################################################################################################
@@ -731,18 +646,18 @@ class NewGameMenu:
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE 		= pygame.Surface((self.CHARACTER_CREATION_SHEET.get_width(), self.CHARACTER_CREATION_SHEET.get_height()), pygame.SRCALPHA)
 		
-		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE 	= pygame.Surface((350, 953), pygame.SRCALPHA)
-		self.CHARACTER_CREATION_ORGANS_SURFACE 				= pygame.Surface((725, 953), pygame.SRCALPHA)
+		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE 	= pygame.Surface((350 * self.FACTOR_X, 953 * self.FACTOR_Y), pygame.SRCALPHA)
+		self.CHARACTER_CREATION_ORGANS_SURFACE 				= pygame.Surface((725 * self.FACTOR_X, 953 * self.FACTOR_Y), pygame.SRCALPHA)
 
 
 		self.CHARACTER_CREATION_SHEET_SCROLL_BAR 			= Utility.Scroll_Bar(423 * self.FACTOR_X, 13 * self.FACTOR_Y, 1053 * self.FACTOR_Y,
-															self.CHARACTER_CREATION_SHEET.get_height() - 1000 * self.FACTOR_Y, (200,0,0), 17)
+															self.CHARACTER_CREATION_SHEET.get_height() - 1000 * self.FACTOR_Y, (200,0,0), int(17 * self.FACTOR_X))
 
 		#############################################################################################################################################
 
 
 		#############################################################################################################################################
-		self.CHARACTER_SELECTION_SURFACE 					= pygame.Surface((376, 2048), pygame.SRCALPHA)
+		self.CHARACTER_SELECTION_SURFACE 					= pygame.Surface((376 * self.FACTOR_X, 2048 * self.FACTOR_Y), pygame.SRCALPHA)
 
 		self.CHARACTER_SELECTION_RECT = pygame.Rect(
 													33 * self.FACTOR_X,                                        # START X
@@ -752,7 +667,7 @@ class NewGameMenu:
 													)
 
 		self.CHARACTER_SELECTION_SCROLL_BAR 				= Utility.Scroll_Bar(13 * self.FACTOR_X, 13 * self.FACTOR_Y, 1053 * self.FACTOR_Y,
-															1000 * self.FACTOR_Y, (200,0,0), 17)
+															1000 * self.FACTOR_Y, (200,0,0), int(17 * self.FACTOR_X))
 
 		#############################################################################################################################################
 
@@ -787,37 +702,37 @@ class NewGameMenu:
 		self.variable_to_receive_player_keybord_input 	= None
 
 		# ID
-		self.ASSIGN_CHARACTER_NAME_BOX_RECT 			= pygame.Rect(88, 33, 453, 20)
+		self.ASSIGN_CHARACTER_NAME_BOX_RECT 			= pygame.Rect(88 * self.FACTOR_X, 33 * self.FACTOR_Y, 453 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_AGE_BOX_RECT 				= pygame.Rect(616, 82, 59, 20)
+		self.ASSIGN_CHARACTER_AGE_BOX_RECT 				= pygame.Rect(616 * self.FACTOR_X, 82 * self.FACTOR_Y, 59 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT 			= pygame.Rect(107, 278, 59, 20)
+		self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT 			= pygame.Rect(107 * self.FACTOR_X, 278 * self.FACTOR_Y, 59 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_GENDER_BOX_RECT 			= pygame.Rect(656, 33, 38, 20)
+		self.ASSIGN_CHARACTER_GENDER_BOX_RECT 			= pygame.Rect(656 * self.FACTOR_X, 33 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT 				= pygame.Rect(157, 75, 384, 32)
+		self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT 				= pygame.Rect(157 * self.FACTOR_X, 75 * self.FACTOR_Y, 384 * self.FACTOR_X, 32 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT 		= pygame.Rect(252, 124, 442, 32)
+		self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT 		= pygame.Rect(252 * self.FACTOR_X, 124 * self.FACTOR_Y, 442 * self.FACTOR_X, 32 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_CAREERS_BOX_RECT 					= pygame.Rect(120, 173, 574, 32)
+		self.ASSIGN_CHARACTER_CAREERS_BOX_RECT 					= pygame.Rect(120 * self.FACTOR_X, 173 * self.FACTOR_Y, 574 * self.FACTOR_X, 32 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT 					= pygame.Rect(120, 222, 574, 32)
+		self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT 					= pygame.Rect(120 * self.FACTOR_X, 222 * self.FACTOR_Y, 574 * self.FACTOR_X, 32 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT 				= pygame.Rect(395, 271, 299, 32)
+		self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT 				= pygame.Rect(395 * self.FACTOR_X, 271 * self.FACTOR_Y, 299 * self.FACTOR_X, 32 * self.FACTOR_Y)
 
 
 		# TRAITS
-		self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT 		= pygame.Rect(858, 32, 38, 20)
+		self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT 		= pygame.Rect(858 * self.FACTOR_X, 32 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT 	= pygame.Rect(1155, 32, 38, 20)
+		self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT 	= pygame.Rect(1155 * self.FACTOR_X, 32 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_AGILITY_BOX_RECT 			= pygame.Rect(1335, 32, 38, 20)
+		self.ASSIGN_CHARACTER_AGILITY_BOX_RECT 			= pygame.Rect(1335 * self.FACTOR_X, 32 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT 		= pygame.Rect(903, 339, 38, 20)
+		self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT 		= pygame.Rect(903 * self.FACTOR_X, 339 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT 	= pygame.Rect(1259, 339, 38, 20)
+		self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT 	= pygame.Rect(1259 * self.FACTOR_X, 339 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT 		= pygame.Rect(913, 565, 38, 20)
+		self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT 		= pygame.Rect(913 * self.FACTOR_X, 565 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
 		#------------------------------------------------------------------------ TEX BOXES --------------------------------------------------------------------------#
 		###############################################################################################################################################################
@@ -830,52 +745,56 @@ class NewGameMenu:
 		###############################################################################################################################################################
 
 	def get_button_by_interaction(self, mouse_rect):
-		if self.ASSIGN_CHARACTER_NAME_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.character_creation_image_offset_y - 13, 1, 1)):
+		x_offset = 439 * self.FACTOR_X
+		y_offset =  13 * self.FACTOR_Y
+		if self.ASSIGN_CHARACTER_NAME_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
 			return 'ASSIGN_CHARACTER_NAME'	
 		
-		elif self.ASSIGN_CHARACTER_AGE_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.character_creation_image_offset_y - 13, 1, 1)):
+		elif self.ASSIGN_CHARACTER_AGE_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
 			return 'ASSIGN_CHARACTER_AGE'
 		
-		elif self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.character_creation_image_offset_y - 13, 1, 1)):
+		elif self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
 			return 'ASSIGN_CHARACTER_WEIGHT'
 
 		
-		elif self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.character_creation_image_offset_y - 13, 1, 1)):
+		elif self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
 			return 'ASSIGN_CHARACTER_STRENGHT'
 		
-		elif self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.character_creation_image_offset_y - 13, 1, 1)):
+		elif self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
 			return 'ASSIGN_CHARACTER_CONSTITUTION'	
 		
-		elif self.ASSIGN_CHARACTER_AGILITY_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.character_creation_image_offset_y - 13, 1, 1)):
+		elif self.ASSIGN_CHARACTER_AGILITY_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
 			return 'ASSIGN_CHARACTER_AGILITY'
 		
-		elif self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.character_creation_image_offset_y - 13, 1, 1)):
+		elif self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
 			return 'ASSIGN_CHARACTER_CHARISMA'	
 		
-		elif self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.character_creation_image_offset_y - 13, 1, 1)):
+		elif self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
 			return 'ASSIGN_CHARACTER_INTELLIGENCE'
 		
-		elif self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT.colliderect((mouse_rect[0] - 439, mouse_rect[1]+self.character_creation_image_offset_y - 13, 1, 1)):
+		elif self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
 			return 'ASSIGN_CHARACTER_EDUCATION'											
 		
 		else:
 			return None
 
 	def get_organ_by_interaction(self, mouse_pos):
-		try:
-			if self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.character_creation_image_offset_y)) == self.character_organs_collider_colors['CHARACTER_BRAIN_SPRITE']:
+		x_offset = 439 * self.FACTOR_X
+		y_offset =  354 * self.FACTOR_Y
+		try:	
+			if self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((int(mouse_pos[0]-x_offset), int(mouse_pos[1]-y_offset + self.character_creation_image_offset_y))) == self.character_organs_collider_colors['CHARACTER_BRAIN_SPRITE']:
 				return 'CHARACTER_BRAIN_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.character_creation_image_offset_y)) == self.character_organs_collider_colors['CHARACTER_HEART_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((int(mouse_pos[0]-x_offset), int(mouse_pos[1]-y_offset + self.character_creation_image_offset_y))) == self.character_organs_collider_colors['CHARACTER_HEART_SPRITE']:
 				return 'CHARACTER_HEART_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.character_creation_image_offset_y)) == self.character_organs_collider_colors['CHARACTER_LUNGS_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((int(mouse_pos[0]-x_offset), int(mouse_pos[1]-y_offset + self.character_creation_image_offset_y))) == self.character_organs_collider_colors['CHARACTER_LUNGS_SPRITE']:
 				return 'CHARACTER_LUNGS_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.character_creation_image_offset_y)) == self.character_organs_collider_colors['CHARACTER_LIVER_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((int(mouse_pos[0]-x_offset), int(mouse_pos[1]-y_offset + self.character_creation_image_offset_y))) == self.character_organs_collider_colors['CHARACTER_LIVER_SPRITE']:
 				return 'CHARACTER_LIVER_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.character_creation_image_offset_y)) == self.character_organs_collider_colors['CHARACTER_STOMACH_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((int(mouse_pos[0]-x_offset), int(mouse_pos[1]-y_offset + self.character_creation_image_offset_y))) == self.character_organs_collider_colors['CHARACTER_STOMACH_SPRITE']:
 				return 'CHARACTER_STOMACH_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.character_creation_image_offset_y)) == self.character_organs_collider_colors['CHARACTER_KIDNEYS_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((int(mouse_pos[0]-x_offset), int(mouse_pos[1]-y_offset + self.character_creation_image_offset_y))) == self.character_organs_collider_colors['CHARACTER_KIDNEYS_SPRITE']:
 				return 'CHARACTER_KIDNEYS_SPRITE'
-			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((mouse_pos[0]-439, mouse_pos[1]-354 + self.character_creation_image_offset_y)) == self.character_organs_collider_colors['CHARACTER_INTESTINE_SPRITE']:
+			elif self.CHARACTER_ORGANS_COLLIDER_SPRITE.get_at((int(mouse_pos[0]-x_offset), int(mouse_pos[1]-y_offset + self.character_creation_image_offset_y))) == self.character_organs_collider_colors['CHARACTER_INTESTINE_SPRITE']:
 				return 'CHARACTER_INTESTINE_SPRITE'															
 					
 		except Exception as e:
@@ -954,7 +873,7 @@ class NewGameMenu:
 		else:
 			if self.CHARACTER_SELECTION_RECT.colliderect(mouse_rect):
 				for index, character in enumerate(self.characters):
-					rect = (33, 18 + index * 100 - self.character_selection_image_offset_y + (10 * index if index > 0 else 0), 376, 100)
+					rect = (33 * self.FACTOR_X, 18 + index * (100 * self.FACTOR_Y) - self.character_selection_image_offset_y + (10 * index if index > 0 else 0), 376 * self.FACTOR_X, 100 * self.FACTOR_Y)
 					rect = pygame.Rect(rect)
 					if rect.colliderect(mouse_rect):
 						self.selected_character = character
@@ -964,7 +883,7 @@ class NewGameMenu:
 
 						return
 				
-				rect = (33, 18 + (index+1) * 100 - self.character_selection_image_offset_y + 10 * (index+1), 376, 100)
+				rect = (33 * self.FACTOR_X, 18 + (index+1) * (100 * self.FACTOR_Y) - self.character_selection_image_offset_y + 10 * (index+1), 376 * self.FACTOR_X, 100 * self.FACTOR_Y)
 				rect = pygame.Rect(rect)
 				if rect.colliderect(mouse_rect):
 					self.characters.append(copy.deepcopy(self.blank_character_sheet))
@@ -1176,57 +1095,56 @@ class NewGameMenu:
 
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(self.CHARACTER_SILHOUETTE, 																						(	0											
-																																											,   340))		
-		
+																																											,   340 * self.FACTOR_Y))		
 		
 		if 'CHARACTER_BRAIN_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
 			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_BRAIN_SPRITE, 'CHARACTER_BRAIN_SPRITE'), brain_color), 					(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 		else:
-			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_BRAIN_SPRITE, 'CHARACTER_BRAIN_SPRITE'), brain_color), 					(	0											
-																																												,   340))
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_BRAIN_SPRITE, 'CHARACTER_BRAIN_SPRITE'), brain_color), 		(	0											
+																																												,   340 * self.FACTOR_Y))
 		
 		if 'CHARACTER_HEART_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
 			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_HEART_SPRITE, 'CHARACTER_HEART_SPRITE'), heart_color), 					(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 		else:
-			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_HEART_SPRITE, 'CHARACTER_HEART_SPRITE'), heart_color), 					(	0											
-																																												,   340))
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_HEART_SPRITE, 'CHARACTER_HEART_SPRITE'), heart_color), 		(	0											
+																																												,   340 * self.FACTOR_Y))
 		
 		if 'CHARACTER_KIDNEYS_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
 			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_KIDNEYS_SPRITE, 'CHARACTER_KIDNEYS_SPRITE'), kidneys_color), 			(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 		else:
-			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_KIDNEYS_SPRITE, 'CHARACTER_KIDNEYS_SPRITE'), kidneys_color), 			(	0											
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_KIDNEYS_SPRITE, 'CHARACTER_KIDNEYS_SPRITE'), kidneys_color), (	0											
 																																												,   340))
 		
 		if 'CHARACTER_STOMACH_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
 			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_STOMACH_SPRITE, 'CHARACTER_STOMACH_SPRITE'), stomach_color), 			(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 		else:
-			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_STOMACH_SPRITE, 'CHARACTER_STOMACH_SPRITE'), stomach_color), 			(	0											
-																																												,   340))
+			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_STOMACH_SPRITE, 'CHARACTER_STOMACH_SPRITE'), stomach_color), (	0											
+																																												,   340 * self.FACTOR_Y))
 		
 		if 'CHARACTER_LIVER_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
 			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_LIVER_SPRITE, 'CHARACTER_LIVER_SPRITE'), liver_color), 					(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 		else:
 			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_LIVER_SPRITE, 'CHARACTER_LIVER_SPRITE'), liver_color), 					(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 		
 		if 'CHARACTER_LUNGS_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
 			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_LUNGS_SPRITE, 'CHARACTER_LUNGS_SPRITE'), lungs_color), 					(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 		else:
 			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_LUNGS_SPRITE, 'CHARACTER_LUNGS_SPRITE'), lungs_color), 					(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 		
 		if 'CHARACTER_INTESTINE_SPRITE' == self.organ_to_draw or self.organ_to_draw == None:
 			self.CHARACTER_CREATION_ORGANS_SURFACE.blit(self.change_white_to_color((self.CHARACTER_INTESTINE_SPRITE, 'CHARACTER_INTESTINE_SPRITE'), instestine_color), 		(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 		else:
 			self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.blit(self.change_white_to_color((self.CHARACTER_INTESTINE_SPRITE, 'CHARACTER_INTESTINE_SPRITE'), instestine_color), 		(	0											
-																																												,   340))
+																																												,   340 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_ORGANS_TRANSPARENT_SURFACE.set_alpha(80)
 
@@ -1249,7 +1167,7 @@ class NewGameMenu:
 		character_languages_fluency_text_render = self.font20.render(languages,  True, 	(255,255,255))
 		
 		max_length = len(languages)
-		while character_languages_fluency_text_render.get_width() > 415:
+		while character_languages_fluency_text_render.get_width() > 415 * self.FACTOR_X:
 			max_length -= 1
 			languages = languages[:max_length - 3] + '...'
 			character_languages_fluency_text_render = self.font20.render(languages,  True, 	(255,255,255))
@@ -1260,7 +1178,7 @@ class NewGameMenu:
 		character_careers_text_render = self.font20.render(careers,  True, 	(255,255,255))
 		
 		max_length = len(careers)
-		while character_careers_text_render.get_width() > 415:
+		while character_careers_text_render.get_width() > 415 * self.FACTOR_X:
 			max_length -= 1
 			careers = careers[:max_length - 3] + '...'
 			character_careers_text_render = self.font20.render(careers,  True, 	(255,255,255))
@@ -1271,7 +1189,7 @@ class NewGameMenu:
 		character_hobbies_text_render = self.font20.render(hobbies,  True, 	(255,255,255))
 		
 		max_length = len(hobbies)
-		while character_hobbies_text_render.get_width() > 415:
+		while character_hobbies_text_render.get_width() > 415 * self.FACTOR_X:
 			max_length -= 1
 			hobbies = hobbies[:max_length - 3] + '...'
 			character_hobbies_text_render = self.font20.render(hobbies,  True, 	(255,255,255))
@@ -1286,38 +1204,38 @@ class NewGameMenu:
 		character_educations_text_render = self.font20.render(educations,  True, 	(255,255,255))
 		
 		max_length = len(educations)
-		while character_educations_text_render.get_width() > 260:
+		while character_educations_text_render.get_width() > 260 * self.FACTOR_X:
 			max_length -= 1
 			educations = educations[:max_length - 3] + '...'
 			character_educations_text_render = self.font20.render(educations,  True, 	(255,255,255))						
 
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 		(	self.ASSIGN_CHARACTER_NAME_BOX_RECT[0]				+ self.selected_character['character_name']['x_offset']											
-																							,   self.ASSIGN_CHARACTER_NAME_BOX_RECT[1] 			- 6))
+																							,   self.ASSIGN_CHARACTER_NAME_BOX_RECT[1] 			- 6 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_age_text_render, 		(	self.ASSIGN_CHARACTER_AGE_BOX_RECT[0] 				+ self.selected_character['character_age']['x_offset']		
-																							,   self.ASSIGN_CHARACTER_AGE_BOX_RECT[1] 			- 8))
+																							,   self.ASSIGN_CHARACTER_AGE_BOX_RECT[1] 			- 8 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_weight_text_render, 		(	self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[0] 			+ self.selected_character['character_weight']['x_offset']		
-																							,   self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[1] 		- 8))
+																							,   self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[1] 		- 8 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_gender_text_render, 		(	self.ASSIGN_CHARACTER_GENDER_BOX_RECT[0] 			+ self.selected_character['character_gender']['x_offset']		
-																							,   self.ASSIGN_CHARACTER_GENDER_BOX_RECT[1] 		- 10))							
+																							,   self.ASSIGN_CHARACTER_GENDER_BOX_RECT[1] 		- 10 * self.FACTOR_Y))							
 		
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_nationality_text_render, (	self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[0] 					+ self.selected_character['character_nationality']['x_offset']		
-																							,   self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[1] 					+ 3))
+																							,   self.ASSIGN_CHARACTER_NATIONALITY_BOX_RECT[1] 					+ 3 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_languages_fluency_text_render, 	(	self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT[0] 	+ self.selected_character['character_languages_fluency']['x_offset']		
-																									,   self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT[1] 	+ 3))
+																									,   self.ASSIGN_CHARACTER_LANGUAGES_FLUENCY_BOX_RECT[1] 	+ 3 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_careers_text_render, 			(	self.ASSIGN_CHARACTER_CAREERS_BOX_RECT[0] 				+ self.selected_character['character_careers']['x_offset']		
-																									,   self.ASSIGN_CHARACTER_CAREERS_BOX_RECT[1] 				+ 3))
+																									,   self.ASSIGN_CHARACTER_CAREERS_BOX_RECT[1] 				+ 3 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_hobbies_text_render, 			(	self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[0] 				+ self.selected_character['character_hobbies']['x_offset']		
-																									,   self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[1] 				+ 3))
+																									,   self.ASSIGN_CHARACTER_HOBBIES_BOX_RECT[1] 				+ 3 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_educations_text_render, 			(	self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT[0] 			+ self.selected_character['character_schooling']['x_offset']		
-																									,   self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT[1] 			+ 3))								
+																									,   self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT[1] 			+ 3 * self.FACTOR_Y))								
 
 
 
@@ -1341,22 +1259,22 @@ class NewGameMenu:
 
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_strenght_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]			+ self.selected_character['character_strenght']['x_offset']											
-																								,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		- 8))
+																								,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		- 8 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constituion_text_render, 	(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0] 		+ self.selected_character['character_constituion']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 	- 8))
+																								,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 	- 8 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_agility_text_render, 		(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0] 			+ self.selected_character['character_agility']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		- 8))
+																								,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		- 8 * self.FACTOR_Y))
 		
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_charisma_text_render, 		(	self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[0]			+ self.selected_character['character_charisma']['x_offset']											
-																								,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		- 8))
+																								,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		- 8 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_intelligence_text_render, 	(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0] 		+ self.selected_character['character_intelligence']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 	- 8))
+																								,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 	- 8 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_education_text_render, 		(	self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] 		+ self.selected_character['character_education']['x_offset']		
-																								,   self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] 	- 8))			
+																								,   self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] 	- 8 * self.FACTOR_Y))			
 
 
 		if self.receive_player_keybord_input == True:
@@ -1401,7 +1319,7 @@ class NewGameMenu:
 
 		for index, character in enumerate(self.characters):
 
-			rect = (0, (index * 100) + 10 * index if index > 0 else 0, 376, 100)
+			rect = (0, (index * (100 * self.FACTOR_Y)) + 10 * index if index > 0 else 0, 376 * self.FACTOR_X, 100 * self.FACTOR_Y)
 
 			width = 4 if character is self.selected_character else 1
 			color = (160,133,0) if character is self.selected_character else (170,127,127)			
@@ -1409,15 +1327,15 @@ class NewGameMenu:
 
 			character_name_text_render = self.font16.render(str(character['character_name']['value']), 	True,  (255,255,255))
 
-			self.CHARACTER_SELECTION_SURFACE.blit(character_name_text_render, (8, 10 + ((index * 100) + 10 * index if index > 0 else 0)))
+			self.CHARACTER_SELECTION_SURFACE.blit(character_name_text_render, (8, 10 + ((index * (100 * self.FACTOR_Y)) + 10 * index if index > 0 else 0)))
 
 
-		rect = (0, (index+1) * 100 + 10 * (index+1), 376, 30)
+		rect = (0, (index+1) * (100 * self.FACTOR_Y) + 10 * (index+1), 376 * self.FACTOR_X, 30 * self.FACTOR_Y)
 		pygame.draw.rect(self.CHARACTER_SELECTION_SURFACE, (91,127,0), rect, 2)
 
 
 		new_character_text_render = self.font16.render('CREATE NEW CHARACTER', 	True,  (255,255,255))
-		self.CHARACTER_SELECTION_SURFACE.blit(new_character_text_render, (188 - new_character_text_render.get_width()/2, 16 - new_character_text_render.get_height()/2 + (index+1) * 100 + 10 * (index+1)))			
+		self.CHARACTER_SELECTION_SURFACE.blit(new_character_text_render, (188 * self.FACTOR_X - new_character_text_render.get_width()/2, 16 * self.FACTOR_Y - new_character_text_render.get_height()/2 + (index+1) * (100 * self.FACTOR_Y) + 10 * (index+1)))			
 
 
 		######  SUBSURFACES  ######

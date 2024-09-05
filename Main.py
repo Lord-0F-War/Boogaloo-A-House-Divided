@@ -2,16 +2,15 @@
 import sys
 import os
 import glob
-from json import load as json_load
 from PygameManager import pygame
+import tkinter as tk
+root = tk.Tk()
 
 
 MAIN_FOLDER = os.path.dirname(sys.argv[0])
 
-with open(f'{MAIN_FOLDER}\_settings.txt', 'r') as file:
-    CONFIGURATIONS:dict     = json_load(file)
-    SCREEN_WIDTH:int        = CONFIGURATIONS.get('screen_width')
-    SCREEN_HEIGHT:int       = CONFIGURATIONS.get('screen_height')
+SCREEN_WIDTH    = root.winfo_screenwidth()
+SCREEN_HEIGHT   = root.winfo_screenheight()
 
 
 import PygameManager
@@ -97,7 +96,7 @@ class GameLoader:
         global character_intestine_sprite
         character_intestine_sprite          = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(1825, 0, 304, 600), (FACTOR_X, FACTOR_Y))
         global character_organs_collider_sprite
-        character_organs_collider_sprite    = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(2129, 0, 304, 600), (FACTOR_X, FACTOR_Y))        
+        character_organs_collider_sprite    = pygame.transform.scale_by(organs_spirtesheet_source.subsurface(2129, 0, 304, 600), (FACTOR_X, FACTOR_Y))        
         global character_silhouette
         character_silhouette                = pygame.transform.smoothscale_by(organs_spirtesheet_source.subsurface(2433, 0, 304, 600), (FACTOR_X, FACTOR_Y))                                                           
 
