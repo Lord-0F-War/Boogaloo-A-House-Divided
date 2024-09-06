@@ -163,9 +163,9 @@ class GameLoader:
                 for filename in os.listdir(folder_path):
                     if filename.endswith(".wav") or filename.endswith(".ogg") or filename.endswith(".mp3"):
                         music_path = os.path.join(folder_path, filename)
-                        image_name = os.path.splitext(filename)[0]
-                        music_files_dic[image_name] = music_path
-        
+                        music_name = os.path.splitext(filename)[0]
+                        music_files_dic[music_name] = music_path
+
         return music_files_dic
 
     def set_variables(self):

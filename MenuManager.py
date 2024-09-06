@@ -404,7 +404,7 @@ class MainMenu:
 		
 		self.main_menu_intro_video.draw(SCREEN, (self.MENU_GUI_MIDDLE_X + 2 * self.FACTOR_X, self.MENU_GUI_MIDDLE_Y + 2 * self.FACTOR_Y))
 
-		if self.main_menu_intro_video.frames >= 4955:
+		if self.main_menu_intro_video.frames >= 4885:
 			self.main_menu_intro_video.restart()	
 
 		SCREEN.blit(self.MENU_GUI, (self.MENU_GUI_MIDDLE_X, self.MENU_GUI_MIDDLE_Y))
@@ -673,6 +673,7 @@ class NewGameMenu:
 
 		self.font22 = Utility.ScalableFont('menu.ttf', 22)
 		self.font20 = Utility.ScalableFont('menu.ttf', 20)
+		self.font18 = Utility.ScalableFont('menu.ttf', 18)
 		self.font16 = Utility.ScalableFont('menu.ttf', 16)
 
 		self.character_creation_image_offset_y = 0
@@ -704,9 +705,9 @@ class NewGameMenu:
 		# ID
 		self.ASSIGN_CHARACTER_NAME_BOX_RECT 			= pygame.Rect(88 * self.FACTOR_X, 33 * self.FACTOR_Y, 453 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_AGE_BOX_RECT 				= pygame.Rect(616 * self.FACTOR_X, 82 * self.FACTOR_Y, 59 * self.FACTOR_X, 20 * self.FACTOR_Y)
+		self.ASSIGN_CHARACTER_AGE_BOX_RECT 				= pygame.Rect(616 * self.FACTOR_X, 80 * self.FACTOR_Y, 59 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT 			= pygame.Rect(107 * self.FACTOR_X, 278 * self.FACTOR_Y, 59 * self.FACTOR_X, 20 * self.FACTOR_Y)
+		self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT 			= pygame.Rect(107 * self.FACTOR_X, 276 * self.FACTOR_Y, 59 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
 		self.ASSIGN_CHARACTER_GENDER_BOX_RECT 			= pygame.Rect(656 * self.FACTOR_X, 33 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
@@ -722,17 +723,17 @@ class NewGameMenu:
 
 
 		# TRAITS
-		self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT 		= pygame.Rect(858 * self.FACTOR_X, 32 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
+		self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT 		= pygame.Rect(858 * self.FACTOR_X, 30 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT 	= pygame.Rect(1155 * self.FACTOR_X, 32 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
+		self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT 	= pygame.Rect(1155 * self.FACTOR_X, 30 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_AGILITY_BOX_RECT 			= pygame.Rect(1335 * self.FACTOR_X, 32 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
+		self.ASSIGN_CHARACTER_AGILITY_BOX_RECT 			= pygame.Rect(1335 * self.FACTOR_X, 30 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT 		= pygame.Rect(903 * self.FACTOR_X, 339 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
+		self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT 		= pygame.Rect(903 * self.FACTOR_X, 377 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT 	= pygame.Rect(1259 * self.FACTOR_X, 339 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
+		self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT 	= pygame.Rect(1259 * self.FACTOR_X, 377 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
-		self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT 		= pygame.Rect(913 * self.FACTOR_X, 565 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
+		self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT 		= pygame.Rect(913 * self.FACTOR_X, 643 * self.FACTOR_Y, 38 * self.FACTOR_X, 20 * self.FACTOR_Y)
 
 		#------------------------------------------------------------------------ TEX BOXES --------------------------------------------------------------------------#
 		###############################################################################################################################################################
@@ -1058,8 +1059,8 @@ class NewGameMenu:
 		value_percentage = value / max_value
 		
 		# Define the start and end colors
-		color_dead = (220, 10, 10)  
-		color_alive = (10, 220, 10)  
+		color_dead = (230, 20, 20)  
+		color_alive = (20, 230, 20)  
 		
 		# Interpolate between the two colors
 		r = int(color_dead[0] * (1 - value_percentage) + color_alive[0] * value_percentage)
@@ -1214,10 +1215,10 @@ class NewGameMenu:
 																							,   self.ASSIGN_CHARACTER_NAME_BOX_RECT[1] 			- 6 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_age_text_render, 		(	self.ASSIGN_CHARACTER_AGE_BOX_RECT[0] 				+ self.selected_character['character_age']['x_offset']		
-																							,   self.ASSIGN_CHARACTER_AGE_BOX_RECT[1] 			- 8 * self.FACTOR_Y))
+																							,   self.ASSIGN_CHARACTER_AGE_BOX_RECT[1] 			- 5 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_weight_text_render, 		(	self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[0] 			+ self.selected_character['character_weight']['x_offset']		
-																							,   self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[1] 		- 8 * self.FACTOR_Y))
+																							,   self.ASSIGN_CHARACTER_WEIGHT_BOX_RECT[1] 		- 5 * self.FACTOR_Y))
 
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_gender_text_render, 		(	self.ASSIGN_CHARACTER_GENDER_BOX_RECT[0] 			+ self.selected_character['character_gender']['x_offset']		
 																							,   self.ASSIGN_CHARACTER_GENDER_BOX_RECT[1] 		- 10 * self.FACTOR_Y))							
@@ -1238,6 +1239,8 @@ class NewGameMenu:
 																									,   self.ASSIGN_CHARACTER_SCHOOLING_BOX_RECT[1] 			+ 3 * self.FACTOR_Y))								
 
 
+		###############################################################################################################################################################
+		#------------------------------------------------------------------------------------------------------------------------------------------------- ATTRIBUTES #
 
 		character_strenght_text_render 		= self.font22.render(	str(self.selected_character['character_strenght']['value']), 		True, 	
 																		self.get_color_from_value_size(self.selected_character['character_strenght']['value'], 10))
@@ -1276,6 +1279,434 @@ class NewGameMenu:
 		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_education_text_render, 		(	self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] 		+ self.selected_character['character_education']['x_offset']		
 																								,   self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] 	- 8 * self.FACTOR_Y))			
 
+
+		y_offset = 27
+
+		character_archery_text_render = self.font18.render(
+			str(self.selected_character['character_strenght']['archery']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_strenght']['archery'], 5)
+		)
+
+		character_armed_fight_text_render = self.font18.render(
+			str(self.selected_character['character_strenght']['armed_fight']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_strenght']['armed_fight'], 5)
+		)
+
+		character_unarmed_fight_text_render = self.font18.render(
+			str(self.selected_character['character_strenght']['unarmed_fight']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_strenght']['unarmed_fight'], 5)
+		)
+
+		character_pistol_mastery_text_render = self.font18.render(
+			str(self.selected_character['character_strenght']['pistol_mastery']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_strenght']['pistol_mastery'], 5)
+		)
+
+		character_rifle_mastery_text_render = self.font18.render(
+			str(self.selected_character['character_strenght']['rifle_mastery']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_strenght']['rifle_mastery'], 5)
+		)
+
+		character_heavy_artilhery_text_render = self.font18.render(
+			str(self.selected_character['character_strenght']['heavy_artilhery']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_strenght']['heavy_artilhery'], 5)
+		)
+
+		character_heavy_gun_text_render = self.font18.render(
+			str(self.selected_character['character_strenght']['heavy_gun']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_strenght']['heavy_gun'], 5)
+		)
+
+		character_throw_range_text_render = self.font18.render(
+			str(self.selected_character['character_strenght']['throw_range']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_strenght']['throw_range'], 5)
+		)
+
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_archery_text_render, 			(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]		+ 66 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		+ (73 + (y_offset * 0)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_armed_fight_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]		+ 66 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		+ (73 + (y_offset * 1)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_unarmed_fight_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]		+ 66 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		+ (73 + (y_offset * 2)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_pistol_mastery_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]		+ 66 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		+ (73 + (y_offset * 3)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_rifle_mastery_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]		+ 66 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		+ (73 + (y_offset * 4)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_heavy_artilhery_text_render, 	(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]		+ 66 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		+ (73 + (y_offset * 5)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_heavy_gun_text_render, 			(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]		+ 66 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		+ (73 + (y_offset * 6)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_throw_range_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]		+ 66 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		+ (73 + (y_offset * 7)) * self.FACTOR_Y))
+
+
+
+		character_climbing_text_render = self.font18.render(
+			str(self.selected_character['character_constituion']['climbing']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_constituion']['climbing'], 5)
+		)
+
+		character_combat_engineer_text_render = self.font18.render(
+			str(self.selected_character['character_constituion']['combat_engineer']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_constituion']['combat_engineer'], 5)
+		)
+
+		character_parachute_text_render = self.font18.render(
+			str(self.selected_character['character_constituion']['parachute']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_constituion']['parachute'], 5)
+		)
+
+		character_riding_text_render = self.font18.render(
+			str(self.selected_character['character_constituion']['riding']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_constituion']['riding'], 5)
+		)
+
+		character_swimming_text_render = self.font18.render(
+			str(self.selected_character['character_constituion']['swimming']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_constituion']['swimming'], 5)
+		)
+
+		character_excavation_text_render = self.font18.render(
+			str(self.selected_character['character_constituion']['excavation']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_constituion']['excavation'], 5)
+		)		
+		
+		
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_climbing_text_render, 			(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0]		+ 29 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 		+ (73 + (y_offset * 0)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_combat_engineer_text_render, 	(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0]		+ 29 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 		+ (73 + (y_offset * 1)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_parachute_text_render, 			(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0]		+ 29 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 		+ (73 + (y_offset * 2)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_riding_text_render, 				(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0]		+ 29 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 		+ (73 + (y_offset * 3)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_swimming_text_render, 			(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0]		+ 29 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 		+ (73 + (y_offset * 4)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_excavation_text_render, 			(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0]		+ 29 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 		+ (73 + (y_offset * 5)) * self.FACTOR_Y))
+
+
+
+		character_acrobatics_text_render = self.font18.render(
+			str(self.selected_character['character_agility']['acrobatics']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_agility']['acrobatics'], 5)
+		)
+
+		character_motorcycle_text_render = self.font18.render(
+			str(self.selected_character['character_agility']['motorcycle']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_agility']['motorcycle'], 5)
+		)
+
+		character_tracked_text_render = self.font18.render(
+			str(self.selected_character['character_agility']['tracked']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_agility']['tracked'], 5)
+		)
+
+		character_wheeled_text_render = self.font18.render(
+			str(self.selected_character['character_agility']['wheeled']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_agility']['wheeled'], 5)
+		)
+
+		character_stealth_text_render = self.font18.render(
+			str(self.selected_character['character_agility']['stealth']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_agility']['stealth'], 5)
+		)
+
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_acrobatics_text_render, 			(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0]		+ 69 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		+ (73 + (y_offset * 0)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_motorcycle_text_render, 			(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0]		+ 69 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		+ (73 + (y_offset * 1)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_tracked_text_render, 			(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0]		+ 69 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		+ (73 + (y_offset * 2)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_wheeled_text_render, 			(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0]		+ 69 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		+ (73 + (y_offset * 3)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_stealth_text_render, 			(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0]		+ 69 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[1] 		+ (73 + (y_offset * 4)) * self.FACTOR_Y))
+
+
+
+		character_desguise_text_render = self.font18.render(
+			str(self.selected_character['character_charisma']['desguise']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_charisma']['desguise'], 5)
+		)
+
+		character_instruction_text_render = self.font18.render(
+			str(self.selected_character['character_charisma']['instruction']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_charisma']['instruction'], 5)
+		)
+
+		character_interrogation_text_render = self.font18.render(
+			str(self.selected_character['character_charisma']['interrogation']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_charisma']['interrogation'], 5)
+		)
+
+		character_persuasion_text_render = self.font18.render(
+			str(self.selected_character['character_charisma']['persuasion']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_charisma']['persuasion'], 5)
+		)
+
+		character_leadership_text_render = self.font18.render(
+			str(self.selected_character['character_charisma']['leadership']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_charisma']['leadership'], 5)
+		)
+
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_desguise_text_render, 			(	self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[0]		+ 124 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		+ (73 + (y_offset * 0)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_instruction_text_render, 		(	self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[0]		+ 124 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		+ (73 + (y_offset * 1)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_interrogation_text_render, 		(	self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[0]		+ 124 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		+ (73 + (y_offset * 2)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_persuasion_text_render, 			(	self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[0]		+ 124 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		+ (73 + (y_offset * 3)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_leadership_text_render, 			(	self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[0]		+ 124 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_CHARISMA_BOX_RECT[1] 		+ (73 + (y_offset * 4)) * self.FACTOR_Y))
+
+
+
+		character_navigation_text_render = self.font18.render(
+			str(self.selected_character['character_intelligence']['navigation']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_intelligence']['navigation'], 5)
+		)
+
+		character_observation_text_render = self.font18.render(
+			str(self.selected_character['character_intelligence']['observation']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_intelligence']['observation'], 5)
+		)
+
+		character_reconnaissance_text_render = self.font18.render(
+			str(self.selected_character['character_intelligence']['reconnaissance']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_intelligence']['reconnaissance'], 5)
+		)
+
+		character_survivalism_text_render = self.font18.render(
+			str(self.selected_character['character_intelligence']['survivalism']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_intelligence']['survivalism'], 5)
+		)
+
+		character_tracking_text_render = self.font18.render(
+			str(self.selected_character['character_intelligence']['tracking']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_intelligence']['tracking'], 5)
+		)
+
+		character_scrounging_text_render = self.font18.render(
+			str(self.selected_character['character_intelligence']['scrounging']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_intelligence']['scrounging'], 5)
+		)		
+
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_navigation_text_render, 			(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0]		+ 121 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 		+ (73 + (y_offset * 0)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_observation_text_render, 		(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0]		+ 121 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 		+ (73 + (y_offset * 1)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_reconnaissance_text_render, 		(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0]		+ 121 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 		+ (73 + (y_offset * 2)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_survivalism_text_render, 		(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0]		+ 121 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 		+ (73 + (y_offset * 3)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_tracking_text_render, 			(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0]		+ 121 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 		+ (73 + (y_offset * 4)) * self.FACTOR_Y))
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_scrounging_text_render, 			(	self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[0]		+ 121 * self.FACTOR_X											
+																									,   self.ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT[1] 		+ (73 + (y_offset * 5)) * self.FACTOR_Y))
+
+
+
+		character_aircraft_mechanic_text_render = self.font18.render(
+			str(self.selected_character['character_education']['aircraft_mechanic']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['aircraft_mechanic'], 5)
+		)
+
+		character_vehicle_mechanic_text_render = self.font18.render(
+			str(self.selected_character['character_education']['vehicle_mechanic']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['vehicle_mechanic'], 5)
+		)
+
+		character_forgery_text_render = self.font18.render(
+			str(self.selected_character['character_education']['forgery']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['forgery'], 5)
+		)
+
+		character_gunsmith_text_render = self.font18.render(
+			str(self.selected_character['character_education']['gunsmith']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['gunsmith'], 5)
+		)
+
+		character_pilot_helicopter_text_render = self.font18.render(
+			str(self.selected_character['character_education']['pilot_helicopter']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['pilot_helicopter'], 5)
+		)
+
+		character_pilot_airplane_text_render = self.font18.render(
+			str(self.selected_character['character_education']['pilot_airplane']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['pilot_airplane'], 5)
+		)
+
+		character_farming_text_render = self.font18.render(
+			str(self.selected_character['character_education']['farming']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['farming'], 5)
+		)
+
+		character_biology_text_render = self.font18.render(
+			str(self.selected_character['character_education']['biology']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['biology'], 5)
+		)
+
+		character_chemistry_text_render = self.font18.render(
+			str(self.selected_character['character_education']['chemistry']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['chemistry'], 5)
+		)
+
+		character_civil_engineer_text_render = self.font18.render(
+			str(self.selected_character['character_education']['civil_engineer']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['civil_engineer'], 5)
+		)
+
+		character_computer_text_render = self.font18.render(
+			str(self.selected_character['character_education']['computer']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['computer'], 5)
+		)
+
+		character_electronics_text_render = self.font18.render(
+			str(self.selected_character['character_education']['electronics']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['electronics'], 5)
+		)
+
+		character_medical_diagnosis_text_render = self.font18.render(
+			str(self.selected_character['character_education']['medical_diagnosis']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['medical_diagnosis'], 5)
+		)
+
+		character_medical_trauma_text_render = self.font18.render(
+			str(self.selected_character['character_education']['medical_trauma']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['medical_trauma'], 5)
+		)
+
+		character_medical_surgery_text_render = self.font18.render(
+			str(self.selected_character['character_education']['medical_surgery']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['medical_surgery'], 5)
+		)
+
+		character_metallurgy_text_render = self.font18.render(
+			str(self.selected_character['character_education']['metallurgy']),
+			True,
+			self.get_color_from_value_size(self.selected_character['character_education']['metallurgy'], 5)
+		)
+
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_aircraft_mechanic_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 111 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 0)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_vehicle_mechanic_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 111 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 1)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_forgery_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 111 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 2)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_gunsmith_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 111 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 3)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_pilot_helicopter_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 111 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 4)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_pilot_airplane_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 111 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 5)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_farming_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 111 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 6)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_biology_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 111 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 7)) * self.FACTOR_Y))
+
+
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_chemistry_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 467 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 0)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_civil_engineer_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 467 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 1)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_computer_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 467 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 2)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_electronics_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 467 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 3)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_medical_diagnosis_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 467 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 4)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_medical_trauma_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 467 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 5)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_medical_surgery_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 467 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 6)) * self.FACTOR_Y))
+
+		self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_metallurgy_text_render,  
+			(self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[0] + 467 * self.FACTOR_X,
+			self.ASSIGN_CHARACTER_EDUCATION_BOX_RECT[1] + (73 + (y_offset * 7)) * self.FACTOR_Y))
+
+		#------------------------------------------------------------------------------------------------------------------------------------------------- ATTRIBUTES #
+		###############################################################################################################################################################
 
 		if self.receive_player_keybord_input == True:
 			current_time = pygame.time.get_ticks()
@@ -1503,13 +1934,31 @@ class NewGameMenu:
 		character['character_intelligence']['value'] 	= attributes['int']
 		character['character_education']['value'] 		= attributes['edu']
 
+
+		banned_keys = ['value', 'rect', 'maximum_size', 'content_type', 'x_offset', 'throw_range']
+		for attr_dict in [character['character_strenght'], character['character_constituion'], character['character_agility'], character['character_charisma'], character['character_intelligence'], character['character_education']]:
+
+			total_value = attr_dict['value']
+			keys = [key for key in attr_dict.keys() if key not in banned_keys]
+
+
+			# Randomly distribute the values
+			remaining_value = total_value
+			while remaining_value > 0:
+				for key in keys:
+					value = random.randint(0, 1)
+					attr_dict[key] += value
+					remaining_value -= value
+					if remaining_value == 0:
+						break
+
 		#------------------------------------------------------------------------ ATTRIBUTES -------------------------------------------------------------------------#
 		###############################################################################################################################################################
 
 
 		###############################################################################################################################################################
 		#---------------------------------------------------------------------------- AGE ----------------------------------------------------------------------------#
-		character['character_age']['value'] 		= random.randint(17, 65)
+		character['character_age']['value'] 		= random.randint(17, 17)
 
 		#---------------------------------------------------------------------------- AGE ----------------------------------------------------------------------------#
 		###############################################################################################################################################################

@@ -57,9 +57,16 @@
             "rect" 			: "ASSIGN_CHARACTER_STRENGHT_BOX_RECT",            
             "maximum_size" 	: 2,
             "content_type" 	: "int",
-            "x_offset" 		: 4,             
+            "x_offset" 		: 7,             
 
-            "skill_1": 0
+            "archery"           : 0,
+            "armed_fight"       : 0,
+            "unarmed_fight"     : 0,
+            "pistol_mastery"    : 0,
+            "rifle_mastery"     : 0,
+            "heavy_artilhery"   : 0,
+            "heavy_gun"         : 0,
+            "throw_range"       : 0
         },
         
         "character_constituion": {
@@ -67,9 +74,14 @@
             "rect" 			: "ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT",            
             "maximum_size" 	: 2,
             "content_type" 	: "int",
-            "x_offset" 		: 4,
+            "x_offset" 		: 7,
 
-            "skill_1": 0
+            "climbing"          : 0,
+            "combat_engineer"   : 0,
+            "parachute"         : 0,
+            "riding"            : 0,
+            "swimming"          : 0,
+            "excavation"        : 0
         },
 
         "character_agility": {
@@ -77,9 +89,13 @@
             "rect" 			: "ASSIGN_CHARACTER_AGILITY_BOX_RECT",            
             "maximum_size" 	: 2,
             "content_type" 	: "int",
-            "x_offset" 		: 4,
+            "x_offset" 		: 7,
 
-            "skill_1": 0
+            "acrobatics"        : 0,
+            "motorcycle"        : 0,
+            "tracked"           : 0,
+            "wheeled"           : 0,
+            "stealth"           : 0
         },
         
         "character_charisma": {
@@ -87,9 +103,13 @@
             "rect" 			: "ASSIGN_CHARACTER_CHARISMA_BOX_RECT",            
             "maximum_size" 	: 2,
             "content_type" 	: "int",
-            "x_offset" 		: 4,
+            "x_offset" 		: 7,
 
-            "skill_1": 0
+            "desguise"          : 0,
+            "instruction"       : 0,
+            "interrogation"     : 0,
+            "persuasion"        : 0,
+            "leadership"        : 0
         },
         
         "character_intelligence": {
@@ -97,9 +117,14 @@
             "rect" 			: "ASSIGN_CHARACTER_INTELLIGENCE_BOX_RECT",            
             "maximum_size" 	: 2,
             "content_type" 	: "int",
-            "x_offset" 		: 4,
+            "x_offset" 		: 7,
 
-            "skill_1": 0
+            "navigation"        : 0,
+            "observation"       : 0,
+            "reconnaissance"    : 0,
+            "survivalism"       : 0,
+            "tracking"          : 0,
+            "scrounging"        : 0
         },
         
         "character_education": {
@@ -107,9 +132,25 @@
             "rect" 			: "ASSIGN_CHARACTER_EDUCATION_BOX_RECT",            
             "maximum_size" 	: 2,
             "content_type" 	: "int",
-            "x_offset" 		: 4,
+            "x_offset" 		: 7,
 
-            "skill_1": 0
+            "aircraft_mechanic" : 0,
+            "vehicle_mechanic"  : 0,
+            "forgery"           : 0,
+            "gunsmith"          : 0,
+            "pilot_helicopter"  : 0,
+            "pilot_airplane"    : 0,
+            "farming"           : 0,
+            "biology"           : 0,
+            
+            "chemistry"         : 0,
+            "civil_engineer"    : 0,
+            "computer"          : 0,
+            "electronics"       : 0,
+            "medical_diagnosis" : 0,
+            "medical_trauma"    : 0,
+            "medical_surgery"   : 0,
+            "metallurgy"        : 0            
         }
     }   
 ]
