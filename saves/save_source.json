@@ -81,7 +81,8 @@
             "parachute"         : 0,
             "riding"            : 0,
             "swimming"          : 0,
-            "excavation"        : 0
+            "excavation"        : 0,
+            "load_capacity"     : 0
         },
 
         "character_agility": {

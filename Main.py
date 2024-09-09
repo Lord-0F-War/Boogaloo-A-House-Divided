@@ -74,6 +74,10 @@ class GameLoader:
         global new_game_menu_UI
         new_game_menu_UI                    = pygame.transform.smoothscale_by(new_game_menu_UI_source, (FACTOR_X, FACTOR_Y))
 
+        new_game_education_menu_UI_source 	= pygame.image.load(os.path.join(NEW_GAME_MENU_FOLDER, 'new_game_education_menu_UI.png')).convert_alpha()
+        global  new_game_education_menu_UI
+        new_game_education_menu_UI          = pygame.transform.smoothscale_by(new_game_education_menu_UI_source, (FACTOR_X, FACTOR_Y))        
+
         character_creation_sheet_UI_source 	= pygame.image.load(os.path.join(NEW_GAME_MENU_FOLDER, 'character_creation_sheet.png')).convert_alpha()
         global character_creation_sheet_UI
         character_creation_sheet_UI         = pygame.transform.smoothscale_by(character_creation_sheet_UI_source, (FACTOR_X, FACTOR_Y))
@@ -228,11 +232,11 @@ class GameLoader:
                                                     Sounds_Manager.generic_click_button_sound)
 
         global New_Game_Menu
-        New_Game_Menu                           = NewGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, new_game_menu_UI, character_creation_sheet_UI,                          # type: ignore
-                                                    Sounds_Manager.generic_hover_over_button_sound, Sounds_Manager.generic_click_button_sound,
-                                                    character_brain_sprite, character_heart_sprite, character_lungs_sprite, character_liver_sprite,
-                                                    character_stomach_sprite, character_kidneys_sprite, character_intestine_sprite, character_organs_collider_sprite,
-                                                    character_silhouette)                   
+        New_Game_Menu                           = NewGameMenu(SCREEN_WIDTH, SCREEN_HEIGHT, new_game_menu_UI, new_game_education_menu_UI,                            # type: ignore
+                                                    character_creation_sheet_UI, Sounds_Manager.generic_hover_over_button_sound,
+                                                    Sounds_Manager.generic_click_button_sound, character_brain_sprite, character_heart_sprite,
+                                                    character_lungs_sprite, character_liver_sprite, character_stomach_sprite, character_kidneys_sprite,
+                                                    character_intestine_sprite, character_organs_collider_sprite, character_silhouette)                   
 
 
 
