@@ -78,7 +78,7 @@ class Screen:
         self.SURFACE_ALFA.fill((0, 0, 0, 0))
         self.BRIGHTNESS_SURFACE.fill((0, 0, 0, 0))
 
-        self.New_Game_Menu.draw(self.SCREEN)
+        self.New_Game_Menu.draw(self.SCREEN, self.SURFACE_ALFA)
 
         if is_in_esc_menu == True:
             self.ESC_Menu.draw(self.SURFACE_ALFA)

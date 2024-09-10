@@ -45,7 +45,11 @@
             "x_offset" 		: 6            
         },
         "character_schooling": {
-            "value"         : {},
+            "value"         : {
+                "high_school":{},
+                "college":{},
+                "masters_degree":{}
+            },
             "x_offset" 		: 6            
         },                                            
 

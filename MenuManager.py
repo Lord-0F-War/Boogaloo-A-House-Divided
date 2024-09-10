@@ -637,7 +637,7 @@ class NewGameMenu:
 
 		#############################################################################################################################################
 		self.is_in_education_menu_open = False
-		self.NEW_GAME_EDUCATION_MENU = NewGameEducationMenu(self.EDUCATION_MENU_GUI)
+		self.NEW_GAME_EDUCATION_MENU = NewGameEducationMenu(SCREEN_WIDTH, SCREEN_HEIGHT, self.EDUCATION_MENU_GUI)
 
 		#############################################################################################################################################
 
@@ -759,7 +759,8 @@ class NewGameMenu:
 		y_offset =  13 * self.FACTOR_Y
 
 		if self.is_in_education_menu_open == True:
-			return None
+			button = self.NEW_GAME_EDUCATION_MENU.get_button_by_interaction(mouse_rect)
+			return button
 		
 		else:
 			if self.ASSIGN_CHARACTER_NAME_BOX_RECT.colliderect((mouse_rect[0] - x_offset, mouse_rect[1]+self.character_creation_image_offset_y - y_offset, 1, 1)):
@@ -827,79 +828,114 @@ class NewGameMenu:
 	def click_button(self, mouse_rect):
 		clicked_button = self.get_button_by_interaction(mouse_rect)
 
-		if clicked_button != None:			
-			if clicked_button == 'ASSIGN_CHARACTER_NAME':
-				self.receive_player_keybord_input = True
+		if clicked_button != None:
+			if self.is_in_education_menu_open == True:
+				if clicked_button == 'CLOSE_MENU':
+					self.is_in_education_menu_open = False
 
-				self.variable_to_receive_player_keybord_input = self.selected_character['character_name']
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()	
+				elif clicked_button == 'HIGH_SCHOOL_BUTTON':
+					self.NEW_GAME_EDUCATION_MENU.selected_education = 'high_school' if self.NEW_GAME_EDUCATION_MENU.selected_education == None or self.NEW_GAME_EDUCATION_MENU.selected_education in ['college', 'masters_degree'] else None
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()
-			elif clicked_button == 'ASSIGN_CHARACTER_AGE':
-				self.receive_player_keybord_input = True
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()
+				elif clicked_button == 'COLLEGE_BUTTON':
+					self.NEW_GAME_EDUCATION_MENU.selected_education = 'college' if self.NEW_GAME_EDUCATION_MENU.selected_education == None or self.NEW_GAME_EDUCATION_MENU.selected_education in ['high_school', 'masters_degree'] else None
 
-				self.variable_to_receive_player_keybord_input = self.selected_character['character_age']
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()
+				elif clicked_button == 'MASTERS_DEGREE_BUTTON':
+					self.NEW_GAME_EDUCATION_MENU.selected_education = 'masters_degree' if self.NEW_GAME_EDUCATION_MENU.selected_education == None or self.NEW_GAME_EDUCATION_MENU.selected_education in ['high_school', 'college'] else None
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()
-			elif clicked_button == 'ASSIGN_CHARACTER_WEIGHT':
-				self.receive_player_keybord_input = True
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()										
+				elif type(clicked_button[0]) == pygame.Rect:
+					if self.NEW_GAME_EDUCATION_MENU.selected_education == 'high_school':
+						self.selected_character['character_schooling']['value']['high_school'].update(clicked_button[1]) 
+					
+					elif self.NEW_GAME_EDUCATION_MENU.selected_education == 'college':
+						self.selected_character['character_schooling']['value']['college'].update(clicked_button[1]) 
+					
+					elif self.NEW_GAME_EDUCATION_MENU.selected_education == 'masters_degree':
+						self.selected_character['character_schooling']['value']['masters_degree'].update(clicked_button[1]) 
 
-				self.variable_to_receive_player_keybord_input = self.selected_character['character_weight']
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()	
+			else:
+				if clicked_button == 'ASSIGN_CHARACTER_NAME':
+					self.receive_player_keybord_input = True
+
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_name']
+
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()
+				elif clicked_button == 'ASSIGN_CHARACTER_AGE':
+					self.receive_player_keybord_input = True
+
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_age']
+
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()
+				elif clicked_button == 'ASSIGN_CHARACTER_WEIGHT':
+					self.receive_player_keybord_input = True
+
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_weight']
+
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()	
 
 
-			elif clicked_button == 'ASSIGN_CHARACTER_SCHOOLING':
-				self.is_in_education_menu_open = True
+				elif clicked_button == 'ASSIGN_CHARACTER_SCHOOLING':
+					self.is_in_education_menu_open = True
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()	
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()	
 
 
-			elif clicked_button == 'ASSIGN_CHARACTER_STRENGHT':
-				self.receive_player_keybord_input = True
+				elif clicked_button == 'ASSIGN_CHARACTER_STRENGHT':
+					self.receive_player_keybord_input = True
 
-				self.variable_to_receive_player_keybord_input = self.selected_character['character_strenght']
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_strenght']
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()
-			elif clicked_button == 'ASSIGN_CHARACTER_CONSTITUTION':
-				self.receive_player_keybord_input = True
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()
+				elif clicked_button == 'ASSIGN_CHARACTER_CONSTITUTION':
+					self.receive_player_keybord_input = True
 
-				self.variable_to_receive_player_keybord_input = self.selected_character['character_constituion']
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_constituion']
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()	
-			elif clicked_button == 'ASSIGN_CHARACTER_AGILITY':
-				self.receive_player_keybord_input = True
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()	
+				elif clicked_button == 'ASSIGN_CHARACTER_AGILITY':
+					self.receive_player_keybord_input = True
 
-				self.variable_to_receive_player_keybord_input = self.selected_character['character_agility']
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_agility']
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()
-			elif clicked_button == 'ASSIGN_CHARACTER_CHARISMA':
-				self.receive_player_keybord_input = True
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()
+				elif clicked_button == 'ASSIGN_CHARACTER_CHARISMA':
+					self.receive_player_keybord_input = True
 
-				self.variable_to_receive_player_keybord_input = self.selected_character['character_charisma']
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_charisma']
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()	
-			elif clicked_button == 'ASSIGN_CHARACTER_INTELLIGENCE':
-				self.receive_player_keybord_input = True
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()	
+				elif clicked_button == 'ASSIGN_CHARACTER_INTELLIGENCE':
+					self.receive_player_keybord_input = True
 
-				self.variable_to_receive_player_keybord_input = self.selected_character['character_intelligence']
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_intelligence']
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()
-			elif clicked_button == 'ASSIGN_CHARACTER_EDUCATION':
-				self.receive_player_keybord_input = True
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()
+				elif clicked_button == 'ASSIGN_CHARACTER_EDUCATION':
+					self.receive_player_keybord_input = True
 
-				self.variable_to_receive_player_keybord_input = self.selected_character['character_education']
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_education']
 
-				self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
-				self.CLICK_BUTTON_SOUND.play()																				
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()																				
 
 		else:
 			if self.CHARACTER_SELECTION_RECT.colliderect(mouse_rect):
@@ -1131,12 +1167,52 @@ class NewGameMenu:
 		
 		return (r, g, b)	
 
-	def draw(self, SCREEN):
+	def draw(self, SCREEN, SURFACE_ALFA):
 		self.CHARACTER_CREATION_SHEET_SCROLL_BAR.draw(SCREEN)
 		self.CHARACTER_SELECTION_SCROLL_BAR.draw(SCREEN)
 
 		if self.is_in_education_menu_open == True:
-			self.NEW_GAME_EDUCATION_MENU.draw(SCREEN)
+			self.NEW_GAME_EDUCATION_MENU.draw(SCREEN, SURFACE_ALFA, self.selected_character)
+
+			###############################################################################################################################################################
+			#---------------------------------------------------------------------- CHAR SELECTION -----------------------------------------------------------------------#
+			
+			self.character_selection_image_offset_y = self.CHARACTER_SELECTION_SCROLL_BAR.get_scroll_position()
+
+
+			for index, character in enumerate(self.characters):
+
+				rect = (0, (index * (100 * self.FACTOR_Y)) + 10 * index if index > 0 else 0, 376 * self.FACTOR_X, 100 * self.FACTOR_Y)
+
+				width = 4 if character is self.selected_character else 1
+				color = (229,183,0) if character is self.selected_character else (170,170,127)			
+				pygame.draw.rect(self.CHARACTER_SELECTION_SURFACE, color, rect, width)
+
+				character_name_text_render = self.font16.render(str(character['character_name']['value']), 	True,  (255,255,255))
+
+				self.CHARACTER_SELECTION_SURFACE.blit(character_name_text_render, (8, 10 + ((index * (100 * self.FACTOR_Y)) + 10 * index if index > 0 else 0)))
+
+
+			rect = (0, (index+1) * (100 * self.FACTOR_Y) + 10 * (index+1), 376 * self.FACTOR_X, 30 * self.FACTOR_Y)
+			pygame.draw.rect(self.CHARACTER_SELECTION_SURFACE, (91,127,0), rect, 2)
+
+
+			new_character_text_render = self.font16.render('CREATE NEW CHARACTER', 	True,  (255,255,255))
+			self.CHARACTER_SELECTION_SURFACE.blit(new_character_text_render, (188 * self.FACTOR_X - new_character_text_render.get_width()/2, 16 * self.FACTOR_Y - new_character_text_render.get_height()/2 + (index+1) * (100 * self.FACTOR_Y) + 10 * (index+1)))			
+
+
+			######  SUBSURFACES  ######
+			SCREEN.blit(self.CHARACTER_SELECTION_SURFACE.subsurface(					0,															# START X
+																						self.character_selection_image_offset_y,					# START Y
+																						self.CHARACTER_SELECTION_SURFACE.get_width(),				# WIDTH
+																						1000 * self.FACTOR_Y),										# HEIGHT
+																						(33 * self.FACTOR_X, 18 * self.FACTOR_Y))					# BLIT POS
+
+			self.CHARACTER_SELECTION_SURFACE.fill((0, 0, 0, 0))
+
+			#---------------------------------------------------------------------- CHAR SELECTION -----------------------------------------------------------------------#
+			###############################################################################################################################################################
+
 		else:
 			###############################################################################################################################################################
 			#----------------------------------------------------------------------- CHAR CREATION -----------------------------------------------------------------------#
@@ -1268,7 +1344,7 @@ class NewGameMenu:
 			character_educations_text_render = self.font20.render(educations,  True, 	(255,255,255))
 			
 			max_length = len(educations)
-			while character_educations_text_render.get_width() > 260 * self.FACTOR_X:
+			while character_educations_text_render.get_width() > 280 * self.FACTOR_X:
 				max_length -= 1
 				educations = educations[:max_length - 3] + '...'
 				character_educations_text_render = self.font20.render(educations,  True, 	(255,255,255))						
@@ -1866,7 +1942,7 @@ class NewGameMenu:
 				rect = (0, (index * (100 * self.FACTOR_Y)) + 10 * index if index > 0 else 0, 376 * self.FACTOR_X, 100 * self.FACTOR_Y)
 
 				width = 4 if character is self.selected_character else 1
-				color = (160,133,0) if character is self.selected_character else (170,127,127)			
+				color = (229,183,0) if character is self.selected_character else (170,170,127)			
 				pygame.draw.rect(self.CHARACTER_SELECTION_SURFACE, color, rect, width)
 
 				character_name_text_render = self.font16.render(str(character['character_name']['value']), 	True,  (255,255,255))
@@ -1897,7 +1973,8 @@ class NewGameMenu:
 
 		######  BUTTONS ######
 		if self.hovered_button != None:
-			pass
+			if self.is_in_education_menu_open == True:
+				self.NEW_GAME_EDUCATION_MENU.hovered_button = self.hovered_button
 		else:
 			self.HOVER_OVER_BUTTON_SOUND.fadeout(200)				
 
@@ -2098,12 +2175,11 @@ class NewGameMenu:
 		with open(EDUCATION_PATH, 'r') as file:
 			education_data : dict = json_load(file)
 
-		high_school = list(education_data.items())[0]
-		key1, value1 = high_school
+		high_school = list(education_data['high_school'].items())[0:3]
 
-		character['character_schooling']['value'] = {key1: value1}
+		#character['character_schooling']['value'] = dict(high_school)
 
-
+		'''
 		character_intelligence = min(10, character['character_intelligence']['value'])
 		
 		# Normalize x to the range [0, 1] where x=1 maps to 0 and x=10 maps to 1
@@ -2130,7 +2206,7 @@ class NewGameMenu:
 
 				key2, value2 = random_education
 				character['character_schooling']['value'].update({key2 : value2})					
-
+		'''
 		#------------------------------------------------------------------------- EDUCATION -------------------------------------------------------------------------#
 		###############################################################################################################################################################
 
@@ -2219,13 +2295,149 @@ class NewGameMenu:
 			json_dump(save_data, file, indent=4)		
 
 class NewGameEducationMenu:
-	def __init__(self, EDUCATION_MENU_GUI):
+	def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, EDUCATION_MENU_GUI):
+		self.SCREEN_WIDTH:int               = SCREEN_WIDTH
+		self.SCREEN_HEIGHT:int              = SCREEN_HEIGHT	
+		self.REFERENCE_SCREEN_SIZE_X:int    = 1920
+		self.REFERENCE_SCREEN_SIZE_y:int    = 1080
+		self.FACTOR_X:float                 = self.SCREEN_WIDTH / self.REFERENCE_SCREEN_SIZE_X
+		self.FACTOR_Y:float                 = self.SCREEN_HEIGHT / self.REFERENCE_SCREEN_SIZE_y
+
+
 		self.EDUCATION_MENU_GUI	= EDUCATION_MENU_GUI
 
-	def get_button_by_interaction(self, mouse_rect):
-		pass
 
-	def draw(self, SCREEN):
+		self.hovered_button = None
+
+		self.selected_education = None
+		self.selectable_educations_rects = []
+		self
+
+		MAIN_FOLDER 				= os.path.dirname(sys.argv[0])
+		COMMON_FOLDER				= os.path.join(MAIN_FOLDER, 'common')
+		CHARACTER_FOLDER			= os.path.join(COMMON_FOLDER, 'character')
+		EDUCATION_PATH 				= os.path.join(CHARACTER_FOLDER, 'education.json')
+
+		with open(EDUCATION_PATH, 'r') as file:
+			self.education_data : dict = json_load(file)
+
+
+		self.font22 = Utility.ScalableFont('menu.ttf', 22)
+		self.font20 = Utility.ScalableFont('menu.ttf', 20)
+		self.font18 = Utility.ScalableFont('menu.ttf', 18)
+		self.font16 = Utility.ScalableFont('menu.ttf', 16)		
+
+
+		self.CLOSE_MENU_BOX_RECT 			= pygame.Rect(1873 * self.FACTOR_X, 21 * self.FACTOR_Y, 28 * self.FACTOR_X, 28 * self.FACTOR_Y)	
+
+		self.HIGH_SCHOOL_BUTTON_RECT 		= pygame.Rect(1068 * self.FACTOR_X, 59 * self.FACTOR_Y, 790 * self.FACTOR_X, 40 * self.FACTOR_Y)
+		self.COLLEGE_BUTTON_RECT 			= pygame.Rect(1068 * self.FACTOR_X, 299 * self.FACTOR_Y, 790 * self.FACTOR_X, 40 * self.FACTOR_Y)
+		self.MASTERS_DEGREE_BUTTON_RECT 	= pygame.Rect(1068 * self.FACTOR_X, 682 * self.FACTOR_Y, 790 * self.FACTOR_X, 40 * self.FACTOR_Y)	
+
+	def get_button_by_interaction(self, mouse_rect):
+		if self.CLOSE_MENU_BOX_RECT.colliderect((mouse_rect[0], mouse_rect[1], 1, 1)):
+			return 'CLOSE_MENU'
+		elif self.HIGH_SCHOOL_BUTTON_RECT.colliderect((mouse_rect[0], mouse_rect[1], 1, 1)):
+			return 'HIGH_SCHOOL_BUTTON'
+		elif self.COLLEGE_BUTTON_RECT.colliderect((mouse_rect[0], mouse_rect[1], 1, 1)):
+			return 'COLLEGE_BUTTON'	
+		elif self.MASTERS_DEGREE_BUTTON_RECT.colliderect((mouse_rect[0], mouse_rect[1], 1, 1)):
+			return 'MASTERS_DEGREE_BUTTON'							
+		else:
+			for rect in self.selectable_educations_rects:
+				if rect[0].colliderect((mouse_rect[0], mouse_rect[1], 1, 1)):
+					return rect
+
+			return None
+
+	def draw(self, SCREEN, SURFACE_ALFA, selected_character):
 		SCREEN.blit(self.EDUCATION_MENU_GUI, (0, 0))
+
+
+
+		index = 1
+		for education_name, education_info in selected_character['character_schooling']['value']['high_school'].items():
+			rect = pygame.Rect(1068 + (410 if index%2 == 0 else 0), 119 + (90 if index > 2 else 0), 380, 70)
+			pygame.draw.rect(SURFACE_ALFA, (0,120,120,80), rect)
+			pygame.draw.rect(SCREEN, (255,255,255), rect, 1)
+
+			education_name_text_render = self.font20.render(education_name.replace('_', ' ').strip().title(), True, (23,255,255))
+
+			SCREEN.blit(education_name_text_render, (rect[0] + 15, rect[1] + 12))
+
+			index += 1
+		
+
+		index = 1
+		for education_name, education_info in selected_character['character_schooling']['value']['college'].items():
+			rect = pygame.Rect(1068 + (410 if index%2 == 0 else 0), 359 + (90 if index > 2 else 0), 380, 70)
+			pygame.draw.rect(SURFACE_ALFA, (0,120,120,80), rect)
+			pygame.draw.rect(SCREEN, (255,255,255), rect, 1)
+
+			education_name_text_render = self.font20.render(education_name.replace('_', ' ').strip().title(), True, (23,255,255))
+
+			SCREEN.blit(education_name_text_render, (rect[0] + 15, rect[1] + 12))
+
+			index += 1		
+
+
+		index = 1
+		for education_name, education_info in selected_character['character_schooling']['value']['masters_degree'].items():
+			rect = pygame.Rect(1068 + (410 if index%2 == 0 else 0), 742 + (90 if index > 2 else 0), 380, 70)
+			pygame.draw.rect(SURFACE_ALFA, (0,120,120,80), rect)
+			pygame.draw.rect(SCREEN, (255,255,255), rect, 1)
+
+			education_name_text_render = self.font20.render(education_name.replace('_', ' ').strip().title(), True, (23,255,255))
+
+			SCREEN.blit(education_name_text_render, (rect[0] + 15, rect[1] + 12))
+
+			index += 1					
+
+
+		self.selectable_educations_rects = []
+		if self.selected_education != None:
+			if self.selected_education == 'high_school':
+				pygame.draw.rect(SCREEN, (229,183,0), self.HIGH_SCHOOL_BUTTON_RECT, 3)
+			elif self.selected_education == 'college':
+				pygame.draw.rect(SCREEN, (229,183,0), self.COLLEGE_BUTTON_RECT, 3)
+			elif self.selected_education == 'masters_degree':
+				pygame.draw.rect(SCREEN, (229,183,0), self.COLLEGE_BUTTON_RECT, 3)				
+			
+			index = 0
+			for education_name, education_info in self.education_data[self.selected_education].items():
+				rect = pygame.Rect(449, 59 + index * 90, 560, 70)
+
+				pygame.draw.rect(SURFACE_ALFA, (0,120,120,80), rect)
+				pygame.draw.rect(SCREEN, (255,255,255), rect, 1)
+
+				education_name_text_render = self.font20.render(education_name.replace('_', ' ').strip().title(), True, (23,255,255))
+
+				SCREEN.blit(education_name_text_render, (rect[0] + 15, rect[1] + 12))	
+
+				self.selectable_educations_rects.append([rect, {education_name : education_info}])							
+				
+				index += 1
+
+
+		if self.hovered_button != None:
+			if self.hovered_button == 'CLOSE_MENU':
+				pygame.draw.rect(SCREEN, (255,0,0), self.CLOSE_MENU_BOX_RECT, 1)
+				self.hovered_button = None
+			elif self.hovered_button == 'HIGH_SCHOOL_BUTTON':
+				pygame.draw.rect(SCREEN, (229,183,0), self.HIGH_SCHOOL_BUTTON_RECT, 3)
+				self.hovered_button = None
+			elif self.hovered_button == 'COLLEGE_BUTTON':
+				pygame.draw.rect(SCREEN, (229,183,0), self.COLLEGE_BUTTON_RECT, 3)
+				self.hovered_button = None
+			elif self.hovered_button == 'MASTERS_DEGREE_BUTTON':
+				pygame.draw.rect(SCREEN, (229,183,0), self.MASTERS_DEGREE_BUTTON_RECT, 3)
+				self.hovered_button = None								
+			elif type(self.hovered_button[0]) == pygame.Rect:
+				pygame.draw.rect(SCREEN, (229,183,0), self.hovered_button[0], 2)
+				self.hovered_button = None
+
+
+
+
 #------------------------------------------------------------------------- NEW GAME---------------------------------------------------------------------------#
 ###############################################################################################################################################################
