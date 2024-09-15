@@ -3,14 +3,11 @@ import Utility
 from PygameManager import pygame
 from pyvidplayer import Video
 from json import load as json_load, dump as json_dump
-import numpy as np
 import os
 import sys
 from datetime import datetime
 import copy
 import random
-import traceback
-import time
 from scipy.stats import truncnorm
 
 
@@ -850,18 +847,107 @@ class NewGameMenu:
 
 					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
 					self.CLICK_BUTTON_SOUND.play()										
+				
 				elif type(clicked_button[0]) == pygame.Rect:
+					# HIGH SCHOOL
 					if self.NEW_GAME_EDUCATION_MENU.selected_education == 'high_school':
-						self.selected_character['character_schooling']['value']['high_school'].update(clicked_button[1]) 
-					
+						self.selected_character['character_schooling']['value']['high_school'].update(clicked_button[1])
+
+					# COLLEGE
 					elif self.NEW_GAME_EDUCATION_MENU.selected_education == 'college':
-						self.selected_character['character_schooling']['value']['college'].update(clicked_button[1]) 
-					
+						self.selected_character['character_schooling']['value']['college'].update(clicked_button[1])
+
+					# MASTERS DEGREE
 					elif self.NEW_GAME_EDUCATION_MENU.selected_education == 'masters_degree':
 						self.selected_character['character_schooling']['value']['masters_degree'].update(clicked_button[1]) 
 
+
+
+					banned_keys = ['value', 'rect', 'maximum_size', 'content_type', 'x_offset', 'throw_range']
+					for attr_dict in [self.selected_character['character_strenght'], self.selected_character['character_constitution'], self.selected_character['character_agility'], self.selected_character['character_charisma'], self.selected_character['character_intelligence'], self.selected_character['character_education']]:
+						keys = [key for key in attr_dict.keys() if key not in banned_keys]
+
+						for key in keys:
+
+							attr_dict[key] = 0
+
+
+					for key, item in self.selected_character['character_schooling']['value']['high_school'].items():
+						for sub_key, sub_item in item.items():
+							if sub_key not in ['type', 'level', 'requirement']:
+								for stat_key, stat_item in sub_item.items():
+									if stat_key != 'total_value':
+										self.selected_character[f'character_{sub_key}'][stat_key] += stat_item	
+
+
+					for key, item in self.selected_character['character_schooling']['value']['college'].items():
+						for sub_key, sub_item in item.items():
+							if sub_key not in ['type', 'level', 'requirement']:
+								for stat_key, stat_item in sub_item.items():
+									if stat_key != 'total_value':
+										self.selected_character[f'character_{sub_key}'][stat_key] += stat_item	
+
+
+					for key, item in self.selected_character['character_schooling']['value']['masters_degree'].items():
+						for sub_key, sub_item in item.items():
+							if sub_key not in ['type', 'level', 'requirement']:
+								for stat_key, stat_item in sub_item.items():
+									if stat_key != 'total_value':
+										self.selected_character[f'character_{sub_key}'][stat_key] += stat_item																												
+
+
 					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
 					self.CLICK_BUTTON_SOUND.play()
+				
+				elif type(clicked_button[1]) == pygame.Rect:
+					# HIGH SCHOOL
+					if list(clicked_button[0].keys())[0] in self.selected_character['character_schooling']['value']['high_school']:
+						self.selected_character['character_schooling']['value']['high_school'].pop(list(clicked_button[0].keys())[0])
+					
+					# COLLEGE
+					elif list(clicked_button[0].keys())[0] in self.selected_character['character_schooling']['value']['college']:
+						self.selected_character['character_schooling']['value']['college'].pop(list(clicked_button[0].keys())[0]) 
+					
+					# MASTERS DEGREE
+					elif list(clicked_button[0].keys())[0] in self.selected_character['character_schooling']['value']['masters_degree']:
+						self.selected_character['character_schooling']['value']['masters_degree'].pop(list(clicked_button[0].keys())[0]) 					
+
+
+
+					banned_keys = ['value', 'rect', 'maximum_size', 'content_type', 'x_offset', 'throw_range']
+					for attr_dict in [self.selected_character['character_strenght'], self.selected_character['character_constitution'], self.selected_character['character_agility'], self.selected_character['character_charisma'], self.selected_character['character_intelligence'], self.selected_character['character_education']]:
+						keys = [key for key in attr_dict.keys() if key not in banned_keys]
+
+						for key in keys:
+							attr_dict[key] = 0
+
+
+					for key, item in self.selected_character['character_schooling']['value']['high_school'].items():
+						for sub_key, sub_item in item.items():
+							if sub_key not in ['type', 'level', 'requirement']:
+								for stat_key, stat_item in sub_item.items():
+									if stat_key != 'total_value':
+										self.selected_character[f'character_{sub_key}'][stat_key] += stat_item	
+
+
+					for key, item in self.selected_character['character_schooling']['value']['college'].items():
+						for sub_key, sub_item in item.items():
+							if sub_key not in ['type', 'level', 'requirement']:
+								for stat_key, stat_item in sub_item.items():
+									if stat_key != 'total_value':
+										self.selected_character[f'character_{sub_key}'][stat_key] += stat_item	
+
+
+					for key, item in self.selected_character['character_schooling']['value']['masters_degree'].items():
+						for sub_key, sub_item in item.items():
+							if sub_key not in ['type', 'level', 'requirement']:
+								for stat_key, stat_item in sub_item.items():
+									if stat_key != 'total_value':
+										self.selected_character[f'character_{sub_key}'][stat_key] += stat_item	
+
+
+					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
+					self.CLICK_BUTTON_SOUND.play()				
 
 			else:
 				if clicked_button == 'ASSIGN_CHARACTER_NAME':
@@ -904,7 +990,7 @@ class NewGameMenu:
 				elif clicked_button == 'ASSIGN_CHARACTER_CONSTITUTION':
 					self.receive_player_keybord_input = True
 
-					self.variable_to_receive_player_keybord_input = self.selected_character['character_constituion']
+					self.variable_to_receive_player_keybord_input = self.selected_character['character_constitution']
 
 					self.HOVER_OVER_BUTTON_SOUND.fadeout(150)
 					self.CLICK_BUTTON_SOUND.play()	
@@ -1028,10 +1114,10 @@ class NewGameMenu:
 				if self.variable_to_receive_player_keybord_input['rect'] == 'ASSIGN_CHARACTER_STRENGHT_BOX_RECT':
 					self.selected_character['character_strenght']['throw_range'] 			= self.selected_character['character_strenght']['value'] * 4
 					self.selected_character['character_weight']['value'] 					= 90+(4*(self.selected_character['character_strenght']['value'] - self.selected_character['character_agility']['value']))
-					self.selected_character['character_constituion']['load_capacity'] 		= (self.selected_character['character_strenght']['value'] + self.selected_character['character_constituion']['value']) * 3
+					self.selected_character['character_constitution']['load_capacity'] 		= (self.selected_character['character_strenght']['value'] + self.selected_character['character_constitution']['value']) * 3
 				
 				elif self.variable_to_receive_player_keybord_input['rect'] == 'ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT':
-					self.selected_character['character_constituion']['load_capacity'] 		= (self.selected_character['character_strenght']['value'] + self.selected_character['character_constituion']['value']) * 3
+					self.selected_character['character_constitution']['load_capacity'] 		= (self.selected_character['character_strenght']['value'] + self.selected_character['character_constitution']['value']) * 3
 				
 				elif self.variable_to_receive_player_keybord_input['rect'] == 'ASSIGN_CHARACTER_AGILITY_BOX_RECT':
 					self.selected_character['character_weight']['value'] 					= 90+(4*(self.selected_character['character_strenght']['value'] - self.selected_character['character_agility']['value']))
@@ -1335,19 +1421,13 @@ class NewGameMenu:
 				character_hobbies_text_render = self.font20.render(hobbies,  True, 	(255,255,255))
 
 
-			education_list = list(self.selected_character['character_schooling']['value'].keys())
-			educations = ', '.join(
-				education.replace('_', ' ').strip().title()
-				for education in education_list
-			)
-
-			character_educations_text_render = self.font20.render(educations,  True, 	(255,255,255))
-			
-			max_length = len(educations)
-			while character_educations_text_render.get_width() > 280 * self.FACTOR_X:
-				max_length -= 1
-				educations = educations[:max_length - 3] + '...'
-				character_educations_text_render = self.font20.render(educations,  True, 	(255,255,255))						
+			character_educations_text_render = self.font20.render("Uneducated",  True, (255,255,255))
+			if self.selected_character['character_schooling']['value'].get('high_school'):
+				character_educations_text_render = self.font20.render('High School',  True, (255,255,255))
+			if self.selected_character['character_schooling']['value'].get('college'):
+				character_educations_text_render = self.font20.render('College',  True, (255,255,255))
+			if self.selected_character['character_schooling']['value'].get('masters_degree'):
+				character_educations_text_render = self.font20.render("Master's Degree",  True, (255,255,255))								
 
 
 			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_name_text_render, 		(	self.ASSIGN_CHARACTER_NAME_BOX_RECT[0]				+ self.selected_character['character_name']['x_offset']											
@@ -1384,8 +1464,8 @@ class NewGameMenu:
 			character_strenght_text_render 		= self.font22.render(	str(self.selected_character['character_strenght']['value']), 		True, 	
 																			self.get_color_from_value_size(self.selected_character['character_strenght']['value'], 10))
 			
-			character_constituion_text_render 	= self.font22.render(	str(self.selected_character['character_constituion']['value']), 	True, 	
-																			self.get_color_from_value_size(self.selected_character['character_constituion']['value'], 10))
+			character_constitution_text_render 	= self.font22.render(	str(self.selected_character['character_constitution']['value']), 	True, 	
+																			self.get_color_from_value_size(self.selected_character['character_constitution']['value'], 10))
 			
 			character_agility_text_render 		= self.font22.render(	str(self.selected_character['character_agility']['value']), 		True, 	
 																			self.get_color_from_value_size(self.selected_character['character_agility']['value'], 10))			
@@ -1403,7 +1483,7 @@ class NewGameMenu:
 			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_strenght_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]			+ self.selected_character['character_strenght']['x_offset']											
 																									,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 		- 8 * self.FACTOR_Y))
 
-			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constituion_text_render, 	(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0] 		+ self.selected_character['character_constituion']['x_offset']		
+			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constitution_text_render, 	(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0] 		+ self.selected_character['character_constitution']['x_offset']		
 																									,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 	- 8 * self.FACTOR_Y))
 
 			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_agility_text_render, 		(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0] 			+ self.selected_character['character_agility']['x_offset']		
@@ -1422,8 +1502,8 @@ class NewGameMenu:
 			total = self.selected_character['character_strenght']['archery'] + self.selected_character['character_strenght']['armed_fight'] + self.selected_character['character_strenght']['unarmed_fight'] + self.selected_character['character_strenght']['pistol_mastery'] + self.selected_character['character_strenght']['rifle_mastery'] + self.selected_character['character_strenght']['heavy_artilhery'] + self.selected_character['character_strenght']['heavy_gun']
 			character_strenght_total_text_render 		= self.font22.render(	str(total), True, (255,255,255))
 			
-			total = self.selected_character['character_constituion']['climbing'] + self.selected_character['character_constituion']['combat_engineer'] + self.selected_character['character_constituion']['parachute'] + self.selected_character['character_constituion']['riding'] + self.selected_character['character_constituion']['swimming'] + self.selected_character['character_constituion']['excavation']
-			character_constituion_total_text_render 	= self.font22.render(	str(total), True, (255,255,255))
+			total = self.selected_character['character_constitution']['climbing'] + self.selected_character['character_constitution']['combat_engineer'] + self.selected_character['character_constitution']['parachute'] + self.selected_character['character_constitution']['riding'] + self.selected_character['character_constitution']['swimming'] + self.selected_character['character_constitution']['excavation']
+			character_constitution_total_text_render 	= self.font22.render(	str(total), True, (255,255,255))
 			
 			total = self.selected_character['character_agility']['acrobatics'] + self.selected_character['character_agility']['motorcycle'] + self.selected_character['character_agility']['tracked'] + self.selected_character['character_agility']['wheeled'] + self.selected_character['character_agility']['stealth']
 			character_agility_total_text_render 		= self.font22.render(	str(total), True, (255,255,255))			
@@ -1442,7 +1522,7 @@ class NewGameMenu:
 			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_strenght_total_text_render, 		(	self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[0]			- 47											
 																										,   self.ASSIGN_CHARACTER_STRENGHT_BOX_RECT[1] 			+ 34 * self.FACTOR_Y))
 
-			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constituion_total_text_render, 	(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0] 		- 90		
+			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_constitution_total_text_render, 	(	self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[0] 		- 90		
 																										,   self.ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT[1] 		+ 34 * self.FACTOR_Y))
 
 			self.CHARACTER_CREATION_INFORMATION_SURFACE.blit(character_agility_total_text_render, 		(	self.ASSIGN_CHARACTER_AGILITY_BOX_RECT[0] 			- 10		
@@ -1533,45 +1613,45 @@ class NewGameMenu:
 
 
 			character_climbing_text_render = self.font18.render(
-				str(self.selected_character['character_constituion']['climbing']),
+				str(self.selected_character['character_constitution']['climbing']),
 				True,
-				self.get_color_from_value_size(self.selected_character['character_constituion']['climbing'], level_for_proficiency)
+				self.get_color_from_value_size(self.selected_character['character_constitution']['climbing'], level_for_proficiency)
 			)
 
 			character_combat_engineer_text_render = self.font18.render(
-				str(self.selected_character['character_constituion']['combat_engineer']),
+				str(self.selected_character['character_constitution']['combat_engineer']),
 				True,
-				self.get_color_from_value_size(self.selected_character['character_constituion']['combat_engineer'], level_for_proficiency)
+				self.get_color_from_value_size(self.selected_character['character_constitution']['combat_engineer'], level_for_proficiency)
 			)
 
 			character_parachute_text_render = self.font18.render(
-				str(self.selected_character['character_constituion']['parachute']),
+				str(self.selected_character['character_constitution']['parachute']),
 				True,
-				self.get_color_from_value_size(self.selected_character['character_constituion']['parachute'], level_for_proficiency)
+				self.get_color_from_value_size(self.selected_character['character_constitution']['parachute'], level_for_proficiency)
 			)
 
 			character_riding_text_render = self.font18.render(
-				str(self.selected_character['character_constituion']['riding']),
+				str(self.selected_character['character_constitution']['riding']),
 				True,
-				self.get_color_from_value_size(self.selected_character['character_constituion']['riding'], level_for_proficiency)
+				self.get_color_from_value_size(self.selected_character['character_constitution']['riding'], level_for_proficiency)
 			)
 
 			character_swimming_text_render = self.font18.render(
-				str(self.selected_character['character_constituion']['swimming']),
+				str(self.selected_character['character_constitution']['swimming']),
 				True,
-				self.get_color_from_value_size(self.selected_character['character_constituion']['swimming'], level_for_proficiency)
+				self.get_color_from_value_size(self.selected_character['character_constitution']['swimming'], level_for_proficiency)
 			)
 
 			character_excavation_text_render = self.font18.render(
-				str(self.selected_character['character_constituion']['excavation']),
+				str(self.selected_character['character_constitution']['excavation']),
 				True,
-				self.get_color_from_value_size(self.selected_character['character_constituion']['excavation'], level_for_proficiency)
+				self.get_color_from_value_size(self.selected_character['character_constitution']['excavation'], level_for_proficiency)
 			)
 
 			character_load_capacity_text_render = self.font18.render(
-				str(self.selected_character['character_constituion']['load_capacity']),
+				str(self.selected_character['character_constitution']['load_capacity']),
 				True,
-				self.get_color_from_value_size(self.selected_character['character_constituion']['load_capacity'], 54)
+				self.get_color_from_value_size(self.selected_character['character_constitution']['load_capacity'], 54)
 			)				
 			
 			
@@ -2118,29 +2198,12 @@ class NewGameMenu:
 				points_to_add -= 1
 
 		character['character_strenght']['value'] 		= attributes['str']
-		character['character_constituion']['value'] 	= attributes['con']
+		character['character_constitution']['value'] 	= attributes['con']
 		character['character_agility']['value'] 		= attributes['agl']
 		character['character_charisma']['value'] 		= attributes['chr']
 		character['character_intelligence']['value'] 	= attributes['int']
 		character['character_education']['value'] 		= attributes['edu']
 
-
-		banned_keys = ['value', 'rect', 'maximum_size', 'content_type', 'x_offset', 'throw_range']
-		for attr_dict in [character['character_strenght'], character['character_constituion'], character['character_agility'], character['character_charisma'], character['character_intelligence'], character['character_education']]:
-
-			total_value = attr_dict['value']
-			keys = [key for key in attr_dict.keys() if key not in banned_keys]
-
-
-			# Randomly distribute the values
-			remaining_value = total_value
-			while remaining_value > 0:
-				for key in keys:
-					value = random.randint(0, 1)
-					attr_dict[key] += value
-					remaining_value -= value
-					if remaining_value == 0:
-						break
 
 		#------------------------------------------------------------------------ ATTRIBUTES -------------------------------------------------------------------------#
 		###############################################################################################################################################################
@@ -2177,7 +2240,7 @@ class NewGameMenu:
 
 		high_school = list(education_data['high_school'].items())[0:3]
 
-		#character['character_schooling']['value'] = dict(high_school)
+		character['character_schooling']['value']['high_school'] = dict(high_school)
 
 		'''
 		character_intelligence = min(10, character['character_intelligence']['value'])
@@ -2207,6 +2270,15 @@ class NewGameMenu:
 				key2, value2 = random_education
 				character['character_schooling']['value'].update({key2 : value2})					
 		'''
+
+		for key, item in character['character_schooling']['value']['high_school'].items():
+			for sub_key, sub_item in item.items():
+				if sub_key not in ['type', 'level', 'requirement']:
+					for stat_key, stat_item in sub_item.items():
+						if stat_key != 'total_value':
+							character[f'character_{sub_key}'][stat_key] += stat_item
+
+
 		#------------------------------------------------------------------------- EDUCATION -------------------------------------------------------------------------#
 		###############################################################################################################################################################
 
@@ -2230,29 +2302,29 @@ class NewGameMenu:
 		if character['character_age']['value'] >= 45:
 			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
 			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
-			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0
+			character['character_constitution']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constitution']['value'] > 1 else 0
 
 		if character['character_age']['value'] >= 49:
 			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
 			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
-			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0	
+			character['character_constitution']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constitution']['value'] > 1 else 0	
 
 		if character['character_age']['value'] >= 53:
 			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
 			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
-			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0	
+			character['character_constitution']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constitution']['value'] > 1 else 0	
 			character['character_intelligence']['value'] -= random.choices([0, 1], [0.5, 0.5])[0] if character['character_intelligence']['value'] > 1 else 0
 
 		if character['character_age']['value'] >= 57:
 			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
 			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
-			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0
+			character['character_constitution']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constitution']['value'] > 1 else 0
 			character['character_intelligence']['value'] -= random.choices([0, 1], [0.3, 0.7])[0] if character['character_intelligence']['value'] > 1 else 0
 
 		if character['character_age']['value'] >= 61:
 			character['character_agility']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_agility']['value'] > 1 else 0
 			character['character_strenght']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_strenght']['value'] > 1 else 0
-			character['character_constituion']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constituion']['value'] > 1 else 0
+			character['character_constitution']['value'] -= random.choices([0, 1], [0.2, 0.8])[0] if character['character_constitution']['value'] > 1 else 0
 			character['character_intelligence']['value'] -= random.choices([0, 1], [0.1, 0.9])[0] if character['character_intelligence']['value'] > 1 else 0																											
 
 		#--------------------------------------------------------------------------- AGING ---------------------------------------------------------------------------#
@@ -2270,7 +2342,7 @@ class NewGameMenu:
 		#--------------------------------------------------------------------------- MISC ----------------------------------------------------------------------------#
 		character['character_strenght']['throw_range'] 			= character['character_strenght']['value'] * 4
 		
-		character['character_constituion']['load_capacity'] 	= (character['character_strenght']['value'] + character['character_constituion']['value']) * 3
+		character['character_constitution']['load_capacity'] 	= (character['character_strenght']['value'] + character['character_constitution']['value']) * 3
 		
 		#--------------------------------------------------------------------------- MISC ----------------------------------------------------------------------------#
 		###############################################################################################################################################################
@@ -2283,7 +2355,7 @@ class NewGameMenu:
 				"character_weight": self.selected_character['character_weight'],
 				
 				"character_strenght": self.selected_character['character_strenght'],
-				"character_constituion": self.selected_character['character_constituion'],
+				"character_constitution": self.selected_character['character_constitution'],
 				"character_agility": self.selected_character['character_agility'],
 				"character_charisma": self.selected_character['character_charisma'],
 				"character_intelligence": self.selected_character['character_intelligence'],
@@ -2311,7 +2383,7 @@ class NewGameEducationMenu:
 
 		self.selected_education = None
 		self.selectable_educations_rects = []
-		self
+		self.character_educations_rects = []
 
 		MAIN_FOLDER 				= os.path.dirname(sys.argv[0])
 		COMMON_FOLDER				= os.path.join(MAIN_FOLDER, 'common')
@@ -2347,13 +2419,16 @@ class NewGameEducationMenu:
 			for rect in self.selectable_educations_rects:
 				if rect[0].colliderect((mouse_rect[0], mouse_rect[1], 1, 1)):
 					return rect
+			for rect in self.character_educations_rects:
+				if rect[1].colliderect((mouse_rect[0], mouse_rect[1], 1, 1)):
+					return rect				
 
 			return None
 
 	def draw(self, SCREEN, SURFACE_ALFA, selected_character):
 		SCREEN.blit(self.EDUCATION_MENU_GUI, (0, 0))
 
-
+		self.character_educations_rects = []
 
 		index = 1
 		for education_name, education_info in selected_character['character_schooling']['value']['high_school'].items():
@@ -2364,6 +2439,8 @@ class NewGameEducationMenu:
 			education_name_text_render = self.font20.render(education_name.replace('_', ' ').strip().title(), True, (23,255,255))
 
 			SCREEN.blit(education_name_text_render, (rect[0] + 15, rect[1] + 12))
+
+			self.character_educations_rects.append([{education_name : education_info}, rect])
 
 			index += 1
 		
@@ -2378,6 +2455,8 @@ class NewGameEducationMenu:
 
 			SCREEN.blit(education_name_text_render, (rect[0] + 15, rect[1] + 12))
 
+			self.character_educations_rects.append([{education_name : education_info}, rect])
+
 			index += 1		
 
 
@@ -2391,6 +2470,8 @@ class NewGameEducationMenu:
 
 			SCREEN.blit(education_name_text_render, (rect[0] + 15, rect[1] + 12))
 
+			self.character_educations_rects.append([{education_name : education_info}, rect])
+
 			index += 1					
 
 
@@ -2401,7 +2482,7 @@ class NewGameEducationMenu:
 			elif self.selected_education == 'college':
 				pygame.draw.rect(SCREEN, (229,183,0), self.COLLEGE_BUTTON_RECT, 3)
 			elif self.selected_education == 'masters_degree':
-				pygame.draw.rect(SCREEN, (229,183,0), self.COLLEGE_BUTTON_RECT, 3)				
+				pygame.draw.rect(SCREEN, (229,183,0), self.MASTERS_DEGREE_BUTTON_RECT, 3)				
 			
 			index = 0
 			for education_name, education_info in self.education_data[self.selected_education].items():
@@ -2434,7 +2515,134 @@ class NewGameEducationMenu:
 				self.hovered_button = None								
 			elif type(self.hovered_button[0]) == pygame.Rect:
 				pygame.draw.rect(SCREEN, (229,183,0), self.hovered_button[0], 2)
+
+
+				education_name, education_info = list(self.hovered_button[1].items())[0]
+				level_requirement 	= education_info['requirement']
+				character_inteligence = selected_character['character_intelligence']['value']
+
+				strenght 			= str(education_info['strenght']['total_value'])
+				for key, item in education_info['strenght'].items():
+					if key != "total_value":
+						strenght += ("\n" + key.capitalize()+":     "+str(item))
+				strenght += "\n"
+				
+				constitution 		= str(education_info['constitution']['total_value'])
+				for key, item in education_info['constitution'].items():
+					if key != "total_value":
+						constitution += ("\n" + key.capitalize()+":     "+str(item))
+				constitution += "\n"
+
+				agility 			= str(education_info['agility']['total_value'])
+				for key, item in education_info['agility'].items():
+					if key != "total_value":
+						agility += ("\n" + key.capitalize()+":     "+str(item))
+				agility += "\n"
+
+				charisma 			= str(education_info['charisma']['total_value'])
+				for key, item in education_info['charisma'].items():
+					if key != "total_value":
+						charisma += ("\n" + key.capitalize()+":     "+str(item))
+				charisma += "\n"
+
+				intelligence 		= str(education_info['intelligence']['total_value'])
+				for key, item in education_info['intelligence'].items():
+					if key != "total_value":
+						intelligence += ("\n" + key.capitalize()+":     "+str(item))
+				intelligence += "\n"
+
+				education 			= str(education_info['education']['total_value'])
+				for key, item in education_info['education'].items():
+					if key != "total_value":
+						education += ("\n" + key.capitalize()+":     "+str(item))
+				education += "\n"				
+
+				text = f'''
+STATS:
+Intelligence Level Required:         {level_requirement}
+Character's Intelligence:            {character_inteligence}
+
+Strenght:                            {strenght}
+Constitution:                        {constitution}
+Agility:                             {agility}
+Charisma:                            {charisma}
+Intelligence:                        {intelligence}
+Education:                           {education}
+'''
+				education_description_text_render = self.font18.render(text, True, (255,255,255))
+				rect = (self.hovered_button[0][0], self.hovered_button[0][1] + self.hovered_button[0][3] + 8, self.hovered_button[0][2], education_description_text_render.get_height()*1.15)
+				pygame.draw.rect(SCREEN, (0,120,120), rect)
+				pygame.draw.rect(SCREEN, (255,255,255), rect, 1)
+
+				SCREEN.blit(education_description_text_render, (rect[0] + 8, rect[1] + 10))
+
 				self.hovered_button = None
+			elif type(self.hovered_button[1]) == pygame.Rect:
+				pygame.draw.rect(SCREEN, (255,0,0), self.hovered_button[1], 2)
+
+
+				education_name, education_info = list(self.hovered_button[0].items())[0]
+				level_requirement 	= education_info['requirement']
+				character_inteligence = selected_character['character_intelligence']['value']
+
+				strenght 			= str(education_info['strenght']['total_value'])
+				for key, item in education_info['strenght'].items():
+					if key != "total_value":
+						strenght += ("\n" + key.capitalize()+":     "+str(item))
+				strenght += "\n"
+				
+				constitution 		= str(education_info['constitution']['total_value'])
+				for key, item in education_info['constitution'].items():
+					if key != "total_value":
+						constitution += ("\n" + key.capitalize()+":     "+str(item))
+				constitution += "\n"
+
+				agility 			= str(education_info['agility']['total_value'])
+				for key, item in education_info['agility'].items():
+					if key != "total_value":
+						agility += ("\n" + key.capitalize()+":     "+str(item))
+				agility += "\n"
+
+				charisma 			= str(education_info['charisma']['total_value'])
+				for key, item in education_info['charisma'].items():
+					if key != "total_value":
+						charisma += ("\n" + key.capitalize()+":     "+str(item))
+				charisma += "\n"
+
+				intelligence 		= str(education_info['intelligence']['total_value'])
+				for key, item in education_info['intelligence'].items():
+					if key != "total_value":
+						intelligence += ("\n" + key.capitalize()+":     "+str(item))
+				intelligence += "\n"
+
+				education 			= str(education_info['education']['total_value'])
+				for key, item in education_info['education'].items():
+					if key != "total_value":
+						education += ("\n" + key.capitalize()+":     "+str(item))
+				education += "\n"	
+
+				text = f'''
+STATS:
+Intelligence Level Required:   {level_requirement}
+Character's Intelligence:      {character_inteligence}
+
+Strenght:                      {strenght}
+Constitution:                  {constitution}
+Agility:                       {agility}
+Charisma:                      {charisma}
+Intelligence:                  {intelligence}
+Education:                     {education}
+
+CLICK IF YOU WANT TO REMOVE IT
+'''
+				education_description_text_render = self.font18.render(text, True, (255,255,255))
+				rect = (self.hovered_button[1][0], self.hovered_button[1][1] + self.hovered_button[1][3] + 8, self.hovered_button[1][2], education_description_text_render.get_height()*1.15)
+				pygame.draw.rect(SCREEN, (0,120,120), rect)
+				pygame.draw.rect(SCREEN, (255,255,255), rect, 1)
+
+				SCREEN.blit(education_description_text_render, (rect[0] + 8, rect[1] + 10))
+
+				self.hovered_button = None				
 
 
 

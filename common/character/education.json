@@ -5,25 +5,45 @@
             "type": "generic",
             "level": "high_school",
             "requirement" : 1,
-            "special_point": 3
+            "strenght": {"total_value" : 0, "archery" : 5},
+            "constitution": {"total_value" : 0},
+            "agility": {"total_value" : 0},
+            "charisma": {"total_value" : 0},
+            "intelligence": {"total_value" : 0},
+            "education": {"total_value" : 0}
         },
         "a_high_school": {
             "type": "generic",
             "level": "high_school",
             "requirement" : 1,
-            "special_point": 3
+            "strenght": {"total_value" : 0, "archery" : 5},
+            "constitution": {"total_value" : 0},
+            "agility": {"total_value" : 0},
+            "charisma": {"total_value" : 0},
+            "intelligence": {"total_value" : 0},
+            "education": {"total_value" : 0}
         },
         "b_high_school": {
             "type": "generic",
             "level": "high_school",
             "requirement" : 1,
-            "special_point": 3
+            "strenght": {"total_value" : 0, "archery" : 5},
+            "constitution": {"total_value" : 0},
+            "agility": {"total_value" : 0},
+            "charisma": {"total_value" : 0},
+            "intelligence": {"total_value" : 0},
+            "education": {"total_value" : 0}
         },
         "c_high_school": {
             "type": "generic",
             "level": "high_school",
             "requirement" : 1,
-            "special_point": 3
+            "strenght": {"total_value" : 0, "archery" : 5},
+            "constitution": {"total_value" : 0},
+            "agility": {"total_value" : 0},
+            "charisma": {"total_value" : 0},
+            "intelligence": {"total_value" : 0},
+            "education": {"total_value" : 0}
         }                        
     },
     "college": {
@@ -31,13 +51,23 @@
             "type": "medical",
             "level": "college",
             "requirement" : 6,
-            "special_point": 8
+            "strenght": {"total_value" : 0, "archery" : 5},
+            "constitution": {"total_value" : 0},
+            "agility": {"total_value" : 0},
+            "charisma": {"total_value" : 0},
+            "intelligence": {"total_value" : 0},
+            "education": {"total_value" : 0}
         },
         "law_school": {
             "type": "law",
             "level": "college",
             "requirement" : 5,
-            "special_point": 4
+            "strenght": {"total_value" : 0, "archery" : 5},
+            "constitution": {"total_value" : 0},
+            "agility": {"total_value" : 0},
+            "charisma": {"total_value" : 0},
+            "intelligence": {"total_value" : 0},
+            "education": {"total_value" : 0}
         }          
     },
     "masters_degree": {
@@ -45,7 +75,12 @@
             "type": "law",
             "level": "masters_degree",
             "requirement" : 5,
-            "special_point": 4
+            "strenght": {"total_value" : 0, "archery" : 5},
+            "constitution": {"total_value" : 0},
+            "agility": {"total_value" : 0},
+            "charisma": {"total_value" : 0},
+            "intelligence": {"total_value" : 0},
+            "education": {"total_value" : 0}
         } 
     }   
 }

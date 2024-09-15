@@ -73,7 +73,7 @@
             "throw_range"       : 0
         },
         
-        "character_constituion": {
+        "character_constitution": {
             "value"         : 0,
             "rect" 			: "ASSIGN_CHARACTER_CONSTITUTION_BOX_RECT",            
             "maximum_size" 	: 2,
